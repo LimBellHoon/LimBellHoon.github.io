@@ -130,10 +130,10 @@ footer {
 
 /* 각 프로젝트 아이템 레이아웃 */
 .project-item {
-    display: flex; /* ★★★ 핵심: 자식 요소(이미지,설명)를 나란히 배치 */
-    align-items: center; /* 세로 중앙 정렬 */
-    gap: 40px; /* 이미지와 설명 사이의 간격 */
-    margin-bottom: 80px; /* 프로젝트 사이의 간격 */
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    margin-bottom: 80px;
     background-color: var(--subtle-gray);
     padding: 30px;
     border-radius: 8px;
@@ -152,7 +152,7 @@ footer {
 }
 
 .project-image img {
-    width: 100%; /* 이미지가 부모 영역에 꽉 차게 */
+    width: 100%;
     border-radius: 8px;
     box-shadow: 0 4px 15px rgba(0,0,0,0.1);
 }
@@ -180,19 +180,37 @@ footer {
     line-height: 1.7;
 }
 
+/* 상세 업무 내용 레이아웃 (Grid로 변경) */
 .project-details {
-    display: flex;
-    gap: 30px;
+    display: grid; /* Flexbox 대신 Grid 사용 */
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 25px 30px; /* 세로 25px, 가로 30px 간격 */
     margin-top: 30px;
-    padding-top: 20px;
+    padding-top: 25px;
     border-top: 1px solid var(--border-color);
 }
 
 .project-details h4 {
-    font-size: 1rem;
+    font-size: 1.1rem;
     font-weight: 700;
     color: var(--text-color);
-    margin-bottom: 5px;
+    margin: 0 0 10px 0; /* 제목과 목록 사이 간격 */
+}
+
+/* 세부 항목 리스트 스타일 */
+.project-details ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.project-details li {
+    color: #6c757d;
+    margin-bottom: 7px;
+    font-size: 0.95rem;
+}
+.project-details li::before {
+    content: "- "; /* 각 항목 앞에 '-' 기호 추가 */
 }
 
 /* --- 반응형 디자인 (모바일 화면) --- */
@@ -466,4 +484,38 @@ hr.section-divider {
 html {
     scroll-behavior: smooth;
     scroll-padding-top: 100px; /* 고정된 상단 메뉴바에 내용이 가려지지 않도록 */
+}
+
+/* --- 태블릿 및 모바일 반응형 추가 --- */
+@media (max-width: 1024px) {
+    .page-container {
+        flex-direction: column; /* 2단 레이아웃을 세로로 쌓음 */
+        gap: 0;
+    }
+
+    .side-nav {
+        position: static; /* 스크롤 따라다니는 효과 해제 */
+        width: 100%;
+        height: auto;
+        display: flex;
+        border-bottom: 1px solid var(--border-color);
+        padding-bottom: 15px;
+        margin-bottom: 30px;
+    }
+
+    .side-nav ul {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+        gap: 10px; /* 버튼 사이 간격 */
+    }
+
+    .side-nav li a {
+        border: 1px solid var(--border-color);
+    }
+
+    /* html의 스크롤 패딩도 모바일에서는 필요 없으므로 초기화 */
+    html {
+        scroll-padding-top: 80px;
+    }
 }
