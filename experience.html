@@ -200,6 +200,75 @@ img {
 }
 
 
+/* --- Nested Tab Styles --- */
+
+/* 메인 탭 아래 서브 탭 스타일 */
+.sub-tabs {
+	border-bottom: 1px solid var(--border-color); /* 서브 탭 그룹 아래 구분선 */
+	margin-top: 15px; /* 메인 탭 내용 시작 부분과의 여백 */
+	margin-bottom: 0;
+	padding: 0 10px; /* 좌우 여백 살짝 줄임 */
+}
+
+.sub-tabs li {
+	font-size: 0.9em; /* 메인 탭보다 약간 작은 글씨 */
+	padding: 8px 12px; /* 위아래, 좌우 패딩 조정 */
+	margin-bottom: -1px; /* 구분선과 겹치도록 */
+	color: #6c757d; /* 기본 비활성 색상 */
+	border-bottom: 2px solid transparent; /* 밑줄 두께 조정 */
+}
+/* 서브 탭 점 제거 (기존 modal-tabs 규칙 재활용) */
+.sub-tabs li:not(:first-child)::before { content: none; }
+
+.sub-tabs li:hover {
+	color: var(--primary-color);
+}
+.sub-tabs li.active {
+	color: var(--primary-color);
+	font-weight: 600; /* 메인탭보다 약간 얇게 */
+	border-bottom-color: var(--primary-color);
+}
+
+/* 서브 탭 밑줄 너비 조정 (가상 요소 제거 - 서브탭은 border 사용) */
+.sub-tabs li::after {
+    content: none; /* 서브탭에서는 가상요소 밑줄 사용 안 함 */
+}
+.sub-tabs li.active {
+	border-bottom-color: var(--primary-color) !important; /* 다시 border 사용 */
+}
+
+
+/* 서브 탭 콘텐츠 영역 */
+.sub-tab-content-wrapper {
+	padding-top: 25px; /* 서브 탭과의 여백 */
+	/* 스크롤은 메인 컨테이너(.main-tab-container)에서 하므로 여기엔 overflow 불필요 */
+}
+
+/* 서브 탭 콘텐츠 기본 숨김 */
+.sub-tab-content {
+	display: none;
+}
+/* 활성화된 서브 탭 콘텐츠만 보이기 */
+.sub-tab-content.active {
+	display: block;
+	animation: fadeIn 0.4s;
+}
+
+/* 메인 탭 컨테이너 스크롤 처리 (기존 .modal-tab-container 스타일 상속/수정) */
+.main-tab-container {
+    padding: 0; /* 내부 여백 제거 (서브 영역에서 처리) */
+    overflow-y: auto;
+    min-height: 0;
+    /* max-height 계산은 기존 JS/CSS를 따름 */
+}
+
+/* 메인 탭 콘텐츠 영역 기본 숨김/보임 (기존 스타일 재활용) */
+.main-tab-content { display: none; }
+.main-tab-content.active { display: block; animation: fadeIn 0.4s; }
+
+/* 메인탭 하단 여백 제거 (스크롤바 붙이기 위함) */
+.main-tabs { margin-bottom: 0; }
+
     </style>
 </head>
 <body class="sub-page">
@@ -237,7 +306,7 @@ img {
                         <p>출시 이후에는 인게임 <strong>콘텐츠 개발 및 유지보수 업무를 담당</strong>하고 있습니다.</p>
                         <div class="project-details">
                             <div><h4>SDK</h4><ul><li>Firebase-Auth/Messaging</li><li>Adjust, AIHelp</li></ul></div>
-                            <div><h4>콘텐츠</h4><ul><li>코스튬</li><li>공성전</li><li>월드 던전, 공성 던전</li><li>랭킹 시스템</li><li>허수아비 수련 시스템</li><li>칭호 시스템</li></ul></div>
+                            <div><h4>콘텐츠</h4><ul><li>코스튬</li><li>공성전</li><li>월드 던전</li><li>랭킹 시스템</li><li>해골 시스템 (캐릭터 성장)</li><li>칭호 시스템</li></ul></div>
                             <div><h4>빌드</h4><ul><li>자동화 프로세스 구축</li><li>One, Galaxy, Play Unity 빌드</li><li>IOS XCode 빌드</li></ul></div>
                             <div><h4>최적화</h4><ul><li>LateBinding/메모리 중복 제거</li><li>DrawCall 최적화</li></ul></div>
                         </div>
@@ -394,11 +463,11 @@ img {
                 <p>29페이지의 SpriteAtlas를 4페이지로 줄이며 <strong>Batch</strong> 수 감소 및 메모리 약 2~5MB 절감. 번들 사이즈 <strong>52.2MB → 7.2MB</strong>.</p>
             </div>
         </div>
-        </div>
+    </div>
 
 
-
-<div id="sdk-content" data-align="left">
+<div class="modal-hidden-content">
+    <div id="sdk-content" data-align="left">
 	<h2>SDK</h2>
 		<ul class="modal-tabs">
 			<li class="active" data-target="sdk-tab-1">Firebase Login</li>
@@ -417,11 +486,6 @@ img {
 			<ul>
 				<li>기존 `.unitypackage` 방식의 SDK를 `.tgz` (UPM) 방식으로 마이그레이션하여 의존성 관리를 용이하게 했습니다.</li>
 				<li>이를 통해 향후 구글 정책(예: 16KB 메모리 지원) 변경에 따른 SDK 버전 업그레이드에 신속하게 대응할 수 있는 기반을 마련했습니다.</li>
-			</ul>
-			<h4>플랫폼별 구현 세부 내용</h4>
-			<ul>
-				<li>AOS : Unity AOS SDK</li>
-				<li>IOS : Unity IOS SDK</li>
 			</ul>
 		</div>
 		
@@ -464,14 +528,15 @@ img {
 			</ul>
 		</div>
 	</div>
+    </div>
 </div>
 
 
 
 
 
-
-<div id="build-content" data-align="left">
+    <div class="modal-hidden-content">
+        <div id="build-content" data-align="left">
 			<h2>빌드</h2>
 			<ul class="modal-tabs">
 				<li class="active" data-target="build-tab-1">빌드 설정 자동화 (Editor Tool)</li> <li data-target="build-tab-2">Xcode 프로젝트 자동 설정 (PostProcess)</li> <li data-target="build-tab-3">IOS 배포 프로세스</li> </ul>
@@ -577,9 +642,6 @@ img {
 				</div>
 			</div>
 		</div>
-
-
-				
 				<div id="build-tab-2" class="modal-tab-content"> <h3>Xcode 프로젝트 자동 설정 (PostProcess)</h3>
 					<h4>개발 목표</h4>
 					<ul>
@@ -603,9 +665,227 @@ img {
 				</div>
 			</div>
 		</div>
+    </div>
 
 
 
+
+    <div class="modal-hidden-content">
+        <div id="contents-content" data-align="left">
+            <h2>콘텐츠</h2>
+            <ul class="modal-tabs main-tabs">
+                <li class="active" data-target="cont-main-metin">메틴 콘텐츠</li>
+                <li data-target="cont-main-cheonsangbi">천상비 콘텐츠</li>
+            </ul>
+            <div class="modal-tab-container main-tab-container">
+            
+                <div id="cont-main-metin" class="modal-tab-content main-tab-content active">
+                    <ul class="modal-tabs sub-tabs">
+                        <li class="active" data-target="sub-metin-costume">코스튬</li>
+                        <li data-target="sub-metin-title">칭호</li>
+                        <li data-target="sub-metin-siege">공성전</li>
+                        <li data-target="sub-metin-world-dungeon">월드 던전</li>
+                        <li data-target="sub-metin-scarecrow">허수아비 수련 시스템</li>
+                        <li data-target="sub-metin-event">이벤트</li>
+                    </ul>
+                    <div class="sub-tab-content-wrapper">
+                    
+                        <div id="sub-metin-costume" class="modal-tab-content sub-tab-content active">
+                            <h3>코스튬</h3>
+                            <h4>개발 목표</h4>
+                            <ul>
+                                <li>캐릭터 커스터마이징 및 외형 변경 기능 제공.</li>
+                            </ul>
+                            <h4>주요 기능</h4>
+                            <ul>
+                                <li>코스튬: 외형 변경, 세트 효과, 염색.</li>
+                            </ul>
+                            <h4>구현 내용</h4>
+                            <ul>
+                                <li>코스튬: 캐릭터 메쉬 동적 파츠 부착/제거, 데이터 관리.</li>
+                            </ul>
+                        </div>
+                    
+                        <div id="sub-metin-title" class="modal-tab-content sub-tab-content">
+                            <h3>칭호</h3>
+                            <h4>개발 목표</h4>
+                            <ul>
+                                <li>캐릭터 성장 보조 및 업적 달성 시스템 구현.</li>
+                            </ul>
+                            <h4>주요 기능</h4>
+                            <ul>
+                                <li>칭호: 업적 달성 보상, 능력치 적용.</li>
+                            </ul>
+                            <h4>구현 내용</h4>
+                            <ul>
+                                <li>칭호: 획득 조건 체크, 칭호 목록 관리, 장착 시 능력치/UI 연동 로직.</li>
+                            </ul>
+                        </div>
+                    
+                        <div id="sub-metin-siege" class="modal-tab-content sub-tab-content">
+                            <h3>공성전 시스템</h3>
+                            <h4>개발 목표</h4>
+                            <ul>
+                                <li>다수의 유저가 참여하는 실시간 대규모 공성 전투 구현 및 길드 간 경쟁 콘텐츠 제공.</li>
+                                <li>안정적인 서버 통신과 최적화를 통해 원활한 플레이 경험 보장.</li>
+                            </ul>
+                            <h4>주요 기능</h4>
+                            <ul>
+                                <li>성 소유권 쟁탈 (점령/수성 규칙), 공성 상태 관리, 길드 용병 시스템, 세금 징수 및 분배.</li>
+                            </ul>
+                            <h4>구현 내용</h4>
+                            <ul>
+                                <li>실시간 상태 동기화를 위한 네트워크 프로토콜 구현 (e.g., TCP/IP, Protobuf).</li>
+                                <li>공성전 단계별 상태 변화 관리를 위한 유한 상태 머신(FSM) 패턴 적용.</li>
+                                <li>대규모 인원 렌더링 최적화 (LOD, Culling, 경량화).</li>
+                                <li>성문 파괴, 수호석 각인 등 핵심 로직 구현.</li>
+                            </ul>
+                        </div>
+                    
+                        <div id="sub-metin-world-dungeon" class="modal-tab-content sub-tab-content">
+                            <h3>월드 던전</h3>
+                            <h4>개발 목표</h4>
+                            <ul>
+                                <li>여러 서버 유저들이 만나는 공용 던전 구현.</li>
+                                <li>서버 간 경쟁 및 협력 콘텐츠 제공.</li>
+                            </ul>
+                            <h4>주요 기능</h4>
+                            <ul>
+                                <li>월드 던전: 서버 그룹 매칭, 보스 공략 및 차등 보상.</li>
+                            </ul>
+                            <h4>구현 내용</h4>
+                            <ul>
+                                <li>서버 간 매칭 및 인스턴스 던전 관리 로직 구현.</li>
+                                <li>기여도/클리어 시간에 따른 차등 보상 시스템 설계 및 연동.</li>
+                            </ul>
+                        </div>
+                    
+                        <div id="sub-metin-scarecrow" class="modal-tab-content sub-tab-content">
+                            <h3>허수아비 수련 시스템</h3>
+                            <h4>개발 목표</h4>
+                            <ul>
+                                <li>캐릭터 성장 보조 및 대미지 측정 시스템 구현.</li>
+                            </ul>
+                            <h4>주요 기능</h4>
+                            <ul>
+                                <li>허수아비 수련: 대미지 측정(DPS) 기능.</li>
+                            </ul>
+                            <h4>구현 내용</h4>
+                            <ul>
+                                <li>허수아비: 피격 처리 및 누적 대미지 계산/표시 로직.</li>
+                            </ul>
+                        </div>
+                    
+                        <div id="sub-metin-event" class="modal-tab-content sub-tab-content">
+                            <h3>이벤트 제작 시스템</h3>
+                            <h4>개발 목표</h4>
+                            <ul>
+                                <li>다양한 유형의 인게임 이벤트를 효율적으로 제작하고 관리.</li>
+                            </ul>
+                            <h4>주요 기능</h4>
+                            <ul>
+                                <li>이벤트 타입 지원(출석, 미션 등), 기간 설정, 진행 상태 UI.</li>
+                            </ul>
+                            <h4>구현 내용</h4>
+                            <ul>
+                                <li>이벤트 데이터 구조화 (ScriptableObject 또는 테이블).</li>
+                                <li>이벤트 타입별 조건 체크 및 보상 지급 로직 구현.</li>
+                                <li>이벤트 전용 UI 제작 및 서버 연동(기간 동기화, 상태 저장).</li>
+                            </ul>
+                        </div>
+                    
+                    </div>
+                </div>
+            
+                <div id="cont-main-cheonsangbi" class="modal-tab-content main-tab-content">
+                    <ul class="modal-tabs sub-tabs">
+                        <li class="active" data-target="sub-csb-npc-dispatch">NPC 우호도/파견 (도감 작업)</li>
+                        <li data-target="sub-csb-bulkbuy">캐시샵 일괄 구매</li>
+                        <li data-target="sub-csb-bagua">팔괘 도감</li>
+                        <li data-target="sub-csb-dungeon">던전</li>
+                    </ul>
+                    <div class="sub-tab-content-wrapper">
+                    
+                        <div id="sub-csb-npc-dispatch" class="modal-tab-content sub-tab-content active">
+                            <h3>NPC 우호도/파견 (도감 작업)</h3>
+                            <h4>개발 목표</h4>
+                            <ul>
+                                <li>NPC 상호작용을 통한 관계 증진 및 파견 콘텐츠 제공.</li>
+                                <li>관련 활동을 도감 시스템과 연계.</li>
+                            </ul>
+                            <h4>주요 기능</h4>
+                            <ul>
+                                <li>NPC 우호도: 단계별 기능 해금 및 보상.</li>
+                                <li>NPC 파견: 임무 수행 및 보상 획득.</li>
+                                <li>관련 활동(우호도 달성, 파견 완료) 도감 기록.</li>
+                            </ul>
+                            <h4>구현 내용</h4>
+                            <ul>
+                                <li>우호도 변화 및 단계별 기능 변화 로직 구현.</li>
+                                <li>파견 NPC/임무 선택 UI, 파견 시작/완료/보상 로직 구현.</li>
+                                <li>관련 데이터(우호도, 파견 상태) 저장 및 관리.</li>
+                                <li>도감 시스템 연동 로직 추가.</li>
+                            </ul>
+                        </div>
+                    
+                        <div id="sub-csb-bulkbuy" class="modal-tab-content sub-tab-content">
+                            <h3>캐시샵 일괄 구매</h3>
+                            <h4>개발 목표</h4>
+                            <ul>
+                                <li>유저 편의성 증대.</li>
+                            </ul>
+                            <h4>주요 기능</h4>
+                            <ul>
+                                <li>캐시 일괄 구매: 동일 아이템 다수 동시 구매.</li>
+                            </ul>
+                            <h4>구현 내용</h4>
+                            <ul>
+                                <li>일괄 구매: 상점 UI에 수량 입력/계산 및 일괄 구매 요청/처리 로직 구현.</li>
+                            </ul>
+                        </div>
+                    
+                        <div id="sub-csb-bagua" class="modal-tab-content sub-tab-content">
+                            <h3>팔괘 도감</h3>
+                            <h4>개발 목표</h4>
+                            <ul>
+                                <li>'팔괘' 아이템 관련 컬렉션 달성 목표 제공 및 능력치 보너스 부여.</li>
+                            </ul>
+                            <h4>주요 기능</h4>
+                            <ul>
+                                <li>팔괘 아이템 획득/강화 기반 컬렉션, 달성 현황 UI, 컬렉션 효과.</li>
+                            </ul>
+                            <h4>구현 내용</h4>
+                            <ul>
+                                <li>팔괘 획득/강화 시 관련 데이터 서버 기록 로직 구현.</li>
+                                <li>유저별 도감 달성 상태 저장/관리 서버 구조 설계.</li>
+                                <li>달성한 컬렉션 효과(스탯 보너스) 캐릭터 정보 합산 로직.</li>
+                                <li>도감 데이터 시각화 UI 제작.</li>
+                            </ul>
+                        </div>
+                        
+                        <div id="sub-csb-dungeon" class="modal-tab-content sub-tab-content">
+                            <h3>던전</h3>
+                            <h4>개발 목표</h4>
+                            <ul>
+                                <li>다양한 인스턴스 던전 콘텐츠 제공.</li>
+                            </ul>
+                            <h4>주요 기능</h4>
+                            <ul>
+                                <li>파티 기반 던전, 보스 레이드, 특수 보상.</li>
+                            </ul>
+                            <h4>구현 내용</h4>
+                            <ul>
+                                <li>던전 입장/매칭 시스템 구현.</li>
+                                <li>보스 몬스터 AI 및 패턴 구현.</li>
+                                <li>클리어 보상 지급 로직 연동.</li>
+                            </ul>
+                        </div>
+                    
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
 
 
@@ -645,35 +925,136 @@ img {
             });
 
             // ▼▼▼ 모달 내부의 탭 기능을 초기화하는 함수 ▼▼▼
-            function initializeModalTabs() {
-                const tabs = modal.querySelectorAll('.modal-tabs li');
-                const tabContents = modal.querySelectorAll('.modal-tab-content');
-		const scrollContainer = modal.querySelector('.modal-tab-container');
+// ▼▼▼ 모달 내부의 탭 기능을 초기화하는 함수 (Nested Tab 지원) ▼▼▼
+function initializeModalTabs() {
+                // 현재 열린 모달 내부에서 메인 탭 관련 요소 찾기
+                const currentModalContent = document.getElementById('modal-dynamic-content'); // 동적 콘텐츠 영역
+                if (!currentModalContent) return;
 
-                if (tabs.length === 0) return; // 탭이 없으면 실행 안함
+                const mainTabs = currentModalContent.querySelectorAll('.main-tabs li');
+                const mainTabContents = currentModalContent.querySelectorAll('.main-tab-content');
+				const mainScrollContainer = currentModalContent.querySelector('.main-tab-container'); // 메인 스크롤 컨테이너
 
-                tabs.forEach(tab => {
-                    tab.addEventListener('click', () => {
-                        // 모든 탭과 콘텐츠에서 active 클래스 제거
-                        tabs.forEach(t => t.classList.remove('active'));
-                        tabContents.forEach(c => c.classList.remove('active'));
+                // --- 메인 탭 클릭 이벤트 설정 ---
+                if (mainTabs.length > 0) { // 메인 탭이 있는 경우 (중첩 탭 구조)
+                    mainTabs.forEach(tab => {
+                        // 기존 리스너 제거 후 새로 추가 (innerHTML로 재생성된 요소 대응)
+                        const newTab = tab.cloneNode(true);
+                        tab.parentNode.replaceChild(newTab, tab);
 
-			if (scrollContainer) 
-			{ 
-				scrollContainer.scrollTop = 0; 
-			}
+                        newTab.addEventListener('click', () => {
+                            // 1. 모든 메인 탭/콘텐츠 비활성화 (현재 모달 내부에서만)
+                            const currentMainTabs = currentModalContent.querySelectorAll('.main-tabs li'); // 최신 상태 반영
+                            currentMainTabs.forEach(t => t.classList.remove('active'));
+                            mainTabContents.forEach(c => c.classList.remove('active'));
 
-                        // 클릭된 탭과 연결된 콘텐츠에 active 클래스 추가
-                        tab.classList.add('active');
-                        const targetId = tab.getAttribute('data-target');
-                        const targetContent = modal.querySelector('#' + targetId);
-                        if (targetContent) {
-                            targetContent.classList.add('active');
+                            // 2. 메인 컨테이너 스크롤 상단 이동
+    						if (mainScrollContainer) {
+    							mainScrollContainer.scrollTop = 0;
+    						}
+
+                            // 3. 클릭된 메인 탭 및 해당 콘텐츠 활성화
+                            newTab.classList.add('active'); // 복제된 새 요소에 active 추가
+                            const targetId = newTab.getAttribute('data-target');
+                            const targetContent = currentModalContent.querySelector('#' + targetId); // 현재 모달 내부에서 찾기
+                            if (targetContent) {
+                                targetContent.classList.add('active');
+                                    // 4. 활성화된 메인 콘텐츠 내부의 서브 탭 설정 함수 호출
+                                    setupSubTabs(targetContent);
+                            }
+                        });
+                    });
+
+                    // --- 초기에 활성화된 메인 탭 내부의 서브 탭 설정 ---
+                    const initiallyActiveMainContent = currentModalContent.querySelector('.main-tab-content.active');
+                    if (initiallyActiveMainContent) {
+                        setupSubTabs(initiallyActiveMainContent);
+                    }
+                } else { // 메인 탭 없이 바로 탭 리스트가 있는 경우 (단일 탭 구조)
+                     const singleTabs = currentModalContent.querySelectorAll('.modal-tabs li'); // 메인 탭 없을 시 일반 탭 찾기
+                     const singleTabContents = currentModalContent.querySelectorAll('.modal-tab-content');
+                     const singleScrollContainer = currentModalContent.querySelector('.modal-tab-container');
+
+                     if (singleTabs.length > 0) {
+                         singleTabs.forEach(tab => {
+                            const newTab = tab.cloneNode(true);
+                            tab.parentNode.replaceChild(newTab, tab);
+
+                            newTab.addEventListener('click', () => {
+                                const currentSingleTabs = currentModalContent.querySelectorAll('.modal-tabs li');
+                                currentSingleTabs.forEach(t => t.classList.remove('active'));
+                                singleTabContents.forEach(c => c.classList.remove('active'));
+
+                                if (singleScrollContainer) {
+                                    singleScrollContainer.scrollTop = 0;
+                                }
+
+                                newTab.classList.add('active');
+                                const targetId = newTab.getAttribute('data-target');
+                                const targetContent = currentModalContent.querySelector('#' + targetId);
+                                if (targetContent) {
+                                    targetContent.classList.add('active');
+                                }
+                            });
+                         });
+                     }
+                }
+            }
+
+
+            // --- 지정된 부모 요소 내의 서브 탭 기능 설정 함수 ---
+            function setupSubTabs(parentElement) {
+                if (!parentElement) return;
+
+                const subTabs = parentElement.querySelectorAll('.sub-tabs li');
+                const subTabContents = parentElement.querySelectorAll('.sub-tab-content');
+				// 서브탭은 스크롤 별도처리 안함 (메인 컨테이너에서 스크롤)
+
+                if (subTabs.length === 0) return; // 서브 탭 없으면 종료
+
+                subTabs.forEach(subTab => {
+                    // 기존 리스너 제거 (중복 방지)
+                    subTab.replaceWith(subTab.cloneNode(true));
+                });
+                // 새로 복제된 요소들로 다시 찾아야 함
+                const newSubTabs = parentElement.querySelectorAll('.sub-tabs li');
+
+                newSubTabs.forEach(subTab => {
+                     subTab.addEventListener('click', () => {
+                        // 1. 현재 메인 탭 내 모든 서브 탭/콘텐츠 비활성화
+                        newSubTabs.forEach(st => st.classList.remove('active'));
+                        subTabContents.forEach(sc => sc.classList.remove('active'));
+
+						// 2. 서브탭 클릭 시에도 메인 컨테이너 스크롤 상단 이동
+						const mainScrollContainer = modal.querySelector('.main-tab-container');
+						if (mainScrollContainer) {
+							mainScrollContainer.scrollTop = 0;
+						}
+
+                        // 3. 클릭된 서브 탭 및 해당 콘텐츠 활성화
+                        subTab.classList.add('active');
+                        const subTargetId = subTab.getAttribute('data-target');
+                        const subTargetContent = parentElement.querySelector('#' + subTargetId);
+                        if (subTargetContent) {
+                            subTargetContent.classList.add('active');
                         }
                     });
                 });
+
+				// 현재 활성화된 메인 탭 로드 시, 첫 번째 서브 탭이 활성화 되도록 보장
+				const activeSubTab = parentElement.querySelector('.sub-tabs li.active');
+				if (!activeSubTab && newSubTabs.length > 0) {
+					newSubTabs[0].click(); // 첫 번째 서브 탭 강제 클릭
+				} else if (activeSubTab) {
+					// 만약 이미 active 서브 탭이 있다면 해당 콘텐츠만 보이도록 처리
+					const subTargetId = activeSubTab.getAttribute('data-target');
+					const subTargetContent = parentElement.querySelector('#' + subTargetId);
+					subTabContents.forEach(sc => sc.classList.remove('active')); // 일단 다 끄고
+					if (subTargetContent) subTargetContent.classList.add('active'); // 해당 콘텐츠만 켠다
+				}
             }
 
+            
             const closeModal = () => { modal.style.display = 'none'; };
             closeButton.addEventListener('click', closeModal);
             window.addEventListener('click', (event) => { if (event.target == modal) { closeModal(); } });
