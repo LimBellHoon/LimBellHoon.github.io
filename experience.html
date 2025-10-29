@@ -28,6 +28,8 @@
 	.modal-tabs li:not(:first-child)::before { content: none; }
 	.modal-tab-content h4:not(:first-of-type) { border-top: 1px solid var(--border-color); padding-top: 25px; margin-top: 25px; }
 	.modal-tab-content img { max-width: 100%; height: auto; }
+	/* .modal-tab-content video { max-width: 100%; height: auto; } */
+    video { max-width: 100%; height: auto; display: block; box-sizing: border-box; }
 	.parenthesis-note { font-size: 0.9em; }
 	.mt-30 { margin-top: 30px; }
 	.modal-tab-content img.clickable-image { margin-bottom: 0; }
@@ -40,236 +42,106 @@
     .project-details { grid-template-columns: 1fr 1fr; }
 
 
-/* --- 반응형 디자인 추가 개선 --- */
-
-/* 태블릿 화면 (예: 1024px 이하) */
-@media (max-width: 1024px) {
+    /* --- 반응형 디자인 추가 개선 --- */
+    /* 태블릿 화면 (예: 1024px 이하) */
     /* 페이지 좌우 여백을 조금 줄여서 콘텐츠 영역 확보 */
-    .page-container {
-        padding: 0 15px; /* 기존 20px에서 조금 줄임 */
+    @media (max-width: 1024px) 
+    { 
+        .page-container { padding: 0 15px; } 
+        /* 메인 타이틀(index.html) 폰트 크기 살짝 줄이기 */
+        .hero-text .main-title { font-size: 3.5rem; }
+        /* 페이지 제목(experience.html) 폰트 크기 줄이기 */
+        .page-header h1 { font-size: 2.2rem; }
+        /* 섹션 제목 폰트 크기 줄이기 */
+        .section-title { font-size: 1.8rem; }
     }
 
-    /* 메인 타이틀(index.html) 폰트 크기 살짝 줄이기 */
-    .hero-text .main-title {
-        font-size: 3.5rem; /* 기존 4rem에서 줄임 */
+    /* 모바일 화면 (예: 768px 이하) */
+    @media (max-width: 768px) {
+        /* 네비게이션 바 링크 좌우 패딩 줄이기 */
+        .navbar a {            padding: 0 15px; font-size: 0.95rem;        }
+        .hero-text .main-title {            font-size: 2.8rem;        }
+        .hero-text .subtitle {            font-size: 1rem;        }
+        .resume-section {            padding: 40px 15px;        }
+        .resume-block {            margin-bottom: 40px;        }
+        .resume-block h3, .resume-block p, .resume-block li {            font-size: 1rem;        }
+        .page-header h1 {            font-size: 1.8rem;        }
+        .section-title {            font-size: 1.5rem;        }
+        .section-subtitle {            font-size: 0.9rem;        }
+        .project-description h3 {            font-size: 1.5rem;         }
+        .project-description .project-date { font-size: 0.8rem;         }
+        .project-details h4 {            font-size: 1rem;        }
+        .project-details li {            font-size: 0.9rem;        }
+        .task-button .circle {            width: 150px; height: 150px;        }
+         .task-button .circle span {            font-size: 1.5rem;        }
+        .task-label h4 {            font-size: 1rem;        }
+        .task-label p {            font-size: 0.85rem;        }
+        #modal-dynamic-content > h2 { padding: 30px 20px 15px 20px; }
+        .modal-tabs { padding: 0 20px; }
+        .modal-tab-container { padding: 20px; }
+        .modal-tabs li {            font-size: 0.9rem; padding: 8px 10px;        }
+        .modal-tabs li::after {            left: 10px; right: 10px;        }
+
     }
 
-    /* 페이지 제목(experience.html) 폰트 크기 줄이기 */
-    .page-header h1 {
-        font-size: 2.2rem; /* 기존 2.5rem에서 줄임 */
+    /* 아주 작은 모바일 화면 (예: 480px 이하) */
+    @media (max-width: 480px) 
+    {
+        .navbar a { padding: 0 10px; font-size: 0.9rem; }
+        .hero-text .main-title { font-size: 2.2rem;}
+        .page-header h1 { font-size: 1.5rem; }
+        .section-title {font-size: 1.3rem;}
+        .project-description h3 { font-size: 1.3rem; }
+        .task-button .circle { width: 120px; height: 120px; }
+        .task-button .circle span { font-size: 1.3rem; }
     }
-
-    /* 섹션 제목 폰트 크기 줄이기 */
-    .section-title {
-        font-size: 1.8rem; /* 기존 2rem에서 줄임 */
+    /* 모든 이미지 반응형 처리 (기본 스타일 추가) */
+    img {
+        max-width: 100%;
+        height: auto;
+        display: block; /* 이미지 아래 불필요한 공백 제거 */
     }
-}
-
-/* 모바일 화면 (예: 768px 이하) */
-@media (max-width: 768px) {
-    /* 네비게이션 바 링크 좌우 패딩 줄이기 */
-    .navbar a {
-        padding: 0 15px; /* 기존 30px에서 줄임 */
-        font-size: 0.95rem; /* 폰트 크기 미세 조정 */
+    /* 메인 탭 아래 서브 탭 스타일 */
+    .sub-tabs {
+    	border-bottom: 1px solid var(--border-color); /* 서브 탭 그룹 아래 구분선 */
+    	margin-top: 15px; /* 메인 탭 내용 시작 부분과의 여백 */
+    	margin-bottom: 0;
+    	padding: 0 10px; /* 좌우 여백 살짝 줄임 */
     }
-
-    /* 메인 타이틀(index.html) 폰트 크기 더 줄이기 */
-    .hero-text .main-title {
-        font-size: 2.8rem;
+    .sub-tabs li {
+    	font-size: 0.9em; /* 메인 탭보다 약간 작은 글씨 */
+    	padding: 8px 12px; /* 위아래, 좌우 패딩 조정 */
+    	margin-bottom: -1px; /* 구분선과 겹치도록 */
+    	color: #6c757d; /* 기본 비활성 색상 */
+    	border-bottom: 2px solid transparent; /* 밑줄 두께 조정 */
     }
-    .hero-text .subtitle {
-        font-size: 1rem;
-    }
-
-    /* 이력서 섹션(index.html) 내부 여백 줄이기 */
-    .resume-section {
-        padding: 40px 15px;
-    }
-    .resume-block {
-        margin-bottom: 40px; /* 기존 60px에서 줄임 */
-    }
-    .resume-block h3, .resume-block p, .resume-block li {
-        font-size: 1rem; /* 모바일에서 폰트 크기 살짝 줄임 */
-    }
-
-
-    /* 페이지 제목(experience.html) 폰트 크기 더 줄이기 */
-    .page-header h1 {
-        font-size: 1.8rem;
-    }
-
-    /* 섹션 제목 폰트 크기 더 줄이기 */
-    .section-title {
-        font-size: 1.5rem;
-    }
-    .section-subtitle {
-        font-size: 0.9rem;
-    }
-
-    /* 프로젝트 설명 제목/날짜 폰트 크기 줄이기 */
-    .project-description h3 {
-        font-size: 1.5rem; /* 기존 2rem에서 줄임 */
-    }
-    .project-description .project-date {
-        font-size: 0.8rem; /* 기존 0.9rem에서 줄임 */
-    }
-
-    /* 프로젝트 상세 설명 폰트 크기 줄이기 */
-    .project-details h4 {
-        font-size: 1rem;
-    }
-    .project-details li {
-        font-size: 0.9rem;
-    }
-
-    /* 경력 기술 버튼(circle) 크기 줄이기 */
-    .task-button .circle {
-        width: 150px;
-        height: 150px;
-    }
-     .task-button .circle span {
-        font-size: 1.5rem;
-    }
-    .task-label h4 {
-        font-size: 1rem;
-    }
-    .task-label p {
-        font-size: 0.85rem;
-    }
-
-    /* 모달 창 내부 패딩 줄이기 */
-    #modal-dynamic-content > h2 { padding: 30px 20px 15px 20px; }
-    .modal-tabs { padding: 0 20px; }
-    .modal-tab-container { padding: 20px; }
-
-    /* 모달 창 탭 폰트 크기 줄이기 */
-    .modal-tabs li {
-        font-size: 0.9rem;
-        padding: 8px 10px;
-    }
-    /* 모달 탭 밑줄 위치 조정 (left/right 값 변경) */
-    .modal-tabs li::after {
-        left: 10px;
-        right: 10px;
-    }
-
-}
-
-/* 아주 작은 모바일 화면 (예: 480px 이하) */
-@media (max-width: 480px) {
-    /* 네비게이션 바 링크 좌우 패딩 더 줄이기 */
-    .navbar a {
-        padding: 0 10px;
-        font-size: 0.9rem;
-    }
-
-    /* 메인 타이틀(index.html) 폰트 크기 더 줄이기 */
-    .hero-text .main-title {
-        font-size: 2.2rem;
-    }
-
-     /* 페이지 제목(experience.html) 폰트 크기 더 줄이기 */
-    .page-header h1 {
-        font-size: 1.5rem;
-    }
-    /* 섹션 제목 폰트 크기 더 줄이기 */
-    .section-title {
-        font-size: 1.3rem;
-    }
-
-    /* 프로젝트 설명 제목 폰트 크기 줄이기 */
-    .project-description h3 {
-        font-size: 1.3rem;
-    }
-
-    /* 경력 기술 버튼(circle) 크기 더 줄이기 */
-    .task-button .circle {
-        width: 120px;
-        height: 120px;
-    }
-     .task-button .circle span {
-        font-size: 1.3rem;
-    }
-}
-
-/* 모든 이미지 반응형 처리 (기본 스타일 추가) */
-img {
-    max-width: 100%;
-    height: auto;
-    display: block; /* 이미지 아래 불필요한 공백 제거 */
-}
-
-
-/* --- Nested Tab Styles --- */
-
-/* 메인 탭 아래 서브 탭 스타일 */
-.sub-tabs {
-	border-bottom: 1px solid var(--border-color); /* 서브 탭 그룹 아래 구분선 */
-	margin-top: 15px; /* 메인 탭 내용 시작 부분과의 여백 */
-	margin-bottom: 0;
-	padding: 0 10px; /* 좌우 여백 살짝 줄임 */
-}
-
-.sub-tabs li {
-	font-size: 0.9em; /* 메인 탭보다 약간 작은 글씨 */
-	padding: 8px 12px; /* 위아래, 좌우 패딩 조정 */
-	margin-bottom: -1px; /* 구분선과 겹치도록 */
-	color: #6c757d; /* 기본 비활성 색상 */
-	border-bottom: 2px solid transparent; /* 밑줄 두께 조정 */
-}
-/* 서브 탭 점 제거 (기존 modal-tabs 규칙 재활용) */
-.sub-tabs li:not(:first-child)::before { content: none; }
-
-.sub-tabs li:hover {
-	color: var(--primary-color);
-}
-.sub-tabs li.active {
-	color: var(--primary-color);
-	font-weight: 600; /* 메인탭보다 약간 얇게 */
-	border-bottom-color: var(--primary-color);
-}
-
-/* 서브 탭 밑줄 너비 조정 (가상 요소 제거 - 서브탭은 border 사용) */
-.sub-tabs li::after {
-    content: none; /* 서브탭에서는 가상요소 밑줄 사용 안 함 */
-}
-.sub-tabs li.active {
-	border-bottom-color: var(--primary-color) !important; /* 다시 border 사용 */
-}
-
-
-/* 서브 탭 콘텐츠 영역 */
-.sub-tab-content-wrapper {
-	padding-top: 25px; /* 서브 탭과의 여백 */
-	/* 스크롤은 메인 컨테이너(.main-tab-container)에서 하므로 여기엔 overflow 불필요 */
-}
-
-/* 서브 탭 콘텐츠 기본 숨김 */
-.sub-tab-content {
-	display: none;
-}
-/* 활성화된 서브 탭 콘텐츠만 보이기 */
-.sub-tab-content.active {
-	display: block;
-	animation: fadeIn 0.4s;
-}
-
-/* 메인 탭 컨테이너 스크롤 처리 (기존 .modal-tab-container 스타일 상속/수정) */
-.main-tab-container {
-    padding: 0; /* 내부 여백 제거 (서브 영역에서 처리) */
-    overflow-y: auto;
-    min-height: 0;
-    /* max-height 계산은 기존 JS/CSS를 따름 */
-}
-
-/* 메인 탭 콘텐츠 영역 기본 숨김/보임 (기존 스타일 재활용) */
-.main-tab-content { display: none; }
-.main-tab-content.active { display: block; animation: fadeIn 0.4s; }
-
-/* 메인탭 하단 여백 제거 (스크롤바 붙이기 위함) */
-.main-tabs { margin-bottom: 0; }
-
+    /* 서브 탭 점 제거 (기존 modal-tabs 규칙 재활용) */
+    .sub-tabs li:not(:first-child)::before { content: none; }
+    .sub-tabs li:hover { color: var(--primary-color); }
+    .sub-tabs li.active { color: var(--primary-color); font-weight: 600; border-bottom-color: var(--primary-color); }
+    .sub-tabs li::after { content: none; }
+    .sub-tabs li.active { border-bottom-color: var(--primary-color) !important; }
+    .sub-tab-content-wrapper { padding-top: 25px; }
+    .sub-tab-content { display: none; }
+    .sub-tab-content.active { display: block; animation: fadeIn 0.4s; }
+    .main-tab-container { padding: 0; overflow-y: auto; min-height: 0; }
+    .main-tab-content { display: none; }
+    .main-tab-content.active { display: block; animation: fadeIn 0.4s; }
+    .main-tabs { margin-bottom: 0; }
+    .modal-tab-content > div.indented-media { margin-top: 5px; margin-bottom: 5px; margin-left: 30px; }
+	.modal-tab-content > p.ref-note2 { margin-top: -5px; margin-left: 33px; font-size: 0.9em; color: #4a4d50; }
     </style>
+
+
+
+
+
+
+
+
+
+
+
 </head>
 <body class="sub-page">
 
@@ -429,8 +301,8 @@ img {
             <div id="opt-tab-3" class="modal-tab-content">
                 <h3>Tilemap Property 중복 적재 제거</h3>
                 <h4>문제점</h4>
-                <img src="images/Tilemap_Property_중복_적재_제거_문제.png" alt="Tilemap Property 문제" class="clickable-image">
                 <p>맵 이동 시 이전 맵의 Resource들이 해제되지 않고 누적되어 <strong>최대 208MB까지 중복 적재</strong>되는 현상이 발생했습니다.</p>
+                <img src="images/Tilemap_Property_중복_적재_제거_문제.png" alt="Tilemap Property 문제" class="clickable-image">
                 <h4>개선 내용</h4>
                 <img src="images/Tilemap_Property_중복_적재_제거_개선_내용.png" alt="Tilemap Property 개선 내용" class="clickable-image">
                 <p><strong>AssetBundle</strong> 로드 시에도 메모리에 적재됨을 확인했습니다. 적재된 메모리를 <strong>null처리</strong>로 Reference Count 감소 후, <strong>UnloadUnusedAssets</strong> 함수로 제거하여 이중 적재 및 누적 문제를 해결했습니다.</p>
@@ -611,7 +483,7 @@ img {
                         <li><strong>앱 용량 및 데이터 다운로드 (Guideline 2.5)</strong>:
                             <ul style="padding-left: 20px;">
                                 <li>빌드 용량 최소화: 초기 빌드(.ipa) 용량이 과도하게 크지 않도록 관리 (경험상 750MB 통과, 1GB 초과 시 다운로드 시간 문제 발생 가능성).</li>
-                                <li>번들 다운로드 시간: 게임 시작 시 다운로드하는 번들 용량이 너무 크면 다운로드 시간 초과(경험상 2GB, 30분 이상 소요 시 리젝)로 리젝될 수 있음. → **해결**: 주요 아틀라스, UI 리소스 등 필수 번들은 Resources 폴더에 포함시켜 빌드하여 초기 다운로드 시간 단축.</li>
+                                <li>번들 다운로드 시간: 게임 시작 시 다운로드하는 번들 용량이 너무 크면 다운로드 시간 초과(경험상 2GB, 30분 이상 소요 시 리젝)로 리젝될 수 있음. → 해결: 주요 아틀라스, UI 리소스 등 필수 번들은 Resources 폴더에 포함시켜 빌드하여 초기 다운로드 시간 단축.</li>
                             </ul>
                         </li>
                         <li><strong>콘텐츠 접근성 및 테스트 용이성 (Guideline 2.1)</strong>:
@@ -694,16 +566,52 @@ img {
                             <h3>코스튬</h3>
                             <h4>개발 목표</h4>
                             <ul>
-                                <li>캐릭터 커스터마이징 및 외형 변경 기능 제공.</li>
+                                <li>캐릭터 외형 커스터마이징 기능 제공.</li>
+                                <li>추가적인 BM을 통해 공성 및 PVP 활성화를 목표로 능력치 및 스킬 제공.</li>
                             </ul>
                             <h4>주요 기능</h4>
                             <ul>
-                                <li>코스튬: 외형 변경, 세트 효과, 염색.</li>
+                                <li>캐릭터 외형 변경.</li>
+                                <li>부가 능력치 부여.</li>
+                                <li>패시브 스킬 제공.</li>
                             </ul>
                             <h4>구현 내용</h4>
-                            <ul>
-                                <li>코스튬: 캐릭터 메쉬 동적 파츠 부착/제거, 데이터 관리.</li>
-                            </ul>
+                            <div>메인 메뉴 - 코스튬 버튼</div>
+                            <div class="indented-media"><img src="images/Contents/Costume/코스튬1.png" alt="코스튬 1" class="clickable-image"></div>
+                            <br>
+                            <div>코스튬 UI - 장착 및 외형적용</div>
+                            <div class="indented-media"><img src="images/Contents/Costume/코스튬2.png" alt="코스튬 2" class="clickable-image"></div>
+                            <p class="ref-note2">*캐릭터링에 실시간으로 외형이 적용됩니다.</p>
+                            <div class="indented-media"><img src="images/Contents/Costume/코스튬3.png" alt="코스튬 3" class="clickable-image"></div>
+                            <p class="ref-note2">*코스튬 부위별 장착/해제 기능</p>
+                            <div class="indented-media"><img src="images/Contents/Costume/코스튬4.png" alt="코스튬 4" class="clickable-image"></div>
+                            <div class="indented-media"><img src="images/Contents/Costume/코스튬5.png" alt="코스튬 5" class="clickable-image"></div>
+                            <p class="ref-note2">*산타 코스튬으로 전부 외형 적용됐을 때</p>
+                            <br>
+
+                            <div>코스튬 UI - 강화</div>
+                            <div class="indented-media"><video controls muted loop playsinline autoplay>
+                                <source src="video/코스튬7.mp4" type="video/mp4">
+                                영상을 지원하지 않는 브라우저입니다.
+                            </video> </div>
+                            <div class="indented-media"><img src="images/Contents/Costume/코스튬6.png" alt="코스튬 6" class="clickable-image"></div>
+                            <div class="indented-media"><img src="images/Contents/Costume/코스튬9.png" alt="코스튬 9" class="clickable-image"></div>
+                            <p class="ref-note2">*강화를 완료했을 때</p>
+                            <p class="ref-note2">** 인벤토리 - 코스튬 : 금색으로 빛남</p>
+                            <p class="ref-note2">** 코스튬 정보 - 이미지 뒤에 이펙트 추가</p>
+                            <p class="ref-note2">** 현재 아인 능력치 - 아인 부여로 인해 얻은 추가 능력치</p>
+                            <br>
+                            <div>코스튬 UI - 수집</div>
+                            <div class="indented-media"><img src="images/Contents/Costume/코스튬10.png" alt="코스튬 10" class="clickable-image"></div>
+                            <div class="indented-media"><img src="images/Contents/Costume/코스튬11.png" alt="코스튬 11" class="clickable-image"></div>
+                            <p class="ref-note2">*아인 100을 달성한 코스튬 수집 이미지</p>
+                            <div class="indented-media"><img src="images/Contents/Costume/코스튬12.png" alt="코스튬 12" class="clickable-image"></div>
+                            <div class="indented-media"><img src="images/Contents/Costume/코스튬13.png" alt="코스튬 13" class="clickable-image"></div>
+                            <p class="ref-note2">*아인 100을 달성한 코스튬 외형 적용 이미지</p>
+                            <div class="indented-media"><img src="images/Contents/Costume/코스튬14.png" alt="코스튬 14" class="clickable-image"></div>
+                            <p class="ref-note2">*코스튬으로 얻은 추가 효과</p>
+                            <div class="indented-media"><img src="images/Contents/Costume/코스튬15.png" alt="코스튬 15" class="clickable-image"></div>
+                            <p class="ref-note2">*코스튬으로 얻은 스킬</p>
                         </div>
                     
                         <div id="sub-metin-title" class="modal-tab-content sub-tab-content">
