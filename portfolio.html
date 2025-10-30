@@ -49,8 +49,22 @@
             display: flex;
             flex-direction: column; /* 세로로 쌓기 */
         }
+
+        /* ⬇️ [수정됨] <br> 태그 대신 CSS로 간격 적용 */
+        .project-media-column > img {
+            width: 100%; /* 너비 꽉 채움 */
+            height: auto;
+            display: block;
+            border-radius: 6px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            margin-bottom: 25px; /* 비디오와의 간격 */
+            transition: transform 0.2s ease;
+        }
+        .project-media-column > img:hover {
+            transform: scale(1.03);
+        }
         
-        /* 상단 배너 (이미지 2개 가로 배치) */
+        /* 상단 배너 (이미지 2개 가로 배치) - 2개일 경우 사용 */
         .project-banner-row {
             display: flex;
             gap: 15px; /* 이미지 사이 간격 */
@@ -175,6 +189,40 @@
             }
         }
 
+        /* --- ⬇️ [새로 추가됨] 포트폴리오 외부 링크 버튼 --- */
+        .project-external-links {
+            margin-top: 30px; /* 위쪽 내용(p 태그)과의 간격 */
+            display: flex; /* 버튼들을 flexbox로 배치 */
+            gap: 12px; /* 버튼 사이의 간격 */
+        }
+
+        .external-link-btn {
+            flex-grow: 1; /* 버튼이 남은 공간을 1:1 비율로 채우도록 함 */
+            flex-basis: 0; /* 버튼의 기본 너비를 0으로 설정하여 동일한 크기 보장 */
+
+            display: inline-block;
+            padding: 8px 14px;
+            border: 1px solid var(--border-color, #ccc);
+            border-radius: 5px;
+
+            color: var(--text-color-light, #555);
+            background-color: #ffffff;
+
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            text-align: center; /* 버튼 내부 텍스트 가운데 정렬 */
+
+            transition: all 0.2s ease;
+        }
+
+        .external-link-btn:hover {
+            background-color: var(--card-bg-color, #f9f9f9);
+            border-color: #999;
+            color: #222;
+        }
+        /* --- ⬆️ [새로 추가됨] 여기까지 --- */
+
     </style>
 </head>
 <body class="sub-page">
@@ -200,7 +248,7 @@
                 <div class="project-entry">
                     
                     <div class="project-media-column">
-                            <img src="images/Portfolio/Dragonball/dbz1.png" alt="드래곤볼 Z 카카로트 배너">
+                        <img src="images/Portfolio/Dragonball/dbz1.png" alt="드래곤볼 Z 카카로트 배너">
                         
                         <div class="video-embed-container">
                         <iframe 
@@ -228,8 +276,15 @@
                         <p>저는 툴 제작, 카메라 연출, 그리고 이펙트 제작을 담당했으며, DirectX 11 기반의 기술을 바탕으로 게임 내 시각적 효과와 연출을 구현했습니다. 또한, 팀원들과의 협업을 통해 원작 게임의 핵심적인 요소들을 충실히 재현하였습니다.</p>
                         <p>이 과정에서 C++, HLSL, IMGUI 등 다양한 기술을 활용하며, 프로젝트의 효율성과 완성도를 높이는 데 기여하였습니다.</p>
                         
-                        <p class="project-note">※ 좌측 이미지를 클릭하시면 코드가 첨부된 포트폴리오 페이지로 이동합니다.</p>
-                    </div>
+                        <div class="project-external-links">
+                            <a href="YOUR_GOOGLE_DRIVE_LINK_HERE" class="external-link-btn" target="_blank" rel="noopener noreferrer">
+                                포트폴리오 (Google Drive)
+                            </a>
+                            <a href="YOUR_ONEDRIVE_LINK_HERE" class="external-link-btn" target="_blank" rel="noopener noreferrer">
+                                포트폴리오 (OneDrive)
+                            </a>
+                        </div>
+                        </div>
 
                 </div>
                 
