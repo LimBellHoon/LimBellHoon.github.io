@@ -692,12 +692,10 @@
                             </ul>
                             <h4>주요 기능</h4>
                             <ul>
-                                <li>보스 공략 및 차등 보상.</li>
+                                <li>월드 던전 입장.</li>
+                                <li>월드 던전 랭킹 및 보상 열람.</li>
                             </ul>
                             <h4>구현 내용</h4>
-                                <li>서버 간 매칭 및 인스턴스 던전 관리 로직 구현.</li>
-                                <li>기여도/클리어 시간에 따른 차등 보상 시스템 설계 및 연동.</li>
-
                                 <div><strong>월드 던전 UI</strong></div>
                                 <div class="indented-media"><img src="images/Contents/Dungeon/던전1.png" alt="던전 1" class="clickable-image"></div>
                                 <div class="indented-media"><img src="images/Contents/Dungeon/던전2.png" alt="던전 2" class="clickable-image"></div>
@@ -711,25 +709,44 @@
                             <h3>해골(허수아비 수련 시스템)</h3>
                             <h4>개발 목표</h4>
                             <ul>
-                                <li>캐릭터 성장 보조 및 대미지 측정 시스템 구현.</li>
+                                <li>저레벨 구간 캐릭터 성장 보조.</li>
+                                <li>말풍선을 통한 공지 및 유저간 소통 활성화.</li>
                             </ul>
                             <h4>주요 기능</h4>
                             <ul>
-                                <li>허수아비 수련: 대미지 측정(DPS) 기능.</li>
+                                <li>해골 소환</li>
+                                <li>해골 피격 시 말풍선 출력</li>
+                                <li>맵에 해골 UI 출력 및 해골 위치로 워프</li>
                             </ul>
                             <h4>구현 내용</h4>
-                            <ul>
-                                <li>허수아비: 피격 처리 및 누적 대미지 계산/표시 로직.</li>
-                            </ul>
+                                <div><strong>해골 UI - 소환 시 문구 입력 (해골 피격 시 말풍선 출력용 문구)</strong></div>
+                                <div class="indented-media"><img src="images/Contents/Skull/해골0.png" alt="해골 0" class="clickable-image"></div>
+                                <div class="indented-media"><img src="images/Contents/Skull/해골1.png" alt="해골 1" class="clickable-image"></div>
+                                <div class="indented-media"><img src="images/Contents/Skull/해골2.png" alt="해골 2" class="clickable-image"></div>
+                                <p class="ref-note2">*N초에 한 번 입력한 말풍선으로 출력되는 모습.</p>
+                                <br>
+                                <div><strong>해골 UI - 중복 소환 불가 및 범위 제한</strong></div>
+                                <div class="indented-media"><img src="images/Contents/Skull/해골3.png" alt="해골 3" class="clickable-image"></div>
+                                <div class="indented-media"><img src="images/Contents/Skull/해골4.png" alt="해골 4" class="clickable-image"></div>
+                                <p class="ref-note2">*"가까운 곳에 다른 해골이 이미 소환되어 있습니다."</p>                               
+                                <br>
+                                <div><strong>해골 UI - 맵에 표시되는 해골</strong></div>
+                                <div class="indented-media"><img src="images/Contents/Skull/해골5.png" alt="해골 5" class="clickable-image"></div>
+                                <p class="ref-note2">*소환자 및 해골 종류, 설정한 문구, 남은 시간을 볼 수 있으며, 해골로 이동 가능한 UI.</p>
+                                <br>
                         </div>
                     
                         <div id="sub-metin-event" class="modal-tab-content sub-tab-content">
                             <h3>이벤트 제작 시스템</h3>
                             <h4>개발 목표</h4>
                             <ul>
+                                <li>카드 뒤집기를 통한 보상 지급</li>
                             </ul>
                             <h4>주요 기능</h4>
                             <ul>
+                                <li>카드판 초기화</li>
+                                <li>두 개의 카드를 뒤집어 같은 짝을 맞추면 보상 지급</li>
+                                <li>문서에 따라 달라지는 카드 수로 난이도 조절</li>
                             </ul>
                             <h4>구현 내용</h4>
                                 <div><strong>이벤트 - 카드 뒤집기 UI</strong></div>
@@ -756,14 +773,18 @@
                             <h3>평판</h3>
                             <h4>개발 목표</h4>
                             <ul>
+                                <li>동전 및 은화 소모 콘텐츠.</li>
+                                <li>지역 별 평판을 통한 지역 별 특수 상품 판매.</li>
                             </ul>
                             <h4>주요 기능</h4>
                             <ul>
+                                <li>지역 기부를 통한 지역 별 평판 수치 UI 최신화.</li>
+                                <li>각 지역 평판에 따른 구매 상품 활성 여부.</li>
                             </ul>
                             <h4>구현 내용</h4>
                                 <div><strong>평판 UI</strong></div>
                                 <div class="indented-media"><img src="images/Contents/1003bM/Reputation/평판1.png" alt="평판 1" class="clickable-image"></div>
-                                <p class="ref-note2">*지역 클릭 시 우측 상세 페이지 UI.</p>
+                                <p class="ref-note2">*지역 클릭 시 좌측 적대 지역 표시 우측 상세 페이지 UI.</p>
                                 <div class="indented-media"><img src="images/Contents/1003bM/Reputation/평판2.png" alt="평판 2" class="clickable-image"></div>
                                 <p class="ref-note2">*각 평판에 따라 살 수 있는 아이템 및 가격 변동.</p>
                                 <br>
@@ -773,28 +794,30 @@
                             <h3>인연 (NPC 우호도/파견 - 도감 자동화 시스템)</h3>
                             <h4>개발 목표</h4>
                             <ul>
-                                <li>NPC 상호작용을 통한 관계 증진 및 파견 콘텐츠 제공.</li>
-                                <li>관련 활동을 도감 시스템과 연계.</li>
+                                <li>도감 시스템과 연계된 파견 콘텐츠 제공.</li>
+                                <li>도감 작업에 지루함을 느끼는 유저들의 불만 해소.</li>
                             </ul>
                             <h4>주요 기능</h4>
                             <ul>
-                                <li>NPC 우호도: 단계별 기능 해금 및 보상.</li>
-                                <li>NPC 파견: 임무 수행 및 보상 획득.</li>
-                                <li>관련 활동(우호도 달성, 파견 완료) 도감 기록.</li>
+                                <li>NPC 파견을 통한 도감 작업 및 경험치 획득.</li>
                             </ul>
                             <h4>구현 내용</h4>
-                                <li>우호도 변화 및 단계별 기능 변화 로직 구현.</li>
-                                <li>파견 NPC/임무 선택 UI, 파견 시작/완료/보상 로직 구현.</li>
-                                <li>관련 데이터(우호도, 파견 상태) 저장 및 관리.</li>
-                                <li>도감 시스템 연동 로직 추가.</li>
                                 <div><strong>인연 UI</strong></div>
                                 <div class="indented-media"><img src="images/Contents/1003bM/Dispatch/인연1.png" alt="인연 1" class="clickable-image"></div>
                                 <p class="ref-note2">*보유 인연 출력 및 파견/보유 효과.</p>
                                 <br>
                                 <div><strong>인연 UI - 파견</strong></div>
-                                <div class="indented-media"><img src="images/Contents/1003bM/Dispatch/인연2.png" alt="인연 2" class="clickable-image"></div>
+                                <div class="indented-media"><img src="images/Contents/1003bM/Dispatch/인연2.jpg" alt="인연 2" class="clickable-image"></div>
+                                <p class="ref-note2">*파견 종류.</p>
+                                <div class="indented-media"><img src="images/Contents/1003bM/Dispatch/인연3.jpg" alt="인연 3" class="clickable-image"></div>
+                                <p class="ref-note2">*파견 지역 및 몬스터 선택.</p>
                                 <p class="ref-note2">*파견 보낼 NPC 선택.</p>
+                                <p class="ref-note2">*일괄 파견 시 최근 보냈던 지역 및 몬스터, NPC로 설정되어 창을 연속해서 띄웁니다..</p>
                                 <br>
+                                <li>우호도 변화 및 단계별 기능 변화 로직 구현.</li>
+                                <li>파견 NPC/임무 선택 UI, 파견 시작/완료/보상 로직 구현.</li>
+                                <li>관련 데이터(파견 상태) 저장 및 관리.</li>
+                                <li>도감 시스템 연동 로직 추가.</li>
                         </div>
                     
                         <div id="sub-csb-bulkbuy" class="modal-tab-content sub-tab-content">
@@ -805,10 +828,10 @@
                             </ul>
                             <h4>주요 기능</h4>
                             <ul>
-                                <li>캐시 일괄 구매: 동일 아이템 다수 동시 구매.</li>
+                                <li>일괄 구매: 일일 동전 구매 가능 아이템 다수 동시 구매.</li>
                             </ul>
                             <h4>구현 내용</h4>
-                                <li>일괄 구매: 상점 UI에 수량 입력/계산 및 일괄 구매 요청/처리 로직 구현.</li>
+                                <li>상점 UI에 동전으로 살 수 있는 아이템들에 대해 수량 입력/계산 및 일괄 구매 요청/처리 로직 구현.</li>
                                 <div class="indented-media"><img src="images/Contents/1003bM/CashBuy_Bulk/캐시샵_일괄_구매.png" alt="캐시샵 일괄 구매" class="clickable-image"></div>
                                 <br>
                         </div>
@@ -824,10 +847,6 @@
                                 <li>팔괘 아이템 획득/강화 기반 컬렉션, 달성 현황 UI, 컬렉션 효과.</li>
                             </ul>
                             <h4>구현 내용</h4>
-                                <li>팔괘 획득/강화 시 관련 데이터 서버 기록 로직 구현.</li>
-                                <li>유저별 도감 달성 상태 저장/관리 서버 구조 설계.</li>
-                                <li>달성한 컬렉션 효과(스탯 보너스) 캐릭터 정보 합산 로직.</li>
-                                <li>도감 데이터 시각화 UI 제작.</li>
                                 <div class="indented-media"><img src="images/Contents/1003bM/EightEnchant/팔괘_강화_도감.png" alt="팔괘 강화 도감" class="clickable-image"></div>
                                 <br>
                         </div>
@@ -856,7 +875,7 @@
                                 <div class="indented-media"><img src="images/Contents/1003bM/Dungeon/던전2.png" alt="던전 2" class="clickable-image"></div>
                                 <p class="ref-note2">*획득한 장비 증표에 따라 점수 집계되며, 점수에 따른 랭킹 보상.</p>
                                 <div class="indented-media"><img src="images/Contents/1003bM/Dungeon/던전3.png" alt="던전 3" class="clickable-image"></div>
-                                <p class="ref-note2">*PVP 시 유명 랭커에게서 도망가는 유저들의 발생으로 익명 던전이라는 컨셉.</p>
+                                <p class="ref-note2">*PVP 시 유명 랭커에게서 도망가는 유저 방지용 익명 던전 컨셉.</p>
                                 <div class="indented-media"><img src="images/Contents/1003bM/Dungeon/던전4.png" alt="던전 4" class="clickable-image"></div>
                                 <p class="ref-note2">*환각의 섬 내 드랍되거나 랭킹 보상인 장비 수집증표를 통해 장비 도감의 수집.</p>
                                 <br>

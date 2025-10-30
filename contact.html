@@ -3,8 +3,158 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>홍길동의 포트폴리오 - Contact</title>
-    <link rel="stylesheet" href="css/style.css">
+    <title>임종훈의 포트폴리오 - Contact</title> <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* --- Contact 페이지 전용 스타일 --- */
+
+        /* experience.html의 기본 레이아웃 구조 활용 */
+        .page-container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .main-content {
+            padding-top: 50px; /* 네비게이션 바와의 여백 */
+            padding-bottom: 80px; /* 푸터와의 여백 */
+        }
+
+        /* 페이지 헤더 (레퍼런스의 'Contact' 제목) */
+        .page-header {
+            margin-bottom: 40px; /* 이미지와의 간격 */
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--border-color, #eee);
+        }
+
+        .page-header h1 {
+            font-size: 3rem; 
+            font-weight: 700;
+            color: var(--text-color-dark, #222);
+            margin: 0;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        /* 프로필 섹션 (이미지 + 이름) */
+        .profile-block {
+            margin-bottom: 50px; /* 하단 연락처 그리드와의 간격 */
+            animation: fadeIn 0.5s ease-out 0.1s;
+            animation-fill-mode: backwards; /* 애니메이션 시작 전 숨김 */
+        }
+
+        .profile-photo {
+            width: 220px; /* 이미지 크기 (조절 가능) */
+            height: auto;
+            border-radius: 8px; /* 살짝 둥근 모서리 */
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08); /* 은은한 그림자 */
+            margin-bottom: 25px; /* 이름과의 간격 */
+        }
+
+        .name-block {
+            /* 이름 블록 스타일 */
+        }
+
+        .name-korean {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--text-color-dark, #222);
+            margin: 0;
+            display: inline-block; 
+            vertical-align: baseline;
+        }
+
+        .name-english {
+            font-size: 1.5rem;
+            font-weight: 400;
+            color: var(--text-color-light, #777);
+            display: inline-block;
+            vertical-align: baseline;
+            margin-left: 10px;
+            padding-left: 10px;
+            border-left: 2px solid var(--border-color, #eee); /* 레퍼런스의 구분선 */
+        }
+
+        /* 연락처 3단 그리드 */
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr); /* 데스크탑 3단 */
+            gap: 40px; /* 섹션 간 간격 */
+            animation: fadeIn 0.5s ease-out 0.2s;
+            animation-fill-mode: backwards;
+        }
+
+        /* 각 연락처 블록 */
+        .contact-block {
+            /* 특별한 스타일 없음 (레퍼런스 참고) */
+        }
+
+        .contact-block h3 {
+            font-size: 1.1rem; /* "Phone", "Email" 텍스트 */
+            font-weight: 600;
+            color: var(--text-color-light, #555);
+            margin-top: 0;
+            margin-bottom: 12px;
+            letter-spacing: 0.5px; 
+        }
+
+        .contact-block p {
+            font-size: 1.1rem; /* 내용 텍스트 */
+            font-weight: 500;
+            color: var(--text-color, #333);
+            margin: 0;
+            line-height: 1.6;
+            word-break: break-all; /* 긴 이메일/주소 자동 줄바꿈 */
+        }
+        
+        .contact-block p strong {
+            color: var(--text-color-dark, #222); /* "GitHub" 텍스트 */
+            font-weight: 600;
+        }
+
+        .contact-block a {
+            color: var(--text-color, #333);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        .contact-block a:hover {
+            text-decoration: underline;
+            color: var(--primary-color, #007bff);
+        }
+        
+        /* --- 반응형 디자인 --- */
+        @media (max-width: 768px) {
+            .page-header h1 {
+                font-size: 2.2rem;
+            }
+
+            .profile-photo {
+                width: 180px; /* 모바일에선 이미지 살짝 줄임 */
+            }
+            
+            .name-korean {
+                font-size: 2rem;
+            }
+            .name-english {
+                font-size: 1.2rem;
+            }
+
+            /* 모바일에서는 1단으로 변경 */
+            .contact-grid {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+            
+            .contact-block {
+                /* 모바일에서 각 블록 아래에 구분선 추가 */
+                padding-bottom: 30px;
+                border-bottom: 1px solid var(--border-color, #eee);
+            }
+            .contact-block:last-child {
+                border-bottom: none;
+                padding-bottom: 0;
+            }
+        }
+    </style>
 </head>
 <body class="sub-page">
 
@@ -17,19 +167,49 @@
         </ul>
     </nav>
     
-    <div class="page-title-spacer"></div>
+    <div class="page-container">
+        <main class="main-content">
+            
+            <div class="page-header">
+                <h1>Contact</h1>
+            </div>
+            
+            <section id="contact-main">
+                
+                <div class="profile-block">
+                    <img src="images/반명함_임종훈.jpg" alt="임종훈 프로필 사진" class="profile-photo">
+                    <div class="name-block">
+                        <h2 class="name-korean">임종훈</h2>
+                        <span class="name-english">Lim JongHoon</span>
+                    </div>
+                </div>
 
-    <main>
-        <section id="contact">
-            <h2>연락처 (Contact)</h2>
-            <p>Email: myemail@example.com</p>
-            <p>GitHub: <a href="https://github.com/your-username" target="_blank">your-username</a></p>
-        </section>
-    </main>
+                <div class="contact-grid">
+                    <div class="contact-block">
+                        <h3>Phone</h3>
+                        <p>010-6211-7194</p>
+                    </div>
+                    
+                    <div class="contact-block">
+                        <h3>Email</h3>
+                        <p><a href="mailto:your-email@example.com">jhoon01645@gmail.com</a></p>
+                    </div>
+
+                    <div class="contact-block">
+                        <!-- <h3>Online</h3>
+                        <p>
+                            <strong>GitHub</strong><br>
+                            <a href="https://github.com/your-github-username" target="_blank">github.com/your-github-username</a>
+                        </p> -->
+                    </div>
+                </div>
+
+            </section>
+        </main>
+    </div>
 
     <footer>
-        <p>&copy; 2025 홍길동. All rights reserved.</p>
-    </footer>
+        <p>&copy; 2025 임종훈. All rights reserved.</p> </footer>
 
 </body>
 </html>
