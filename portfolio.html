@@ -7,7 +7,6 @@
     <style>
         /* --- 포트폴리오 페이지 전용 스타일 --- */
 
-        /* experience.html과 동일한 페이지 컨테이너/메인 콘텐츠 구조 */
         .page-container {
             max-width: 1100px;
             margin: 0 auto;
@@ -19,9 +18,8 @@
             padding-bottom: 80px;
         }
         
-        /* 페이지 헤더 */
         .page-header {
-            margin-bottom: 50px; /* 프로젝트 섹션과의 간격 */
+            margin-bottom: 50px;
             padding-bottom: 20px;
             border-bottom: 2px solid var(--border-color, #eee);
         }
@@ -34,25 +32,32 @@
             animation: fadeIn 0.5s ease-out;
         }
 
-        /* --- 프로젝트 레이아웃 (최종 레퍼런스 기반) --- */
+        /* --- 프로젝트 레이아웃 --- */
         .project-entry {
             display: grid;
-            /* 레퍼런스 이미지처럼, 상단 이미지/비디오와 우측 텍스트를 나란히 배치 */
-            grid-template-columns: 1fr 1fr; /* 좌우 1:1 비율 */
-            gap: 40px; /* 좌우 열 간격 */
-            margin-bottom: 60px; /* 프로젝트 간 간격 */
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
             animation: fadeIn 0.5s ease-out;
+            /* ⬇️ [수정됨] margin-bottom은 구분선(hr)이 담당하도록 0으로 변경 */
+            margin-bottom: 0;
+        }
+
+        /* ⬇️ [새로 추가됨] 프로젝트 구분선 */
+        .project-divider {
+            border: 0;
+            border-top: 2px solid var(--border-color, #eee);
+            margin: 60px 0; /* 프로젝트 간 상하 간격 */
         }
 
         /* 왼쪽 (미디어: 이미지, 비디오) */
         .project-media-column {
             display: flex;
-            flex-direction: column; /* 세로로 쌓기 */
+            flex-direction: column;
+            justify-content: center; /* ⬇️ [추가됨] 이미지가 세로 중앙에 오도록 */
         }
 
-        /* ⬇️ [수정됨] <br> 태그 대신 CSS로 간격 적용 */
         .project-media-column > img {
-            width: 100%; /* 너비 꽉 채움 */
+            width: 100%;
             height: auto;
             display: block;
             border-radius: 6px;
@@ -60,19 +65,22 @@
             margin-bottom: 25px; /* 비디오와의 간격 */
             transition: transform 0.2s ease;
         }
+        /* ⬇️ [수정됨] 마지막 미디어 요소는 하단 마진 제거 */
+        .project-media-column > *:last-child {
+            margin-bottom: 0;
+        }
         .project-media-column > img:hover {
             transform: scale(1.03);
         }
         
-        /* 상단 배너 (이미지 2개 가로 배치) - 2개일 경우 사용 */
+        /* ... (기존 .project-banner-row, .video-embed-container 등 스타일) ... */
         .project-banner-row {
             display: flex;
-            gap: 15px; /* 이미지 사이 간격 */
-            margin-bottom: 25px; /* 비디오와의 간격 */
+            gap: 15px;
+            margin-bottom: 25px;
         }
-
         .project-banner-row img {
-            width: 50%; /* 2개이므로 50% */
+            width: 50%;
             height: auto;
             display: block;
             border-radius: 6px;
@@ -80,20 +88,17 @@
             transition: transform 0.2s ease;
         }
         .project-banner-row img:hover {
-            transform: scale(1.03); /* 이미지 호버 시 살짝 확대 */
+            transform: scale(1.03);
         }
-
-        /* YouTube 비디오 컨테이너 (16:9 비율 유지) */
         .video-embed-container {
             position: relative;
-            padding-bottom: 56.25%; /* 16:9 비율 (315 / 560) */
+            padding-bottom: 56.25%;
             height: 0;
             overflow: hidden;
             border-radius: 6px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-            background-color: #000; /* 로딩 중 검은색 배경 */
+            background-color: #000;
         }
-
         .video-embed-container iframe {
             position: absolute;
             top: 0;
@@ -103,14 +108,17 @@
             border: 0;
         }
 
+
         /* 오른쪽 (텍스트 설명) */
         .project-details-column {
-            /* 비어있는 컨테이너 */
+            /* ⬇️ [추가됨] 텍스트가 많은 경우를 대비해 세로 중앙 정렬 */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
 
-        /* 제목 + 날짜 */
         .project-details-column h3 {
-            font-size: 2.2rem; /* 레퍼런스 이미지에 맞게 크기 조절 */
+            font-size: 2.2rem;
             font-weight: 700;
             color: var(--text-color-dark, #222);
             margin-top: 0;
@@ -122,22 +130,20 @@
             font-size: 0.9rem;
             color: var(--text-color-light, #777);
             margin-top: 0;
-            margin-bottom: 30px; /* 내용과의 간격 */
-            border-bottom: 1px solid var(--border-color, #eee); /* 레퍼런스 구분선 */
+            margin-bottom: 30px;
+            border-bottom: 1px solid var(--border-color, #eee);
             padding-bottom: 10px;
-            display: inline-block; /* 너비가 텍스트에 맞게 줄어들도록 */
+            display: inline-block;
         }
 
-        /* 각 섹션 제목 (담당 파트, 개발 환경 등) */
         .project-details-column h4 {
             font-size: 1.1rem;
             font-weight: 600;
             color: var(--text-color-light, #555);
-            margin-top: 25px; /* 섹션 간 간격 */
+            margin-top: 25px;
             margin-bottom: 10px;
         }
         
-        /* 첫 번째 H4에는 위쪽 간격 없음 */
         .project-details-column h4:first-of-type {
             margin-top: 0;
         }
@@ -145,11 +151,11 @@
         .project-details-column p {
             font-size: 1rem;
             color: var(--text-color, #444);
-            line-height: 1.7; /* 줄 간격 넉넉하게 */
+            line-height: 1.7;
             margin: 0 0 10px 0;
         }
         
-        /* 하단 참고 텍스트 (텍스트 박스 형태) */
+        /* ... (기존 .project-note 스타일 - 현재 사용 안 함) ... */
         .project-note {
             font-size: 0.85rem;
             color: var(--text-color-light, #888);
@@ -163,16 +169,22 @@
         
         /* --- 반응형 디자인 --- */
         @media (max-width: 900px) {
-            /* 태블릿에서는 1단으로 쌓기 */
             .project-entry {
                 grid-template-columns: 1fr;
                 gap: 30px;
             }
+            /* ⬇️ [새로 추가됨] 모바일에서 이미지/텍스트 순서 변경 */
+            .project-entry.reverse-mobile .project-media-column {
+                order: 1; /* 미디어 컬럼이 1순위 (아래로) */
+            }
+            .project-entry.reverse-mobile .project-details-column {
+                order: 0; /* 텍스트 컬럼이 0순위 (위로) */
+            }
             .project-banner-row {
-                flex-wrap: wrap; /* 이미지가 작아지면 다음 줄로 */
+                flex-wrap: wrap;
             }
             .project-banner-row img {
-                width: 100%; /* 모바일에서는 꽉 채움 */
+                width: 100%;
             }
         }
         
@@ -189,39 +201,36 @@
             }
         }
 
-        /* --- ⬇️ [새로 추가됨] 포트폴리오 외부 링크 버튼 --- */
+        /* --- 포트폴리오 외부 링크 버튼 (좌측 정렬 / 너비 채움) --- */
         .project-external-links {
-            margin-top: 30px; /* 위쪽 내용(p 태그)과의 간격 */
+            margin-top: 10px; /* 위쪽 내용(p 태그)과의 간격 */
             display: flex; /* 버튼들을 flexbox로 배치 */
             gap: 12px; /* 버튼 사이의 간격 */
         }
-
         .external-link-btn {
             flex-grow: 1; /* 버튼이 남은 공간을 1:1 비율로 채우도록 함 */
             flex-basis: 0; /* 버튼의 기본 너비를 0으로 설정하여 동일한 크기 보장 */
-
+            
             display: inline-block;
             padding: 8px 14px;
             border: 1px solid var(--border-color, #ccc);
             border-radius: 5px;
-
+            
             color: var(--text-color-light, #555);
             background-color: #ffffff;
-
+            
             text-decoration: none;
             font-size: 0.9rem;
             font-weight: 500;
             text-align: center; /* 버튼 내부 텍스트 가운데 정렬 */
-
+            
             transition: all 0.2s ease;
         }
-
         .external-link-btn:hover {
             background-color: var(--card-bg-color, #f9f9f9);
             border-color: #999;
             color: #222;
         }
-        /* --- ⬆️ [새로 추가됨] 여기까지 --- */
 
     </style>
 </head>
@@ -248,7 +257,7 @@
                 <div class="project-entry">
                     
                     <div class="project-media-column">
-                        <img src="images/Portfolio/Dragonball/dbz1.png" alt="드래곤볼 Z 카카로트 배너">
+                        <img src="images/Portfolio/dbz.png" alt="드래곤볼 Z 카카로트 배너">
                         
                         <div class="video-embed-container">
                         <iframe 
@@ -264,31 +273,150 @@
                     <div class="project-details-column">
                         <h3>드래곤볼 Z: 카카로트 (Team Project)</h3>
                         <p class="project-date">2022. 11. ~ 2023. 01.</p>
-
                         <h4>담당 파트</h4>
                         <p>툴 제작 / 카메라 연출 / 이펙트</p>
-
                         <h4>개발 환경</h4>
                         <p>C++ / DirectX 11 / HLSL / IMGUI / JSON</p>
-
                         <h4>프로젝트 소개</h4>
                         <p>이 프로젝트는 DirectX 11을 사용해 원작 게임을 모작한 팀 프로젝트입니다. 쥬신게임아카데미에서 학습 목적으로 진행되었습니다.</p>
                         <p>저는 툴 제작, 카메라 연출, 그리고 이펙트 제작을 담당했으며, DirectX 11 기반의 기술을 바탕으로 게임 내 시각적 효과와 연출을 구현했습니다. 또한, 팀원들과의 협업을 통해 원작 게임의 핵심적인 요소들을 충실히 재현하였습니다.</p>
                         <p>이 과정에서 C++, HLSL, IMGUI 등 다양한 기술을 활용하며, 프로젝트의 효율성과 완성도를 높이는 데 기여하였습니다.</p>
                         
                         <div class="project-external-links">
-                            <a href="YOUR_GOOGLE_DRIVE_LINK_HERE" class="external-link-btn" target="_blank" rel="noopener noreferrer">
+                            <a href="#" class="external-link-btn" target="_blank" rel="noopener noreferrer">
                                 포트폴리오 (Google Drive)
                             </a>
-                            <a href="YOUR_ONEDRIVE_LINK_HERE" class="external-link-btn" target="_blank" rel="noopener noreferrer">
+                            <a href="#" class="external-link-btn" target="_blank" rel="noopener noreferrer">
                                 포트폴리오 (OneDrive)
                             </a>
                         </div>
-                        </div>
+                    </div>
 
                 </div>
+
+                <hr class="project-divider">
+
+                <div class="project-entry reverse-mobile">
+                    
+                    <div class="project-details-column">
+                        <h3>원피스 바운티 러쉬 (Personal Project)</h3>
+                        <p class="project-date">2022. 08. ~ 2022. 10.</p>
+                        <h4>개발 도구</h4>
+                        <p>C++ / DirectX 11 / HLSL / IMGUI / JSON</p>
+                        <h4>프로젝트 소개</h4>
+                        <p>이 프로젝트는 DirectX 11을 사용해 원작 게임을 모작한 개인 프로젝트로, 쥬신게임아카데미에서 학습 목적으로 진행되었습니다.</p>
+                        <p>대전 격투 게임의 원작을 무쌍 액션으로 장르 변경했습니다. 무쌍 액션을 위한 최적화로 프로토 타입 패턴과 절두체 컬링을 구현했으며, 멀티 쓰레드를 통해 로딩 화면에서 객체를 생성하며 시간을 단축시켰습니다. 이외에도 3D 애니메이션과 FSM(유한 상태 머신), 터레인 맵과 네비게이션, 그림자, 툰 셰이더를 구현했습니다.</p>
+                        <p>이 과정에서 DirectX 11, 최적화, Deferred Shader, HLSL, IMGUI 등 다양한 기술을 활용하며 학습하며, 프로젝트의 효율성과 완성도를 높이는 데 기여하였습니다.</p>
+                        
+                        <div class="project-external-links">
+                            <a href="#" class="external-link-btn" target="_blank" rel="noopener noreferrer">
+                                포트폴리오 (Google Drive)
+                            </a>
+                            <a href="#" class="external-link-btn" target="_blank" rel="noopener noreferrer">
+                                포트폴리오 (OneDrive)
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <div class="project-media-column">
+                        <img src="images/Portfolio/OnePiece.jpg" alt="원피스 바운티 러쉬 배너">
+
+                        <div class="video-embed-container">
+                            <iframe 
+                                src="https://www.youtube.com/embed/7e_WOL5PCRE" 
+                                title="YouTube video player" 
+                                frameborder="0" 
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                allowfullscreen>
+                            </iframe>    
+                        </div>
+                    </div>
+
+                </div>
+
+                <hr class="project-divider">
+
+                <div class="project-entry">
+                    
+                    <div class="project-media-column">
+                        <img src="images/Portfolio/goldwing.jpg" alt="골드 윙 배너">
+
+                        <div class="video-embed-container">
+                            <iframe 
+                                src="https://www.youtube.com/embed/MA-U_KOq990" 
+                                title="YouTube video player" 
+                                frameborder="0" 
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                allowfullscreen>
+                            </iframe>    
+                        </div>
+                    </div>
+
+                    <div class="project-details-column">
+                        <h3>골드 윙 (Team Project)</h3>
+                        <p class="project-date">2022. 06. ~ 2022. 07.</p>
+                        <h4>담당 파트</h4>
+                        <p>최적화, 플레이어 스킬, 시네마틱 연출</p>
+                        <h4>개발 도구</h4>
+                        <p>C++ / DirectX 9</p>
+                        <h4>프로젝트 소개</h4>
+                        <p>이 프로젝트는 DirectX 9을 사용해 원작 게임을 모작한 팀 프로젝트로, 쥬신게임아카데미에서 학습 목적으로 진행되었습니다.</p>
+                        <p>저는 최적화, 스킬 구현, 시네마틱 연출을 담당하며, 플레이어가 몰입할 수 있는 게임을 만드는 데 중점을 두었습니다. 또한, 팀원들과 협업하여 프로젝트의 완성도를 높이는 데 기여하였습니다.</p>
+                        <p>이 과정에서 C++과 DirectX 9, 렌더링 파이프 라인에 대한 이해도를 높이며, 그래픽 처리 기술의 다양한 측면을 경험하고 배울 수 있었습니다.</p>
+                        
+                        <div class="project-external-links">
+                            <a href="#" class="external-link-btn" target="_blank" rel="noopener noreferrer">
+                                포트폴리오 (Google Drive)
+                            </a>
+                            <a href="#" class="external-link-btn" target="_blank" rel="noopener noreferrer">
+                                포트폴리오 (OneDrive)
+                            </a>
+                        </div>
+                    </div>
+                    
+                </div>
                 
-                </section>
+                <hr class="project-divider">
+
+                <div class="project-entry reverse-mobile">
+                    
+                    <div class="project-details-column">
+                        <h3>메탈슬러그 (Personal Project)</h3>
+                        <p class="project-date">2022. 04. ~ 2022. 04.</p>
+                        <h4>개발 도구</h4>
+                        <p>C++ / Windows API</p>
+                        <h4>프로젝트 소개</h4>
+                        <p>이 프로젝트는 Windows API를 사용해 원작 게임을 모작한 개인 프로젝트로, 쥬신게임아카데미에서 학습 목적으로 진행되었습니다.</p>
+                        <p>직선 방정식을 활용한 라인 타기, 자유 낙하 공식을 적용한 현실적인 중력 구현, 그리고 가까운 몬스터를 순서대로 정찰해 타겟을 지정하는 유도탄 구현 등을 개발했습니다.</p>
+                        <p>이 과정에서 C++, STL, 자료구조, 게임 수학 등의 다양한 기술을 활용하며 프로젝트를 완성했습니다.</p>
+                        
+                        <div class="project-external-links">
+                            <a href="#" class="external-link-btn" target="_blank" rel="noopener noreferrer">
+                                포트폴리오 (Google Drive)
+                            </a>
+                            <a href="#" class="external-link-btn" target="_blank" rel="noopener noreferrer">
+                                포트폴리오 (OneDrive)
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="project-media-column">
+                        <img src="images/Portfolio/metalslug.jpg" alt="메탈슬러그 배너">
+
+                        <div class="video-embed-container">
+                            <iframe 
+                                src="https://www.youtube.com/embed/-mvSBgGz2AU" 
+                                title="YouTube video player" 
+                                frameborder="0" 
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                allowfullscreen>
+                            </iframe>    
+                        </div>
+                    </div>
+                    
+                </div>
+
+            </section>
         </main>
     </div>
 
