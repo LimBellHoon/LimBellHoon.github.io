@@ -8,228 +8,215 @@
         /* --- 포트폴리오 페이지 전용 스타일 --- */
 
         .page-container {
-            max-width: 1100px;
-            margin: 0 auto;
-            padding: 0 20px;
+            max-width : 1100px;
+            margin : 0 auto;
+            padding : 0 20px;
         }
 
         .main-content {
-            padding-top: 50px;
-            padding-bottom: 80px;
+            padding-top : 50px;
+            padding-bottom : 80px;
         }
         
         .page-header {
-            margin-bottom: 50px;
-            padding-bottom: 20px;
-            border-bottom: 2px solid var(--border-color, #eee);
+            margin-bottom : 50px;
+            padding-bottom : 20px;
+            border-bottom : 2px solid var(--border-color, #eee);
         }
 
         .page-header h1 {
-            font-size: 3rem;
-            font-weight: 700;
-            color: var(--text-color-dark, #222);
-            margin: 0;
-            animation: fadeIn 0.5s ease-out;
+            font-size : 3rem;
+            font-weight : 700;
+            color : var(--text-color-dark, #222);
+            margin : 0;
+            animation : fadeIn 0.5s ease-out;
         }
 
         /* --- 프로젝트 레이아웃 --- */
         .project-entry {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 40px;
-            animation: fadeIn 0.5s ease-out;
-            /* ⬇️ [수정됨] margin-bottom은 구분선(hr)이 담당하도록 0으로 변경 */
-            margin-bottom: 0;
+            display : grid;
+            grid-template-columns : 1fr 1fr;
+            gap : 40px;
+            animation : fadeIn 0.5s ease-out;
+            margin-bottom : 0;
         }
 
-        /* ⬇️ [새로 추가됨] 프로젝트 구분선 */
         .project-divider {
-            border: 0;
-            border-top: 2px solid var(--border-color, #eee);
-            margin: 60px 0; /* 프로젝트 간 상하 간격 */
+            border : 0;
+            border-top : 2px solid var(--border-color, #eee);
+            margin : 60px 0; 
         }
 
-        /* 왼쪽 (미디어: 이미지, 비디오) */
+        /* 왼쪽 (미디어 : 이미지, 비디오) */
         .project-media-column {
-            display: flex;
-            flex-direction: column;
-            justify-content: center; /* ⬇️ [추가됨] 이미지가 세로 중앙에 오도록 */
+            display : flex;
+            flex-direction : column;
+            justify-content : center;
         }
 
         .project-media-column > img {
-            width: 100%;
-            height: auto;
-            display: block;
-            border-radius: 6px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-            margin-bottom: 25px; /* 비디오와의 간격 */
-            transition: transform 0.2s ease;
-        }
-        /* ⬇️ [수정됨] 마지막 미디어 요소는 하단 마진 제거 */
-        .project-media-column > *:last-child {
-            margin-bottom: 0;
-        }
-        .project-media-column > img:hover {
-            transform: scale(1.03);
+            width : 100%;
+            height : auto;
+            display : block;
+            border-radius : 6px;
+            box-shadow : 0 4px 15px rgba(0,0,0,0.08);
+            margin-bottom : 25px;
+            transition : transform 0.2s ease;
         }
         
-        /* ... (기존 .project-banner-row, .video-embed-container 등 스타일) ... */
-        .project-banner-row {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 25px;
+        .project-media-column > *:last-child {
+            margin-bottom : 0;
         }
-        .project-banner-row img {
-            width: 50%;
-            height: auto;
-            display: block;
-            border-radius: 6px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-            transition: transform 0.2s ease;
+        .project-media-column > img:hover {
+            transform : scale(1.03);
         }
-        .project-banner-row img:hover {
-            transform: scale(1.03);
-        }
+        
         .video-embed-container {
-            position: relative;
-            padding-bottom: 56.25%;
-            height: 0;
-            overflow: hidden;
-            border-radius: 6px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-            background-color: #000;
+            position : relative;
+            padding-bottom : 56.25%;
+            height : 0;
+            overflow : hidden;
+            border-radius : 6px;
+            box-shadow : 0 4px 15px rgba(0,0,0,0.08);
+            background-color : #000;
         }
         .video-embed-container iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border: 0;
+            position : absolute;
+            top : 0;
+            left : 0;
+            width : 100%;
+            height : 100%;
+            border : 0;
         }
 
 
         /* 오른쪽 (텍스트 설명) */
         .project-details-column {
-            /* ⬇️ [추가됨] 텍스트가 많은 경우를 대비해 세로 중앙 정렬 */
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
+            display : flex;
+            flex-direction : column;
+            justify-content : center;
         }
 
         .project-details-column h3 {
-            font-size: 2.2rem;
-            font-weight: 700;
-            color: var(--text-color-dark, #222);
-            margin-top: 0;
-            margin-bottom: 5px;
-            line-height: 1.3;
+            font-size : 2.2rem;
+            font-weight : 700;
+            color : var(--text-color-dark, #222);
+            margin-top : 0;
+            margin-bottom : 5px;
+            line-height : 1.3;
         }
 
         .project-details-column .project-date {
-            font-size: 0.9rem;
-            color: var(--text-color-light, #777);
-            margin-top: 0;
-            margin-bottom: 30px;
-            border-bottom: 1px solid var(--border-color, #eee);
-            padding-bottom: 10px;
-            display: inline-block;
+            font-size : 0.9rem;
+            color : var(--text-color-light, #777);
+            margin-top : 0;
+            margin-bottom : 30px;
+            border-bottom : 1px solid var(--border-color, #eee);
+            padding-bottom : 10px;
+            display : inline-block;
         }
 
         .project-details-column h4 {
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: var(--text-color-light, #555);
-            margin-top: 25px;
-            margin-bottom: 10px;
+            font-size : 1.1rem;
+            font-weight : 600;
+            color : var(--text-color-light, #555);
+            margin-top : 25px;
+            margin-bottom : 12px; /* 간격 소폭 조정 */
         }
         
         .project-details-column h4:first-of-type {
-            margin-top: 0;
+            margin-top : 0;
         }
 
+        /* ⬇️ [수정됨] 일반 p 태그 스타일 */
         .project-details-column p {
-            font-size: 1rem;
-            color: var(--text-color, #444);
-            line-height: 1.7;
-            margin: 0 0 10px 0;
+            font-size : 1rem;
+            color : var(--text-color, #444);
+            line-height : 1.7;
+            margin : 0 0 10px 0;
+        }
+
+        /* ⬇️ [새로 추가됨] 기술 상세 리스트 스타일 */
+        .tech-list {
+            list-style : none; /* 기본 불렛 제거 */
+            padding-left : 0;
+            margin : 0 0 20px 0;
         }
         
-        /* ... (기존 .project-note 스타일 - 현재 사용 안 함) ... */
-        .project-note {
-            font-size: 0.85rem;
-            color: var(--text-color-light, #888);
-            margin-top: 30px;
-            padding: 15px 20px;
-            border: 1px solid var(--border-color, #e0e0e0);
-            border-radius: 6px;
-            background-color: var(--card-bg-color, #fdfdfd);
-            line-height: 1.5;
+        .tech-list li {
+            position : relative;
+            padding-left : 15px;
+            margin-bottom : 8px;
+            font-size : 1rem;
+            color : var(--text-color, #444);
+            line-height : 1.6;
+        }
+        
+        .tech-list li::before {
+            content : "•"; /* 커스텀 불렛 */
+            position : absolute;
+            left : 0;
+            color : var(--text-color-light, #888);
+            font-weight : bold;
+        }
+
+        .tech-list strong {
+            color : #333;
+            font-weight : 600;
         }
         
         /* --- 반응형 디자인 --- */
-        @media (max-width: 900px) {
+        @media (max-width : 900px) {
             .project-entry {
-                grid-template-columns: 1fr;
-                gap: 30px;
+                grid-template-columns : 1fr;
+                gap : 30px;
             }
-            /* ⬇️ [새로 추가됨] 모바일에서 이미지/텍스트 순서 변경 */
             .project-entry.reverse-mobile .project-media-column {
-                order: 1; /* 미디어 컬럼이 1순위 (아래로) */
+                order : 1;
             }
             .project-entry.reverse-mobile .project-details-column {
-                order: 0; /* 텍스트 컬럼이 0순위 (위로) */
-            }
-            .project-banner-row {
-                flex-wrap: wrap;
-            }
-            .project-banner-row img {
-                width: 100%;
+                order : 0;
             }
         }
         
-        @media (max-width: 768px) {
+        @media (max-width : 768px) {
             .page-header h1 {
-                font-size: 2.2rem;
+                font-size : 2.2rem;
             }
             .project-details-column h3 {
-                font-size: 1.8rem;
-            }
-            .project-banner-row {
-                gap: 10px;
-                margin-bottom: 20px;
+                font-size : 1.8rem;
             }
         }
 
-        /* --- 포트폴리오 외부 링크 버튼 (좌측 정렬 / 너비 채움) --- */
+        /* --- 버튼 스타일 --- */
         .project-external-links {
-            margin-top: 10px; /* 위쪽 내용(p 태그)과의 간격 */
-            display: flex; /* 버튼들을 flexbox로 배치 */
-            gap: 12px; /* 버튼 사이의 간격 */
+            margin-top : 10px;
+            display : flex;
+            gap : 12px;
         }
         .external-link-btn {
-            flex-grow: 1; /* 버튼이 남은 공간을 1:1 비율로 채우도록 함 */
-            flex-basis: 0; /* 버튼의 기본 너비를 0으로 설정하여 동일한 크기 보장 */
+            flex-grow : 1;
+            flex-basis : 0;
             
-            display: inline-block;
-            padding: 8px 14px;
-            border: 1px solid var(--border-color, #ccc);
-            border-radius: 5px;
+            display : inline-block;
+            padding : 8px 14px;
+            border : 1px solid var(--border-color, #ccc);
+            border-radius : 5px;
             
-            color: var(--text-color-light, #555);
-            background-color: #ffffff;
+            color : var(--text-color-light, #555);
+            background-color : #ffffff;
             
-            text-decoration: none;
-            font-size: 0.9rem;
-            font-weight: 500;
-            text-align: center; /* 버튼 내부 텍스트 가운데 정렬 */
+            text-decoration : none;
+            font-size : 0.9rem;
+            font-weight : 500;
+            text-align : center;
             
-            transition: all 0.2s ease;
+            transition : all 0.2s ease;
         }
         .external-link-btn:hover {
-            background-color: var(--card-bg-color, #f9f9f9);
-            border-color: #999;
-            color: #222;
+            background-color : var(--card-bg-color, #f9f9f9);
+            border-color : #999;
+            color : #222;
         }
 
     </style>
@@ -254,6 +241,52 @@
             
             <section id="portfolio-list">
                 
+                <div class="project-entry reverse-mobile">
+                    
+                    <div class="project-details-column">
+                        <h3>뚱땅주술사</h3>
+                        <p class="project-date">2025. 01. ~ Ing.</p>
+                        
+                        <h4>개발 도구</h4>
+                        <p>C# / Unity / Backend Server / CSV / GitHub</p>
+                        
+                        <h4>기술 상세</h4>
+                        <ul class="tech-list">
+                            <li><strong>Addressable</strong> : 주소 참조 방식을 도입하여 에셋 중복 참조 문제 해결 및 Content Catalog를 통해 리소스의 변경 사항과 버전을 자동으로 추적/갱신 </li>
+                            <li><strong>PAD</strong> : Addressables의 빌드 시스템을 Play Asset Delivery와 연동, 별도 CDN없이 스토어 인프라를 통해 에셋 다운로드 및 로드 구현</li>
+                            <li><strong>Backend Server</strong> : 뒤끝(Backend) 서버와 DB를 활용하여 로그인, 유저 데이터 저장, 재화 동기화 등 비동기 기반의 게임 백엔드 구현</li>
+                            <li><strong>SDK</strong> : 인증(FB_Auth), 푸시(FB_Messaging), 광고(Admob)</li>
+                            <li><strong>프레임워크</strong> : 게임의 핵심 기능을 담당하는 10여종의 매니저 클래스 설계 및 전략 패턴을 적용하여 확장 가능한 스킬 구조 설계 </li>
+                        </ul>
+                        
+                        <!-- <div class="project-external-links">
+                            <a href="https://drive.google.com/file/d/1yxp9Wy-wAgl5hdsb8tsuzYvCNQwVTmZD/view?usp=sharing" class="external-link-btn" target="_blank" rel="noopener noreferrer">
+                                포트폴리오 (Google Drive)
+                            </a>
+                            <a href="https://1drv.ms/b/c/ff9f96ef6fb758b8/ES0DFAnVb65NkeuWncX5rgEBAJ8vvQ4xacU8gDOdAkr3Zg" class="external-link-btn" target="_blank" rel="noopener noreferrer">
+                                포트폴리오 (OneDrive)
+                            </a>
+                        </div> -->
+                    </div>
+                    
+                    <div class="project-media-column">
+                        <img src="images/Portfolio/ddjcs.png" alt="뚱땅주술사">
+
+                        <!-- <div class="video-embed-container">
+                            <iframe 
+                                src="https://www.youtube.com/embed/7e_WOL5PCRE" 
+                                title="YouTube video player" 
+                                frameborder="0" 
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                allowfullscreen>
+                            </iframe>    
+                        </div> -->
+                    </div>
+
+                </div>
+
+                <hr class="project-divider">
+
                 <div class="project-entry">
                     
                     <div class="project-media-column">
@@ -271,16 +304,22 @@
                     </div>
                     
                     <div class="project-details-column">
-                        <h3>드래곤볼 Z: 카카로트 (Team Project)</h3>
+                        <h3>드래곤볼 Z : 카카로트 (Team Project)</h3>
                         <p class="project-date">2022. 11. ~ 2023. 01.</p>
+                        
+                        <h4>개발 환경</h4>
+                        <p>C++ / DirectX 11 / HLSL / IMGUI / JSON / GitHub</p>
+
                         <h4>담당 파트</h4>
                         <p>툴 제작 / 카메라 연출 / 이펙트</p>
-                        <h4>개발 환경</h4>
-                        <p>C++ / DirectX 11 / HLSL / IMGUI / JSON</p>
-                        <h4>프로젝트 소개</h4>
-                        <p>이 프로젝트는 DirectX 11을 사용해 원작 게임을 모작한 팀 프로젝트입니다. 쥬신게임아카데미에서 학습 목적으로 진행되었습니다.</p>
-                        <p>저는 툴 제작, 카메라 연출, 그리고 이펙트 제작을 담당했으며, DirectX 11 기반의 기술을 바탕으로 게임 내 시각적 효과와 연출을 구현했습니다. 또한, 팀원들과의 협업을 통해 원작 게임의 핵심적인 요소들을 충실히 재현하였습니다.</p>
-                        <p>이 과정에서 C++, HLSL, IMGUI 등 다양한 기술을 활용하며, 프로젝트의 효율성과 완성도를 높이는 데 기여하였습니다.</p>
+                        
+                        <h4>기술 상세</h4>
+                        <ul class="tech-list">
+                            <li><strong>카메라 시스템</strong> : Singleton 패턴을 활용하여 플레이어 상태에 반응하는 역동적인 카메라 연출 시스템 설계</li>
+                            <li><strong>시네마틱 툴</strong> : 인게임 컷신을 위한 키프레임 기반의 선형 보간을 적용하여 부드러운 컷신과 2축 쉐이킹 연출 구현</li>
+                            <li><strong>파티클 최적화</strong> : Rect Buffer Instancing 및 오브젝트 풀링을 도입하여 대량의 파티클 렌더링 성능 극대화</li>
+                            <li><strong>고급 렌더링 효과</strong> : Distortion, Dissolve, Bloom 등 hlsl 작성 및 IMGUI 기반 툴을 사용하여 이펙트 제작</li>
+                        </ul>
                         
                         <div class="project-external-links">
                             <a href="https://drive.google.com/file/d/1I8ejaNwC_69ywuwYuDnPEXmoTDXYtmnb/view?usp=sharing" 
@@ -303,12 +342,18 @@
                     <div class="project-details-column">
                         <h3>원피스 바운티 러쉬 (Personal Project)</h3>
                         <p class="project-date">2022. 08. ~ 2022. 10.</p>
+                        
                         <h4>개발 도구</h4>
-                        <p>C++ / DirectX 11 / HLSL / IMGUI / JSON</p>
-                        <h4>프로젝트 소개</h4>
-                        <p>이 프로젝트는 DirectX 11을 사용해 원작 게임을 모작한 개인 프로젝트로, 쥬신게임아카데미에서 학습 목적으로 진행되었습니다.</p>
-                        <p>대전 격투 게임의 원작을 무쌍 액션으로 장르 변경했습니다. 무쌍 액션을 위한 최적화로 프로토 타입 패턴과 절두체 컬링을 구현했으며, 멀티 쓰레드를 통해 로딩 화면에서 객체를 생성하며 시간을 단축시켰습니다. 이외에도 3D 애니메이션과 FSM(유한 상태 머신), 터레인 맵과 네비게이션, 그림자, 툰 셰이더를 구현했습니다.</p>
-                        <p>이 과정에서 DirectX 11, 최적화, Deferred Shader, HLSL, IMGUI 등 다양한 기술을 활용하며 학습하며, 프로젝트의 효율성과 완성도를 높이는 데 기여하였습니다.</p>
+                        <p>C++ / DirectX 11 / HLSL / IMGUI / JSON / GitHub</p>
+                        
+                        <h4>기술 상세</h4>
+                        <ul class="tech-list">
+                            <li><strong>애니메이션 시스템</strong> : 뼈 기반의 <strong>선형 보간(Lerp)</strong>을 적용해 부드러운 모션 블렌딩을 구현하고, <strong>루트 모션(Root Motion)</strong>으로 이동의 사실감 증대</li>
+                            <li><strong>최적화 기법</strong> : <strong>절두체 컬링(Frustum Culling)</strong> 알고리즘을 구현하여 시야 밖 객체 렌더링을 제외, 드로우 콜(Draw Call) 비용 절감</li>
+                            <li><strong>고급 렌더링</strong> : <strong>섀도우 매핑(Shadow Mapping)</strong>을 통한 실시간 그림자 처리</li>
+                            <li><strong>AI 설계</strong> : <strong>FSM(유한 상태 머신)</strong> 패턴을 도입하여 몬스터의 다양한 패턴(공격, 피격, 스킬 등)을 모듈식으로 제어 및 확장성 확보</li>
+                            <li><strong>이동 시스템</strong> : <strong>네비게이션 메시(NavMesh)</strong>를 구축하고 평면 방정식을 활용해 캐릭터의 정확한 Y축 높이 판정 및 이동 제한 구현</li>
+                        </ul>
                         
                         <div class="project-external-links">
                             <a href="https://drive.google.com/file/d/1yxp9Wy-wAgl5hdsb8tsuzYvCNQwVTmZD/view?usp=sharing" class="external-link-btn" target="_blank" rel="noopener noreferrer">
@@ -357,14 +402,20 @@
                     <div class="project-details-column">
                         <h3>골드 윙 (Team Project)</h3>
                         <p class="project-date">2022. 06. ~ 2022. 07.</p>
+
+                        <h4>개발 도구</h4>
+                        <p>C++ / DirectX 9 / GitHub</p>                        
+
                         <h4>담당 파트</h4>
                         <p>최적화, 플레이어 스킬, 시네마틱 연출</p>
-                        <h4>개발 도구</h4>
-                        <p>C++ / DirectX 9</p>
-                        <h4>프로젝트 소개</h4>
-                        <p>이 프로젝트는 DirectX 9을 사용해 원작 게임을 모작한 팀 프로젝트로, 쥬신게임아카데미에서 학습 목적으로 진행되었습니다.</p>
-                        <p>저는 최적화, 스킬 구현, 시네마틱 연출을 담당하며, 플레이어가 몰입할 수 있는 게임을 만드는 데 중점을 두었습니다. 또한, 팀원들과 협업하여 프로젝트의 완성도를 높이는 데 기여하였습니다.</p>
-                        <p>이 과정에서 C++과 DirectX 9, 렌더링 파이프 라인에 대한 이해도를 높이며, 그래픽 처리 기술의 다양한 측면을 경험하고 배울 수 있었습니다.</p>
+                        
+                        <h4>기술 상세</h4>
+                        <ul class="tech-list">
+                            <li><strong>렌더링 파이프라인</strong> : DirectX 9 고정 파이프라인에 대한 이해 및 렌더링 최적화 작업</li>
+                            <li><strong>전투 시스템</strong> : 플레이어 스킬 시스템 로직 설계 및 타격/피격 처리 구현</li>
+                            <li><strong>연출 강화</strong> : 시네마틱 카메라 연출을 통해 게임 몰입도 증대 및 스토리 텔링 보강</li>
+                            <li><strong>성능 개선</strong> : 프레임 드랍 방지를 위한 리소스 관리 및 메모리 최적화</li>
+                        </ul>
                         
                         <div class="project-external-links">
                             <a href="https://drive.google.com/file/d/1IFpaN-HBGCSvVWIsGUypy99MNdt3516F/view?usp=sharing" class="external-link-btn" target="_blank" rel="noopener noreferrer">
@@ -385,12 +436,17 @@
                     <div class="project-details-column">
                         <h3>메탈슬러그 (Personal Project)</h3>
                         <p class="project-date">2022. 04. ~ 2022. 04.</p>
+                        
                         <h4>개발 도구</h4>
                         <p>C++ / Windows API</p>
-                        <h4>프로젝트 소개</h4>
-                        <p>이 프로젝트는 Windows API를 사용해 원작 게임을 모작한 개인 프로젝트로, 쥬신게임아카데미에서 학습 목적으로 진행되었습니다.</p>
-                        <p>직선 방정식을 활용한 라인 타기, 자유 낙하 공식을 적용한 현실적인 중력 구현, 그리고 가까운 몬스터를 순서대로 정찰해 타겟을 지정하는 유도탄 구현 등을 개발했습니다.</p>
-                        <p>이 과정에서 C++, STL, 자료구조, 게임 수학 등의 다양한 기술을 활용하며 프로젝트를 완성했습니다.</p>
+                        
+                        <h4>기술 상세</h4>
+                        <ul class="tech-list">
+                            <li><strong>물리 구현</strong> : 직선 방정식을 활용한 라인 타기 및 자유 낙하 공식을 적용한 현실적인 중력 로직 구현</li>
+                            <li><strong>AI 알고리즘</strong> : 거리 계산 및 정렬 알고리즘을 활용하여 가장 가까운 적을 추적하는 유도탄 구현</li>
+                            <li><strong>엔진 설계</strong> : Windows API와 C++ STL, 자료구조를 활용하여 프레임워크 기초 설계</li>
+                            <li><strong>게임 수학</strong> : 벡터 및 삼각함수를 활용한 캐릭터 이동 및 탄도학 적용</li>
+                        </ul>
                         
                         <div class="project-external-links">
                             <a href="https://drive.google.com/file/d/1-SnCIM6RxusiKS6VVQbraykc_qSLzJqA/view?usp=sharing" class="external-link-btn" target="_blank" rel="noopener noreferrer">
