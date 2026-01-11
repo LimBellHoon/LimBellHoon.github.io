@@ -160,7 +160,7 @@
             <ul>
                 <li><a href="#experience-projects" class="active">프로젝트</a></li>
                 <li><a href="#experience-details">경력 기술</a></li>
-                <li><a href="#version-control">형상 관리</a></li>
+                <!-- <li><a href="#version-control">형상 관리</a></li> -->
             </ul>
         </aside>
 
@@ -171,27 +171,39 @@
                 <h2 class="section-title">프로젝트</h2><p class="section-subtitle">수행한 주요 프로젝트를 소개합니다.</p>
                 
                 <div class="project-item">
-                    <div class="project-image"><img src="images/metin.jpg" alt="메틴 파멸의 서곡"></div>
+                    <div class="project-image"><img src="images/ProjectC.png" alt="ProjectC"></div>
                     <div class="project-description">
-                        <h3>메틴: 파멸의 서곡</h3><p class="project-date">2024.05 - Ing</p>
-                        <p><strong>유니티로 개발한 리니지 라이크 장르</strong>의 신규 모바일 프로젝트에 참여했습니다. 주된 업무로는 <strong>SDK 및 최적화</strong>와 <strong>빌드</strong>를 담당했습니다.</p>
-                        <p>출시 이후에는 인게임 <strong>콘텐츠 개발 및 유지보수 업무를 담당</strong>하고 있습니다.</p>
+                        <h3>Project C</h3><p class="project-date">2025.09 - Ing</p>
+                        <p>20년 전 DirectX 기반의 PC 원작을 유니티 엔진을 통해 현대적으로 재해석하고, 모바일 환경에 맞춰 새롭게 개발 중인 신규 3D MMORPG 프로젝트입니다.</p>
                         <div class="project-details">
-                            <div><h4>SDK</h4><ul><li>Firebase-Auth/Messaging</li><li>Adjust, AIHelp</li></ul></div>
-                            <div><h4>콘텐츠</h4><ul><li>코스튬</li><li>공성전</li><li>월드 던전</li><li>랭킹 시스템</li><li>해골 시스템 (캐릭터 성장)</li><li>칭호 시스템</li></ul></div>
-                            <div><h4>빌드</h4><ul><li>자동화 프로세스 구축</li><li>One, Galaxy, Play Unity 빌드</li><li>IOS XCode 빌드</li></ul></div>
-                            <div><h4>최적화</h4><ul><li>LateBinding/메모리 중복 제거</li><li>DrawCall 최적화</li></ul></div>
+                            <div><h4>확장형 캐릭터 애니메이션 시스템 설계</h4><ul><li>SubStateMachine과 BlendTree를 활용하여 다양한 상태 모듈화</li><li>Animator Override Controller 도입으로 다수의 직업/장비 교체 관리 효율화</li></ul></div>
+                            <div><h4>환경 오브젝트 최적화</h4><ul><li>단 하나의 파티클 시스템으로 플레이어의 일정 거리 내 모든 나무에서 낙엽이 떨어지는 연출 구현하여 DrawCall 최소화</li><li>단순 Plane Mesh와 Shader, 파티클 시스템을 조합하여 저비용 고효율의 나비/새 등 환경 오브젝트 구현</li></ul></div>
+                            <div><h4>DirectX 레거시 맵 변환 파이프라인 구축</h4><ul><li>DirectX 기반 Binary 맵 데이터를 파싱하여 Unity Terrain/Object로 자동 생성</li><li>성과 : 수작업 배치 대비 공수 약 90% 절감</li></ul></div>
                         </div>
                     </div>
                 </div>
 
                 <div class="project-item reverse">
+                    <div class="project-image"><img src="images/metin.jpg" alt="메틴 파멸의 서곡"></div>
+                    <div class="project-description">
+                        <h3>메틴: 파멸의 서곡</h3><p class="project-date">2024.05 - 2025.09 [출시]</p>
+                        <p>PC 온라인 게임 '메틴' 시리즈의 IP를 계승하여 모바일 환경에 맞춰 새롭게 재탄생시킨 MMORPG 프로젝트입니다.<br>2024년 9월 유니티 엔진을 기반으로 정식 출시되어 안정적인 라이브 서비스를 이어가고 있습니다.</p>
+                        <div class="project-details">
+                            <div><h4>SDK</h4><ul><li>Firebase-Auth/Messaging</li><li>Adjust, AIHelp</li></ul></div>
+                            <div><h4>최적화</h4><ul><li>LateBinding/메모리 중복 제거</li><li>DrawCall 최적화</li></ul></div>
+                            <div><h4>빌드</h4><ul><li>자동화 프로세스 구축</li><li>One, Galaxy, Play Unity 빌드</li><li>IOS XCode 빌드</li></ul></div>
+                            <div><h4>콘텐츠</h4><ul><li>코스튬</li><li>공성전</li><li>월드 던전</li><li>랭킹 시스템</li><li>해골 시스템 (캐릭터 성장)</li><li>칭호 시스템</li></ul></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="project-item">
                     <div class="project-image"><img src="images/cheonsangbi.png" alt="천상비M"></div>
                     <div class="project-description">
                         <h3>천상비M</h3><p class="project-date">2023.09 - 2024.05</p>
-                        <p><strong>C#</strong>, <strong>유니티</strong>로 개발한 <strong>리니지라이크</strong> 장르의 모바일 프로젝트에 참여했습니다. 주된 업무로는 <strong>유지보수</strong> 및 <strong>콘텐츠 개발</strong>, <strong>빌드</strong>를 담당했습니다.</p>
+                        <p>1세대 무협 온라인 게임 '천상비'의 IP를 계승하여 모바일 환경에 맞춰 새롭게 재해석한 정통 무협 MMORPG입니다.<br>유니티 엔진을 기반으로 구현되었으며, 국내 주요 앱 마켓에서 안정적으로 라이브 서비스 중인 프로젝트입니다.</p>
                         <div class="project-details">
-                            <div><h4>콘텐츠 개발</h4><ul><li>이벤트 제작</li><li>NPC 우호도/파견</li><li>강화 도감</li><li>사냥/장비 도감 작업</li><li>캐시 일괄 구매</li></ul></div>
+                            <div><h4>콘텐츠</h4><ul><li>이벤트 제작</li><li>NPC 우호도/파견</li><li>강화 도감</li><li>사냥/장비 도감 작업</li><li>캐시 일괄 구매</li></ul></div>
                             <div><h4>빌드</h4><ul><li>One, Galaxy, Play Unity 빌드</li><li>IOS XCode 빌드</li></ul></div>
                             <div><h4>유지보수 작업</h4><ul><li>CS 처리</li><li>해외 서비스를 위한 Localization</li></ul></div>
                         </div>
@@ -212,7 +224,7 @@
                 </div>
             </section>
 
-            <section id="version-control" class="content-section">
+            <!-- <section id="version-control" class="content-section">
                 <hr class="section-divider"><h2 class="section-title">형상 관리</h2>
                 <div class="project-item">
                     <div class="project-image"><img src="images/version-control.png" alt="형상 관리"></div>
@@ -225,7 +237,7 @@
                         <p>또한, 로컬 저장소에 저장 후 커밋 후 원하는 시점에 <strong>Push</strong>할 수 있어, 불필요한 <strong>Conflict를 줄이고</strong> 안정적인 개발 환경을 유지할 수 있었습니다.</p>
                     </div>
                 </div>
-            </section>
+            </section> -->
         </main>
     </div>
 

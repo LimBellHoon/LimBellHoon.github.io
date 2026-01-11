@@ -46,6 +46,43 @@ body.sub-page {
 .hero-text .main-title { font-size: 4rem; color: #fff; margin: 0; text-shadow: 1px 1px 5px rgba(0,0,0,0.5); font-weight: 700;}
 .hero-text .subtitle { font-size: 1.2rem; color: #fff; margin-top: 10px; text-shadow: 1px 1px 3px rgba(0,0,0,0.5); }
 
+.scroll-indicator {
+    position: absolute;
+    bottom: 50px; /* 바닥에서 조금 더 띄움 */
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    color: #fff;
+    z-index: 10;
+    opacity: 0.9; /* 더 잘 보이게 투명도 줄임 */
+}
+
+.scroll-indicator p {
+    font-size: 20px;       /* 글씨 크기 키움 (11px -> 16px) */
+    font-weight: 1000;      /* 글씨 두께 두껍게 (300 -> 700) */
+    letter-spacing: 0px;
+    margin: 0 0 0px 0;    /* 화살표와 간격 조금 더 벌림 */
+    text-transform: uppercase;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.7); /* 그림자도 진하게 */
+}
+
+.scroll-indicator .arrow {
+    width: 30px;           /* 화살표 가로 크기 키움 */
+    height: 30px;          /* 화살표 세로 크기 키움 */
+    border-right: 5px solid #fff;  /* 선 두께 두껍게 */
+    border-bottom: 5px solid #fff; /* 선 두께 두껍게 */
+    transform: rotate(45deg);
+    margin: 0 auto;
+    animation: scroll-bounce 2s infinite;
+    box-shadow: 2px 2px 2px rgba(0,0,0,0.4); /* 화살표 그림자 진하게 */
+}
+
+@keyframes scroll-bounce {
+    0% { transform: rotate(45deg) translate(0, 0); opacity: 0; }
+    50% { opacity: 1; }
+    100% { transform: rotate(45deg) translate(15px, 15px); opacity: 0; } /* 움직임 거리도 살짝 늘림 */
+}
+
 /* --- index.html 이력서 스타일 --- */
 .resume-section { max-width: 700px; margin: 0 auto; padding: 50px 20px; }
 .resume-block { text-align: center; margin-bottom: 60px; }
