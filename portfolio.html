@@ -318,7 +318,7 @@
                             <li><strong>카메라 시스템</strong> : Singleton 패턴을 활용하여 플레이어 상태에 반응하는 역동적인 카메라 연출 시스템 설계</li>
                             <li><strong>시네마틱 툴</strong> : 인게임 컷신을 위한 키프레임 기반의 선형 보간을 적용하여 부드러운 컷신과 2축 쉐이킹 연출 구현</li>
                             <li><strong>파티클 최적화</strong> : Rect Buffer Instancing 및 오브젝트 풀링을 도입하여 대량의 파티클 렌더링 성능 극대화</li>
-                            <li><strong>고급 렌더링 효과</strong> : Distortion, Dissolve, Bloom 등 hlsl 작성 및 IMGUI 기반 툴을 사용하여 이펙트 제작</li>
+                            <li><strong>렌더링</strong> : Distortion, Dissolve, Bloom 등 hlsl 작성 및 IMGUI 기반 툴을 사용하여 이펙트 제작</li>
                         </ul>
                         
                         <div class="project-external-links">
@@ -349,10 +349,10 @@
                         <h4>기술 상세</h4>
                         <ul class="tech-list">
                             <li><strong>애니메이션 시스템</strong> : 뼈 기반의 <strong>선형 보간(Lerp)</strong>을 적용해 부드러운 모션 블렌딩을 구현하고, <strong>루트 모션(Root Motion)</strong>으로 이동의 사실감 증대</li>
-                            <li><strong>최적화 기법</strong> : <strong>절두체 컬링(Frustum Culling)</strong> 알고리즘을 구현하여 시야 밖 객체 렌더링을 제외, 드로우 콜(Draw Call) 비용 절감</li>
-                            <li><strong>고급 렌더링</strong> : <strong>섀도우 매핑(Shadow Mapping)</strong>을 통한 실시간 그림자 처리</li>
-                            <li><strong>AI 설계</strong> : <strong>FSM(유한 상태 머신)</strong> 패턴을 도입하여 몬스터의 다양한 패턴(공격, 피격, 스킬 등)을 모듈식으로 제어 및 확장성 확보</li>
-                            <li><strong>이동 시스템</strong> : <strong>네비게이션 메시(NavMesh)</strong>를 구축하고 평면 방정식을 활용해 캐릭터의 정확한 Y축 높이 판정 및 이동 제한 구현</li>
+                            <li><strong>절두체 컬링(Frustum Culling)</strong> 알고리즘을 구현하여 시야 밖 객체 렌더링을 제외, 드로우 콜(Draw Call) 비용 절감</li>
+                            <li><strong>섀도우 매핑(Shadow Mapping)</strong>을 통한 실시간 그림자 처리</li>
+                            <li><strong>FSM(유한 상태 머신)</strong> 패턴을 도입하여 몬스터의 다양한 패턴(공격, 피격, 스킬 등)을 모듈식으로 제어 및 확장성 확보</li>
+                            <li><strong>네비게이션 메시(NavMesh)</strong>를 구축하고 평면 방정식을 활용해 캐릭터의 정확한 Y축 높이 판정 및 이동 제한 구현</li>
                         </ul>
                         
                         <div class="project-external-links">
@@ -411,10 +411,8 @@
                         
                         <h4>기술 상세</h4>
                         <ul class="tech-list">
-                            <li><strong>렌더링 파이프라인</strong> : DirectX 9 고정 파이프라인에 대한 이해 및 렌더링 최적화 작업</li>
-                            <li><strong>전투 시스템</strong> : 플레이어 스킬 시스템 로직 설계 및 타격/피격 처리 구현</li>
-                            <li><strong>연출 강화</strong> : 시네마틱 카메라 연출을 통해 게임 몰입도 증대 및 스토리 텔링 보강</li>
-                            <li><strong>성능 개선</strong> : 프레임 드랍 방지를 위한 리소스 관리 및 메모리 최적화</li>
+                            <li><strong>Core 매니저</strong>를 통해 전역 시간(Time Scale)을 제어하고, 객체별 <strong>Delta Time</strong>을 개별 연산하여 'Time Slow' 연출 구현</li>
+                            <li><strong>Raycasting</strong>과 <strong>내적</strong> 연산을 활용해 시야각 내 최단 거리의 적을 탐색하는 와이어 타겟팅 로직 설계</li>
                         </ul>
                         
                         <div class="project-external-links">
@@ -442,10 +440,9 @@
                         
                         <h4>기술 상세</h4>
                         <ul class="tech-list">
-                            <li><strong>물리 구현</strong> : 직선 방정식을 활용한 라인 타기 및 자유 낙하 공식을 적용한 현실적인 중력 로직 구현</li>
-                            <li><strong>AI 알고리즘</strong> : 거리 계산 및 정렬 알고리즘을 활용하여 가장 가까운 적을 추적하는 유도탄 구현</li>
-                            <li><strong>엔진 설계</strong> : Windows API와 C++ STL, 자료구조를 활용하여 프레임워크 기초 설계</li>
-                            <li><strong>게임 수학</strong> : 벡터 및 삼각함수를 활용한 캐릭터 이동 및 탄도학 적용</li>
+                            <li><strong>추상 팩토리</strong> 패턴을 도입하여 객체(플레이어, 투사체, 이펙트) 생성 로직을 캡슐화하고 코드의 재사용성 증대</li>
+                            <li><strong>자유 낙하 공식</strong>을 적용하여 캐릭터의 점프 및 투사체의 곡사 포물선 운동 등 현실적인 중력 가속도 로직 구현</li>
+                            <li>두 점을 지나는 <strong>직선의 방정식</strong>을 활용하여 경사로 및 복잡한 지형에서의 정밀한 <strong>라인 충돌</strong> 처리</li>
                         </ul>
                         
                         <div class="project-external-links">
