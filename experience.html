@@ -216,12 +216,12 @@
 		<h2 class="section-title">경력 기술</h2><p class="section-subtitle">버튼을 클릭하면 해당 상세 팝업이 열립니다.</p>
                 <div class="task-section">
                     <div class="task-grid">
-                        <div class="task-button" data-content-id="environment-content"><div class="circle"><span>Graphics</span></div><div class="task-label"><h4>환경 오브젝트 그래픽 최적화</h4><p>Shader/ParticleSystem<br>/LOD/FrustumCulling</p></div></div>
-                        <div class="task-button" data-content-id="system-content"><div class="circle"><span>System</span></div><div class="task-label"><h4>캐릭터 애니메이션 설계</h4><p>BlendTree/SubStateMachine<br>/AnimatorOverrideController</p></div></div>
                         <div class="task-button" data-content-id="optimization-content"><div class="circle"><span>최적화</span></div><div class="task-label"><h4>최적화</h4><p>최적화: 1.77GB → 1.22GB</p></div></div>
                         <div class="task-button" data-content-id="sdk-content"><div class="circle"><span>SDK</span></div><div class="task-label"><h4>SDK</h4><p>Firebase/Adjust</p></div></div>
                         <div class="task-button" data-content-id="build-content"><div class="circle"><span>Build</span></div><div class="task-label"><h4>빌드</h4><p>AOS/IOS</p></div></div>
                         <div class="task-button" data-content-id="contents-content"><div class="circle"><span>Contents</span></div><div class="task-label"><h4>콘텐츠</h4><p>인게임 시스템 개발</p></div></div>
+                        <div class="task-button" data-content-id="environment-content"><div class="circle"><span>Graphics</span></div><div class="task-label"><h4>환경 오브젝트<br>그래픽 최적화</h4><p>Vert Shader/ParticleSystem<br>/LOD/FrustumCulling</p></div></div>
+                        <div class="task-button" data-content-id="system-content"><div class="circle"><span>System</span></div><div class="task-label"><h4>캐릭터 애니메이션 설계</h4><p>BlendTree/SubStateMachine<br>/AnimatorOverrideController</p></div></div>
                     </div>
                 </div>
             </section>
@@ -351,6 +351,215 @@
         </div>
     </div>
 
+
+<div class="modal-hidden-content">
+    <div id="environment-content" data-align="left">
+        <h2>환경 오브젝트 그래픽 최적화</h2>
+        <ul class="modal-tabs">
+            <li class="active" data-target="env-tab-1">나비 (Vert Shader)</li>
+            <li data-target="env-tab-2">나뭇잎 (중앙 제어/Emit)</li>
+            <!-- <li data-target="env-tab-3">LOD & Culling</li> -->
+        </ul>
+        <div class="modal-tab-container">
+            
+            <div id="env-tab-1" class="modal-tab-content active">
+                <h3>나비 (Vert Shader/GPU Instancing Particle System)</h3>
+                
+                <h4>개발 목표</h4>
+                <ul>
+                    <li>맵 분위기 조성을 위해 다수의 나비 오브젝트를 배치해야 하는 상황.</li>
+                    <li>기존 GameObject 방식 대신 <strong>GPU Instancing 기반의 파티클 시스템</strong>을 채택.</li>
+                    <li>이를 통해 구현 시간 단축, 시스템 부하 최소화 및 안정적인 렌더링 성능 확보.</li>
+                </ul>
+
+                <h4>주요 구현 내용</h4>
+                <ul>
+                    <li><strong>애니메이션 (Vertex Shader):</strong> 나비의 날개짓을 CPU 연산이 아닌, Shader의 <code>vert</code> 함수 내에서 <code>sin</code> 파동 공식을 활용하여 정점 애니메이션으로 처리 (CPU Overhead ↓).</li>
+                    <br>
+                    <li><strong>이동 로직 (Particle System):</strong> 단 하나의 ParticleSystem 컴포넌트로 다수의 나비 이동 및 수명 관리 (GPU Instancing 적용, Overhead ↓).</li>
+                </ul>
+
+                <h4>구현 방식 비교</h4>
+                <div style="background-color: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+                    <div style="margin-bottom: 10px;">
+                        <strong>🔴 Legacy ButterFly</strong><br>
+                        <span style="font-size: 0.9em; color: #666;">- 나비 한 마리마다 개별 GameObject 생성<br>- 각 객체마다 Update() 문에서 Transform 이동 연산 수행</span>
+                    </div>
+                    <div>
+                        <strong>🟢 Optimized ButterFly (적용)</strong><br>
+                        <span style="font-size: 0.9em; color: #666;">- 단 하나의 파티클 시스템 컴포넌트 사용<br>- 나비의 움직임과 애니메이션을 GPU(Vertex Shader)에서 처리<br>- GPU Instancing 기술을 사용하여 렌더링</span>
+                    </div>
+                </div>
+
+                <h4>성능 비교 (100마리 기준)</h4>
+                <p class="ref-note2" style="margin-bottom: 10px;"></p>
+                
+                <table style="width: 100%; border-collapse: collapse; text-align: center; font-size: 0.95em;">
+                    <thead>
+                        <tr style="background-color: #e9ecef; border-bottom: 2px solid #dee2e6;">
+                            <th style="padding: 10px; text-align: left;">항목 (Item)</th>
+                            <th style="padding: 10px;">Legacy ButterFly</th>
+                            <th style="padding: 10px;">Particle System</th>
+                            <th style="padding: 10px;">개선 효과</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr style="border-bottom: 1px solid #dee2e6;">
+                            <td style="padding: 10px; text-align: left; font-weight: bold;">Draw Calls</td>
+                            <td style="padding: 10px;">100 (Batching 실패 시)</td>
+                            <td style="padding: 10px; font-weight: bold;">1</td>
+                        <td style="padding: 10px; font-weight: bold; color: #2ecc71;">99% 감소</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #dee2e6;">
+                            <td style="padding: 10px; text-align: left; font-weight: bold;">Update Overhead</td>
+                            <td style="padding: 10px;">100개의 컴포넌트가 매 프레임 연산</td>
+                            <td style="padding: 10px; font-weight: bold;">1개의 컴포넌트만 연산 CPU 점유율 0</td>
+                            <td style="padding: 10px; font-weight: bold; color: #2ecc71;">1개의 컴포넌트만 연산 CPU 점유율 0</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #dee2e6;">
+                            <td style="padding: 10px; text-align: left; font-weight: bold;">Memory Allocation</td>
+                            <td style="padding: 10px;">각 나비 당 Renderer, Script 등 컴포넌트가 차지</td>
+                            <td style="padding: 10px; font-weight: bold;">단순 위치, 색상, 사이즈 등 순수 데이터</td>
+                            <td style="padding: 10px; font-weight: bold; color: #2ecc71;">단순 위치, 색상, 사이즈 등 순수 데이터</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div id="env-tab-2" class="modal-tab-content">
+            <h3>나뭇잎(중앙 제어/Emit)</h3>
+            
+            <h4>개발 목표</h4>
+            <ul>
+                <li>대규모 숲 환경(나무 100그루 이상)에서 나뭇잎 낙하 효과(VFX) 구현 시, 시스템 부하를 최소화하고 렌더링 성능을 확보하기 위함.</li>
+            </ul>
+
+            <h4>구현 내용</h4>
+            <ul>
+                <li><strong>중앙 제어 방식 :</strong> Player에게 단 하나의 <code>Leaf Particle System</code>을 부착.</li>
+                <li><strong>Emit 활용 :</strong> Player 주변 범위 내의 나무를 탐색하고, 해당 나무 위치에서 <code>Emit</code> 함수를 호출하여 파티클을 생성하는 방식.</li>
+                <li><strong>FlyWeight Pattern & Scriptable Object :</strong> 나무 데이터 관리에 FlyWeight 패턴을 적용하고, Scriptable Object를 사용하여 각 나무당 메모리 중복 생성을 방지(메모리는 단 하나만 존재).</li>
+            </ul>
+
+            <h4>구현 방식 비교</h4>
+            <div style="background-color: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+                <div style="margin-bottom: 10px;">
+                    <strong>🔴 Legacy Falling Leaf</strong><br>
+                    <span style="font-size: 0.9em; color: #666;">- 각 나무마다 Particle System 부착 (DrawCall 및 메모리 낭비)<br>- 각 나무의 Particle System이 매 프레임 연산 수행</span>
+                </div>
+                <div>
+                    <strong>🟢 Optimized Falling Leaf (적용)</strong><br>
+                    <span style="font-size: 0.9em; color: #666;">- Player에 단일 Particle System 부착<br>- 범위 내 탐색된 나무 위치에 Emit 함수로 효과 연출<br>- FlyWeight Pattern으로 메모리 최적화</span>
+                </div>
+            </div>
+
+            <!-- <h4>성능 비교 (100그루 기준)</h4>
+            <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.9em; border: 1px solid #dee2e6;">
+                <thead>
+                    <tr style="background-color: #e9ecef; border-bottom: 2px solid #dee2e6;">
+                        <th style="padding: 10px; width: 20%;">항목</th>
+                        <th style="padding: 10px; width: 30%;">개별 부착 (Legacy)</th>
+                        <th style="padding: 10px; width: 25%;">중앙 제어 (Optimized)</th>
+                        <th style="padding: 10px; width: 25%;">개선 효과</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr style="border-bottom: 1px solid #dee2e6;">
+                        <td style="padding: 10px; font-weight: bold;">Draw Calls</td>
+                        <td style="padding: 10px;">100회 (Batching 실패 시)<br><span style="font-size:0.85em; color:#666;">(Dynamic Batching이 깨질 경우 多)</span></td>
+                        <td style="padding: 10px;">1회</td>
+                        <td style="padding: 10px; font-weight: bold; color: #2ecc71;">99% 감소</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #dee2e6;">
+                        <td style="padding: 10px; font-weight: bold;">Update Overhead</td>
+                        <td style="padding: 10px;">100개의 컴포넌트가<br>매 프레임 연산</td>
+                        <td style="padding: 10px;">1개의 컴포넌트만 연산</td>
+                        <td style="padding: 10px; color: #2ecc71;">로직 연산 비용 최소화<br>불필요한 연산 0</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #dee2e6;">
+                        <td style="padding: 10px; font-weight: bold;">Memory Allocation</td>
+                        <td style="padding: 10px;">각 시스템별 버퍼 100개 할당</td>
+                        <td style="padding: 10px;">단일 시스템 버퍼 1개 공유</td>
+                        <td style="padding: 10px; font-weight: bold; color: #2ecc71;">메모리 파편화 방지</td>
+                    </tr>
+                </tbody>
+            </table> -->
+        </div>
+            
+
+        <!-- <div id="env-tab-3" class="modal-tab-content">
+    <h3>광활한 시야 최적화 (LOD & Batching)</h3>
+
+    <h4>개발 목표</h4>
+    <ul>
+        <li><strong>3인칭 자유 시점(TPS Free Camera)</strong> 특성상, 카메라 회전 및 줌 아웃 시 화면에 잡히는 객체 수가 급증하는 문제 해결.</li>
+        <li>원거리 객체의 렌더링 비용을 줄이고, <strong>Static Batching 파괴를 최소화</strong>하여 안정적인 프레임 확보.</li>
+    </ul>
+
+    <h4>주요 구현 내용</h4>
+    <ul>
+        <li><strong>LOD (Level of Detail) 구성:</strong>
+            <ul>
+                <li>근거리(LOD 0): 디테일한 메쉬 및 개별 마테리얼 사용.</li>
+                <li>원거리(LOD 1~2): <strong>통합 아틀라스 텍스처</strong>를 사용하는 저폴리곤 메쉬로 교체하여 <strong>Batching 기회 확대</strong>.</li>
+                <li>최원거리(Cull): 카메라 식별 불가능 거리에서 렌더링 완전 제외.</li>
+            </ul>
+        </li>
+        <li><strong>Frustum Culling & Layer Culling:</strong>
+            <ul>
+                <li>카메라 시야각(Frustum) 밖의 객체 연산 제외.</li>
+                <li>작은 환경 소품(풀, 돌 등)은 별도 레이어로 분류하여 <strong>Culling Distance</strong>를 짧게 설정, 원거리 렌더링 부하 차단.</li>
+            </ul>
+        </li>
+    </ul>
+
+    <h4>최적화 메커니즘</h4>
+    <div style="background-color: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+        <div style="margin-bottom: 10px;">
+            <strong>📉 문제 상황 (Before)</strong><br>
+            <span style="font-size: 0.9em; color: #666;">
+            - 3인칭 시점에서 카메라를 돌릴 때마다 수천 개의 객체가 렌더링 큐에 진입.<br>
+            - 원거리 객체까지 고해상도 마테리얼을 사용하여 DrawCall 폭증 및 Batching 실패.
+            </span>
+        </div>
+        <div>
+            <strong>📈 해결 전략 (After)</strong><br>
+            <span style="font-size: 0.9em; color: #666;">
+            - <strong>LOD + Batching 연계:</strong> 원거리 LOD 모델들은 텍스처를 하나로 묶어(Atlas) 단일 마테리얼로 처리.<br>
+            - 결과적으로 거리가 멀어질수록 객체 개수는 많아져도 <strong>DrawCall은 획기적으로 감소</strong>하는 구조 확립.
+            </span>
+        </div>
+    </div>
+
+    <h4>결과 데이터</h4>
+    <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.9em; border: 1px solid #dee2e6;">
+        <thead>
+            <tr style="background-color: #e9ecef; border-bottom: 2px solid #dee2e6;">
+                <th style="padding: 10px;">구분</th>
+                <th style="padding: 10px;">적용 전</th>
+                <th style="padding: 10px;">적용 후</th>
+                <th style="padding: 10px;">성과</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr style="border-bottom: 1px solid #dee2e6;">
+                <td style="padding: 10px; font-weight: bold;">Avg DrawCalls</td>
+                <td style="padding: 10px;">1,200 ~ 1,500</td>
+                <td style="padding: 10px;">250 ~ 350</td>
+                <td style="padding: 10px; font-weight: bold; color: #2ecc71;">약 75% 감소</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #dee2e6;">
+                <td style="padding: 10px; font-weight: bold;">Tris (View)</td>
+                <td style="padding: 10px;">1.2M</td>
+                <td style="padding: 10px;">400k</td>
+                <td style="padding: 10px; font-weight: bold; color: #2ecc71;">66% 감소</td>
+            </tr>
+        </tbody>
+    </table>
+        </div> -->
+        </div>
+    </div>
+</div>
 
 <div class="modal-hidden-content">
     <div id="sdk-content" data-align="left">
@@ -910,6 +1119,54 @@
         </div>
     </div>
 
+    <div class="modal-hidden-content">
+<div id="system-content" data-align="left">
+        <h2>캐릭터 애니메이션 설계</h2>
+        <ul class="modal-tabs">
+            <li class="active" data-target="sys-tab-1">Animation Architecture</li>
+        </ul>
+        <div class="modal-tab-container">
+            <div id="sys-tab-1" class="modal-tab-content active">
+                <h3>확장형 캐릭터 애니메이션 프레임워크</h3>
+                
+                <h4>개발 배경</h4>
+                <ul>
+                    <li>MMORPG 특성상 수십 종의 직업과 무기 조합에 유연하게 대응할 수 있는 확장성 있는 애니메이션 구조가 필요했습니다.</li>
+                    <li>이동 속도 변화와 전투 상태 전환 시의 모션 끊김을 최소화하여 자연스러운 조작감을 구현하고자 했습니다.</li>
+                </ul>
+
+                <h4>핵심 구현 기술</h4>
+                
+            <div class="indented-media">
+                <img src="images/Animator1.png" alt="Animator 구조" class="clickable-image">
+            </div>
+
+                <div style="margin-top: 15px;"><strong>1. Blend Tree</strong></div>
+                <ul>
+                    <li><strong>Walk ↔ Run</strong>의 2가지 이동 상태를 <strong>하나의 Blend Tree</strong>로 통합 관리.</li>
+                    <li>캐릭터의 이동 속도 파라미터에 따라 각 모션의 가중치를 실시간으로 보간하여, 급격한 속도 변화에도 부드럽고 자연스러운 전신 움직임을 구현.</li>
+                </ul>
+
+                <div style="margin-top: 15px;"><strong>2. Sub-State Machine 계층 구조화</strong></div>
+                <ul>
+                    <li>비대해지기 쉬운 Animator Controller를 <strong>[비무장 / 무장 / 비무장 탈 것 / 무장 탈 것]</strong> 등 기능별로 묶어 <strong>Sub-State Machine으로 모듈화</strong></li>
+                    <li>복잡하게 얽힌 Transition을 계층적으로 정리하여, 로직의 가독성을 높이고 유지보수 효율 극대화</li>
+                </ul>
+
+                <div style="margin-top: 15px;"><strong>3. Animator Override Controller</strong></div>
+                <ul>
+                    <li>모든 캐릭터가 공유하는 'Base Controller'를 하나만 설계하고, 직업이나 무기에 따라 달라지는 고유 모션은 <strong>Override Controller</strong>를 통해 런타임에 교체하는 방식 적용</li>
+                </ul>
+
+                <h4>기대 효과</h4>
+                <ul>
+                    <li>애니메이션 상태 로직의 재사용성을 높여 캐릭터/직업/무기 추가 공수 대폭 절감.</li>
+                    <li>불필요한 Animator 인스턴스 생성을 줄이고 메모리 및 연산 효율성 확보.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    </div>
 
 
     <footer>
