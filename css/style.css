@@ -180,3 +180,26 @@ hr.section-divider { border: none; height: 1px; background-color: var(--border-c
 
 /* --- 푸터 --- */
 footer { text-align: center; padding: 40px; margin-top: 50px; background-color: var(--subtle-gray); border-top: 1px solid var(--border-color); font-size: 0.9rem; color: #6c757d; }
+
+/* Project C 상세 기술 토글 버튼 */
+.btn-toggle-details {
+    display: block;
+    width: 100%;          /* 너비 꽉 채우기 */
+    padding: 12px 0;      /* 위아래 여백 */
+    margin-top: 20px;     /* 3단 요약글과 간격 */
+    background-color: transparent;
+    border: 2px dashed #bbb; /* 회색 점선 */
+    border-radius: 6px;
+    color: #555;
+    font-size: 0.9rem;
+    font-weight: 700;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.2s ease;
+}
+
+.btn-toggle-details:hover {
+    border-color: #555;    /* 마우스 올리면 진하게 */
+    color: #333;
+    background-color: rgba(0,0,0,0.02);
+}
