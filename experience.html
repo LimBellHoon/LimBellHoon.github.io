@@ -178,43 +178,109 @@
                     <div id="proj-c-deep-dive" style="display: none; flex-basis: 100%; width: 100%; margin-top: 10px;">
                         <div class="deep-dive-container">
                             <ul class="dd-tab-nav">
-                                <li class="dd-tab-item active" onclick="switchTab(event, 'proj-c-tab-env')">1. 환경오브젝트 최적화</li>
-                                <li class="dd-tab-item" onclick="switchTab(event, 'proj-c-tab-anim')">2. 애니메이션 설계</li>
-                                <li class="dd-tab-item" onclick="switchTab(event, 'proj-c-tab-pipeline')">3. 맵 파이프라인</li>
+                                <li class="dd-tab-item active" onclick="switchTab(event, 'proj-c-tab-env')">환경오브젝트 최적화</li>
+                                <li class="dd-tab-item" onclick="switchTab(event, 'proj-c-tab-anim')">애니메이션 설계</li>
+                                <li class="dd-tab-item" onclick="switchTab(event, 'proj-c-tab-pipeline')">맵 파이프라인</li>
                             </ul>
 
                             <div id="proj-c-tab-env" class="dd-tab-pane active">
-                                <h3 class="deep-dive-title">나비 (GPU Instancing Particle System)</h3>
+                                <h3 class="deep-dive-title">나비 (Vert Shader)</h3>
+
+                                <div class="indented-media">
+                                    <img src="Images/나비.gif" alt="나비 연출" class="clickable-image">
+                                    <p class="ref-note">* Vertex Shader로 구현된 나비의 자연스러운 비행 (CPU 연산 0)</p>
+                                </div>
                                 <h4>개발 목표</h4>
                                 <div class="dd-content">
-                                    <ul><li>맵 분위기 조성을 위해 다수의 나비 오브젝트를 배치해야 하는 상황.</li><li>기존 GameObject 방식 대신 <strong>GPU Instancing 기반의 파티클 시스템</strong>을 채택.</li></ul>
+                                    <p style="margin-bottom: -15px;">•  맵의 생동감을 부여하기 위한 환경 구축</p>
+                                    <p style="margin-bottom: -15px;">•  모바일 환경에서도 부하가 없는 초경량 연출 시스템 구현</p>
+                                    <p style="margin-bottom: -15px;">•  자연스러운 나비의 움직임</p>
                                 </div>
-                                <h4>성능 비교 (100마리 기준)</h4>
+                                <h4>개발 기간</h4>
                                 <div class="dd-content">
-                                    <table class="perf-table">
-                                        <tr><th>항목</th><th>Legacy</th><th>Particle System</th><th>개선 효과</th></tr>
-                                        <tr><td>Draw Calls</td><td>100</td><td>1</td><td class="text-success">99% 감소</td></tr>
-                                        <tr><td>Overhead</td><td>100개 연산</td><td>1개 연산</td><td class="text-success">CPU 0%</td></tr>
-                                    </table>
+                                    <p>25.12.08 ~ 25.12.15 (일주일)</p>
+                                </div>
+                                <h4>개발 사항</h4>
+                                <div class="dd-content">
+                                    <p style="margin-bottom: -15px;"><strong>① 오브젝트의 중요도에 따른 배경 오브젝트의 리소스 제한</strong></p>
+                                    <ul>
+                                        <li>나비는 게임 플레이에 직접적인 영향을 주지 않는 환경 요소이므로, 메인 캐릭터나 몬스터에 사용되는 <strong>Animator/SkinnedMesh 리소스를 할당할 수 없음</strong></li>
+                                    </ul>
+                                    <p style="margin-bottom: -15px;"><strong>② 기획 데이터 기반 환경 제어</strong></p>
+                                    <p style="margin-bottom: -15px;"><strong>③ 맵 전체에서 나비 밀도 유지</strong></p>
+                                    <ul>
+                                        <li>오픈필드 전체에 오브젝트를 실제로 배치할 수 없으므로, <strong>적은 개체 수</strong>로도 맵 전체가 꽉 차 보이는 시각적 최적화가 필요함</li>
+                                    </ul>
+                                </div>
+                                <h4>해결 방법</h4>
+                                <div class="dd-content">
+                                    <p style="margin-bottom: -15px;"><strong>① Vertex Shader 애니메이션</strong></p>
+                                    <ul>
+                                        <li>sin 파동 함수를 응용하여 시간에 따라 Plane Mesh의 정점을 중심점으로부터 멀어질수록 강도를 더 강하게 이동시켜 날개짓 구현. (CPU 연산 0)</li>
+                                        <li>ParticleSystem.Noise를 통해 나비의 불규칙하고 가벼운 이동 구현</li>
+                                    </ul>
+                                    <p style="margin-bottom: -15px;"><strong>② 기획 데이터 기반 환경 제어</strong></p>
+                                    <ul>
+                                        <li>맵 데이터(ScriptableObject)에 나비 생성 여부, 종류, 최대 개수 등을 파라미터화하여 기획자가 맵 속성만으로 환경 연출을 제어할 수 있도록 구조화</li>
+                                    </ul>
+                                    <p style="margin-bottom: -15px;"><strong>③ 플레이어 중심의 연출</strong></p>
+                                    <ul>
+                                        <li>Transform을 플레이어 위치와 실시간 동기화하여, 적은 개체 수로도 플레이어 주변이 항상 꽉 차 보이도록 구현</li>
+                                        <li>ParticleSystem.Simulation Space = World를 통해 플레이어가 움직여도 나비는 제자리에 있는 것처럼 보이게 함</li>
+                                    </ul>
                                 </div>
 
                                 <hr class="deep-dive-divider">
 
-                                <h3 class="deep-dive-title">나뭇잎 (중앙 제어/Emit)</h3>
-                                <h4>구현 내용</h4>
-                                <div class="dd-content">
-                                    <ul><li><strong>중앙 제어:</strong> Player에게 단 하나의 <code>Particle System</code> 부착.</li><li><strong>Emit 활용:</strong> Player 주변 나무 위치에서만 <code>Emit</code> 함수 호출.</li></ul>
-                                </div>
-                                <h4>성능 비교 (100그루 기준)</h4>
-                                <div class="dd-content">
-                                    <table class="perf-table">
-                                        <tr><th>항목</th><th>개별 부착</th><th>중앙 제어</th><th>개선 효과</th></tr>
-                                        <tr><td>Draw Calls</td><td>100회</td><td>1회</td><td class="text-success">99% 감소</td></tr>
-                                        <tr><td>Memory</td><td>버퍼 100개</td><td>버퍼 1개</td><td class="text-success">파편화 방지</td></tr>
-                                    </table>
+                                <h3 class="deep-dive-title">나뭇잎 (Centralized Control & Flyweight)</h3>
+
+                                <div class="indented-media">
+                                    <img src="Images/나뭇잎.gif" alt="나뭇잎 연출" class="clickable-image" onerror="this.style.display='none'">
+                                    <p class="ref-note">* 중앙 제어 시스템으로 구현된 최적화된 낙엽 효과 (Draw Call 1회)</p>
                                 </div>
 
-                                <hr class="deep-dive-divider">
+                                <h4>개발 목표</h4>
+                                <div class="dd-content">
+                                    <p style="margin-bottom: -15px;">•  대규모 숲 환경에서의 쾌적한 렌더링 성능 확보</p>
+                                    <p style="margin-bottom: -15px;">•  다양한 종류의 나무 데이터를 효율적으로 관리하는 시스템 구축</p>
+                                </div>
+
+                                <h4>개발 기간</h4>
+                                <div class="dd-content">
+                                    <p>25.12.16 ~ 25.12.19 (4일)</p>
+                                </div>
+
+                                <h4>개발 사항</h4>
+                                <div class="dd-content">
+                                    <p style="margin-bottom: 5px;"><strong>① 오브젝트의 중요도에 따른 배경 오브젝트의 성능 제한</strong></p>
+                                    <ul style="margin-top: 0; margin-bottom: 15px;">
+                                        <li>각 나무마다 Particle System을 개별 부착할 경우, 100그루 기준 <strong>Draw Call 100회 발생</strong> 및 메모리 버퍼 중복 할당으로 심각한 부하 발생</li>
+                                        <li>한 화면에 많은 나무가 배치되는 환경이므로, VFX로 인한 <strong>Draw Call 증가 억제</strong></li>
+                                        <li>맵 전체의 나무에서 파티클을 재생하는 것은 비효율적이므로, <strong>플레이어 반경 내의 나무만 선별(Culling)</strong>하여 연출 활성</li>
+                                    </ul>
+                                    <p style="margin-bottom: 5px;"><strong>② 데이터 관리 및 확장성</strong></p>
+                                    <ul style="margin-top: 0; margin-bottom: 15px;">
+                                        <li>나무 종류마다 높이, 너비, 낙엽 색상, 낙하 개수 등이 다르므로 이를 개별 인스턴스가 아닌 공유 데이터로 관리해야 함</li>
+                                    </ul>
+                                </div>
+
+                                <h4>해결 방법</h4>
+                                <div class="dd-content">
+                                    <p style="margin-bottom: 5px;"><strong>① 중앙 제어 시스템 (Centralized Control)</strong></p>
+                                    <ul style="margin-top: 0; margin-bottom: 15px;">
+                                        <li>Transform을 플레이어 위치와 실시간 동기화하여 <strong>단 하나의 Particle System</strong>으로 나뭇잎 제어</li>
+                                        <li>FixedUpdate에서 Physics.OverlapSphere로 주변의 나무(Layer : Tree)를 탐색한 뒤, 해당 나무 위치에서 Emit함수를 호출하여 수동으로 입자를 방출</li>
+                                    </ul>
+
+                                    <p style="margin-bottom: 5px;"><strong>② 경량화 패턴 (SO)</strong></p>
+                                    <ul style="margin-top: 0; margin-bottom: 15px;">
+                                        <li><strong>ScriptableObject 활용 :</strong> LeafData(높이, 범위, 색상 등)를 별도 에셋으로 분리.</li>
+                                        <li>각 나무 객체(Prefab)는 데이터가 아닌 LeafData의 참조값만 가지도록 하여 <strong>메모리 사용량을 최소화</strong>하고 데이터 재사용성을 극대화</li>
+                                        <li>맵 데이터(ScriptableObject)에 나뭇잎 생성 여부, 종류, 색상, 밀도 등을 파라미터화하여 기획자가 맵 속성만으로 환경 연출을 제어할 수 있도록 구조화</li>
+                                    </ul>
+                                </div>
+
+                                <!-- <hr class="deep-dive-divider">
 
                                 <h3 class="deep-dive-title">광활한 시야 최적화 (LOD & Batching)</h3>
                                 <h4>최적화 메커니즘</h4>
@@ -224,7 +290,7 @@
                                         <tr><th>구분</th><th>적용 전</th><th>적용 후</th><th>성과</th></tr>
                                         <tr><td>Avg DrawCalls</td><td>1,500</td><td>350</td><td class="text-success">75% 감소</td></tr>
                                     </table>
-                                </div>
+                                </div> -->
                             </div>
 
                             <div id="proj-c-tab-anim" class="dd-tab-pane">
