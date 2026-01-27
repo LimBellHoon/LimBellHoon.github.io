@@ -167,9 +167,9 @@
                         <h3>Project C</h3><p class="project-date">2025.09 - Ing</p>
                         <p>20년 전 DirectX 기반의 PC 원작을 유니티 엔진을 통해 현대적으로 재해석하고, 모바일 환경에 맞춰 새롭게 개발 중인 신규 3D MMORPG 프로젝트입니다.</p>
                         <div class="project-details">
-                            <div><h4>캐릭터 애니메이션 설계</h4><ul><li>SubStateMachine와 BlendTree 기반의 상태 모듈화</li><li>OverrideController 도입으로 다중 직업/장비 관리 효율화</li></ul></div>
-                            <div><h4>환경 오브젝트 최적화</h4><ul><li>단일 파티클 시스템 제어로 대규모 낙엽 연출 (DrawCall 최소화)</li><li>Mesh와 Shader를 활용한 저비용 고효율 환경 생태계(나비/새) 구현</li></ul></div>
                             <div><h4>맵 변환 파이프라인 구축</h4><ul><li>DirectX 바이너리 맵 → Unity 자동 변환 툴 개발</li><li>수작업 배치 대비 작업 공수 약 90% 절감 달성</li></ul></div>
+                            <div><h4>환경 오브젝트 최적화</h4><ul><li>단일 파티클 시스템 제어로 대규모 낙엽 연출 (DrawCall 최소화)</li><li>Mesh와 Shader를 활용한 저비용 고효율 환경 생태계(나비/새) 구현</li></ul></div>
+                            <div><h4>캐릭터 애니메이션 설계</h4><ul><li>SubStateMachine와 BlendTree 기반의 상태 모듈화</li><li>OverrideController 도입으로 다중 직업/장비 관리 효율화</li></ul></div>
                         </div>
                     </div>
 
@@ -178,12 +178,82 @@
                     <div id="proj-c-deep-dive" style="display: none; flex-basis: 100%; width: 100%; margin-top: 10px;">
                         <div class="deep-dive-container">
                             <ul class="dd-tab-nav">
-                                <li class="dd-tab-item active" onclick="switchTab(event, 'proj-c-tab-env')">환경오브젝트 최적화</li>
+                                <li class="dd-tab-item active" onclick="switchTab(event, 'proj-c-tab-pipeline')">맵 파이프라인</li>
+                                <li class="dd-tab-item" onclick="switchTab(event, 'proj-c-tab-env')">환경오브젝트 최적화</li>
                                 <li class="dd-tab-item" onclick="switchTab(event, 'proj-c-tab-anim')">애니메이션 설계</li>
-                                <li class="dd-tab-item" onclick="switchTab(event, 'proj-c-tab-pipeline')">맵 파이프라인</li>
                             </ul>
 
-                            <div id="proj-c-tab-env" class="dd-tab-pane active">
+                            <div id="proj-c-tab-pipeline" class="dd-tab-pane active">
+                                <h3 class="deep-dive-title">맵 변환 파이프라인 (DirectX to Unity)</h3>
+                                
+                                <div class="indented-media">
+                                    <img src="Images/MapConverter.png" alt="CDM 변환 과정" class="clickable-image">
+                                    <p class="ref-note">* 자체 바이너리 포맷(.cdm)을 유니티 Terrain으로 자동 변환하는 툴 예시</p>
+                                </div>
+
+                                <h4>개발 목표</h4>
+                                <div class="dd-content">
+                                    <p style="margin-bottom: -15px;">•  레거시 게임의 맵 데이터(.cdm)를 유니티 환경으로 완벽하게 이식</p>
+                                    <p style="margin-bottom: -15px;">•  수작업이 불가능한 방대한 지형 및 수천 개의 오브젝트 배치 자동화</p>
+                                </div>
+
+                                <h4>개발 기간</h4>
+                                <div class="dd-content">
+                                    <p>25.09.29 ~ 25.11.21 (8주)</p>
+                                </div>
+
+                                <h4>개발 사항</h4>
+                                <div class="dd-content">
+                                    <p style="margin-bottom: 5px;"><strong>① 이진 데이터(Binary) 역직렬화</strong></p>
+                                    <ul style="margin-top: 0; margin-bottom: 15px;">
+                                        <li>C++ 구조체로 패킹된 Header, HeightMap, TileIndex, ObjectInfo 파싱 필요</li>
+                                        <li>C++(padding 포함)과 C# 간의 데이터 구조 차이 해결 필요</li>
+                                    </ul>
+
+                                    <p style="margin-bottom: 5px;"><strong>② 대규모 맵 최적화</strong></p>
+                                    <ul style="margin-top: 0; margin-bottom: 15px;">
+                                        <li>통짜 지형 데이터를 런타임 성능을 고려하여 분할 생성해야 함</li>
+                                    </ul>
+
+                                    <p style="margin-bottom: 5px;"><strong>③ Terrain Textures</strong></p>
+                                    <ul style="margin-top: 0; margin-bottom: 15px;">
+                                        <li>맵에서 텍스처 20개 이상 사용할 수 있어야 함</li>
+                                        <li>분할된 터레인에 대해서 Baching이 깨지지 않아야 함</li>
+                                    </ul>
+                                </div>
+
+                                <h4>구현 내용</h4>
+                                <div class="dd-content">
+                                    <p style="margin-bottom: 5px;"><strong>① 바이너리 파싱 및 데이터 정규화</strong></p>
+                                    <ul style="margin-top: 0; margin-bottom: 15px;">
+                                        <li>BinaryReader와 Marshal을 사용하여 구조체 단위로 데이터 로드</li>
+                                        <li>Short(-30,000 ~ 30,000) 범위의 높이 데이터를 Unity Terrain(0.0 ~ 1.0) 포맷에 맞춰 정규화(Normalization) 수행</li>
+                                    </ul>
+
+                                    <p style="margin-bottom: 5px;"><strong>② 지형 청크(Chunk) 시스템</strong></p>
+                                    <ul style="margin-top: 0; margin-bottom: 15px;">
+                                        <li>전체 맵을 8x8(총 64개)의 작은 Terrain 타일로 자동 분할 생성</li>
+                                        <li>Frustum Culling 효율을 높이고 LOD 관리가 용이하도록 구조화</li>
+                                    </ul>
+
+                                    <p style="margin-bottom: 5px;"><strong>③ Texture 2D Array 적용</strong></p>
+                                    <ul style="margin-top: 0; margin-bottom: 15px;">
+                                        <li>폴더 내 모든 텍스처를 Texture2DArray로 병합하여 텍스처를 단일 Draw Call로 처리</li>
+                                    </ul>
+                                </div>
+
+                                <h4>어려웠던 점</h4>
+                                <div class="dd-content">
+                                    <p style="margin-bottom: 5px;"><strong>이슈 : 레거시 포맷의 Padding 처리</strong></p>
+                                    <ul style="margin-top: 0; margin-bottom: 15px;">
+                                        <li><strong>문제 상황:</strong> C++ 구조체 정렬로 인해 생성된 더미 바이트로 인해 데이터 밀림 현상 발생</li>
+                                        <li><strong>해결:</strong> br.ReadBytes()로 더미 데이터를 건너뛰거나, C# 구조체에 Placeholder 필드를 추가하여 오프셋을 정확히 맞춤</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+
+                            <div id="proj-c-tab-env" class="dd-tab-pane">
                                 <h3 class="deep-dive-title">나비 (Vert Shader)</h3>
 
                                 <div class="indented-media">
@@ -204,35 +274,47 @@
                                 <div class="dd-content">
                                     <p style="margin-bottom: -15px;"><strong>① 오브젝트의 중요도에 따른 배경 오브젝트의 리소스 제한</strong></p>
                                     <ul>
-                                        <li>나비는 게임 플레이에 직접적인 영향을 주지 않는 환경 요소이므로, 메인 캐릭터나 몬스터에 사용되는 <strong>Animator/SkinnedMesh 리소스를 할당할 수 없음</strong></li>
+                                        <li>메인 캐릭터나 몬스터에 사용되는 Animator/SkinnedMesh 할당 불가</li>
                                     </ul>
-                                    <p style="margin-bottom: -15px;"><strong>② 기획 데이터 기반 환경 제어</strong></p>
-                                    <p style="margin-bottom: -15px;"><strong>③ 맵 전체에서 나비 밀도 유지</strong></p>
+                                    <p style="margin-bottom: -15px;"><strong>② 맵 전체에서 나비 밀도 유지</strong></p>
                                     <ul>
-                                        <li>오픈필드 전체에 오브젝트를 실제로 배치할 수 없으므로, <strong>적은 개체 수</strong>로도 맵 전체가 꽉 차 보이는 시각적 최적화가 필요함</li>
+                                        <li>맵 곳곳에 나비가 있어야 하며, 성능에 영향을 끼치지 않아야 함</li>
+                                    </ul>
+                                    <p style="margin-bottom: -15px;"><strong>③ 데이터 기반 환경 제어</strong></p>
+                                    <ul>
+                                        <li>나비 생성 여부 및 종류를 쉽게 관리할 수 있어야 함</li>
                                     </ul>
                                 </div>
-                                <h4>해결 방법</h4>
+                                <h4>구현 내용</h4>
                                 <div class="dd-content">
                                     <p style="margin-bottom: -15px;"><strong>① Vertex Shader 애니메이션</strong></p>
+                                    <ul style="list-style: none;">
+                                    <div class="indented-media">
+                                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; align-items: center;">
+                                            <img src="Images/butterfly_mat.png" alt="나비 shader math" class="clickable-image" style="width: 100%; height: auto;" onerror="this.style.display='none'">
+                                            <p class="ref-note"><br><br><br><br><br><br><br><br>* Flap Speed : 날개짓 속도<br>* Wing Intensity : 날개 강도</p>
+                                            <img src="Images/sinx2.gif" alt="sin 그래프" class="clickable-image" style="width: 100%; height: auto;" onerror="this.style.display='none'">
+                                        </div>
+                                    </div>
+                                    </ul>
                                     <ul>
-                                        <li>sin 파동 함수를 응용하여 시간에 따라 Plane Mesh의 정점을 중심점으로부터 멀어질수록 강도를 더 강하게 이동시켜 날개짓 구현. (CPU 연산 0)</li>
+                                        <li>sin 파동 함수를 응용하여 시간에 따라 Plane Mesh의 정점을 중심점으로부터 멀어질수록 더 강하게 이동시켜 날개짓 구현 (CPU 연산 0)</li>
                                         <li>ParticleSystem.Noise를 통해 나비의 불규칙하고 가벼운 이동 구현</li>
                                     </ul>
-                                    <p style="margin-bottom: -15px;"><strong>② 기획 데이터 기반 환경 제어</strong></p>
+                                    <p style="margin-bottom: -15px;"><strong>② 플레이어 중심의 연출</strong></p>
                                     <ul>
-                                        <li>맵 데이터(ScriptableObject)에 나비 생성 여부, 종류, 최대 개수 등을 파라미터화하여 기획자가 맵 속성만으로 환경 연출을 제어할 수 있도록 구조화</li>
-                                    </ul>
-                                    <p style="margin-bottom: -15px;"><strong>③ 플레이어 중심의 연출</strong></p>
-                                    <ul>
-                                        <li>Transform을 플레이어 위치와 실시간 동기화하여, 적은 개체 수로도 플레이어 주변이 항상 꽉 차 보이도록 구현</li>
+                                        <li>플레이어 위치와 동기화하여, 적은 개체 수로도 플레이어 주변이 항상 꽉 차 보이도록 구현</li>
                                         <li>ParticleSystem.Simulation Space = World를 통해 플레이어가 움직여도 나비는 제자리에 있는 것처럼 보이게 함</li>
+                                    </ul>
+                                    <p style="margin-bottom: -15px;"><strong>③ 데이터 기반 환경 제어</strong></p>
+                                    <ul>
+                                        <li>맵 데이터(ScriptableObject)에 생성 여부, 종류, 최대 개수 등 파라미터화하여 기획자가 번들로 환경 제어할 수 있도록 구조화</li>
                                     </ul>
                                 </div>
 
                                 <hr class="deep-dive-divider">
 
-                                <h3 class="deep-dive-title">나뭇잎 (Centralized Control & Flyweight)</h3>
+                                <h3 class="deep-dive-title">나뭇잎 (Centralized Control)</h3>
 
                                 <div class="indented-media">
                                     <img src="Images/나뭇잎.gif" alt="나뭇잎 연출" class="clickable-image" onerror="this.style.display='none'">
@@ -241,7 +323,7 @@
 
                                 <h4>개발 목표</h4>
                                 <div class="dd-content">
-                                    <p style="margin-bottom: -15px;">•  대규모 숲 환경에서의 쾌적한 렌더링 성능 확보</p>
+                                    <p style="margin-bottom: -15px;">•  숲 환경에서 쾌적한 렌더링 성능 확보</p>
                                     <p style="margin-bottom: -15px;">•  다양한 종류의 나무 데이터를 효율적으로 관리하는 시스템 구축</p>
                                 </div>
 
@@ -254,29 +336,29 @@
                                 <div class="dd-content">
                                     <p style="margin-bottom: 5px;"><strong>① 오브젝트의 중요도에 따른 배경 오브젝트의 성능 제한</strong></p>
                                     <ul style="margin-top: 0; margin-bottom: 15px;">
-                                        <li>각 나무마다 Particle System을 개별 부착할 경우, 100그루 기준 <strong>Draw Call 100회 발생</strong> 및 메모리 버퍼 중복 할당으로 심각한 부하 발생</li>
-                                        <li>한 화면에 많은 나무가 배치되는 환경이므로, VFX로 인한 <strong>Draw Call 증가 억제</strong></li>
-                                        <li>맵 전체의 나무에서 파티클을 재생하는 것은 비효율적이므로, <strong>플레이어 반경 내의 나무만 선별(Culling)</strong>하여 연출 활성</li>
+                                        <li>각 나무에서 나뭇잎이 떨어지는 연출과 동시에 성능에 영향을 끼치지 않아야 함</li>
                                     </ul>
                                     <p style="margin-bottom: 5px;"><strong>② 데이터 관리 및 확장성</strong></p>
                                     <ul style="margin-top: 0; margin-bottom: 15px;">
-                                        <li>나무 종류마다 높이, 너비, 낙엽 색상, 낙하 개수 등이 다르므로 이를 개별 인스턴스가 아닌 공유 데이터로 관리해야 함</li>
+                                        <li>나무 종류에 따라 높이, 너비, 색상, 개수 등을 쉽게 관리할 수 있어야 함</li>
                                     </ul>
                                 </div>
 
-                                <h4>해결 방법</h4>
+                                <h4>구현 내용</h4>
                                 <div class="dd-content">
                                     <p style="margin-bottom: 5px;"><strong>① 중앙 제어 시스템 (Centralized Control)</strong></p>
                                     <ul style="margin-top: 0; margin-bottom: 15px;">
-                                        <li>Transform을 플레이어 위치와 실시간 동기화하여 <strong>단 하나의 Particle System</strong>으로 나뭇잎 제어</li>
-                                        <li>FixedUpdate에서 Physics.OverlapSphere로 주변의 나무(Layer : Tree)를 탐색한 뒤, 해당 나무 위치에서 Emit함수를 호출하여 수동으로 입자를 방출</li>
+                                        <li>플레이어 위치와 동기화하여 단 하나의 Particle System으로 나뭇잎 제어</li>
+                                        <li>주변 Tree Layer를 탐색한 뒤, 해당 나무 위치에서 Emit함수를 호출하여 수동으로 입자 방출</li>
                                     </ul>
 
                                     <p style="margin-bottom: 5px;"><strong>② 경량화 패턴 (SO)</strong></p>
+                                    <ul style="list-style: none;">
+                                        <img src="Images/SOLeafData.png" alt="나뭇잎 연출" class="clickable-image" onerror="this.style.display='none'">
+                                    </ul>
                                     <ul style="margin-top: 0; margin-bottom: 15px;">
-                                        <li><strong>ScriptableObject 활용 :</strong> LeafData(높이, 범위, 색상 등)를 별도 에셋으로 분리.</li>
-                                        <li>각 나무 객체(Prefab)는 데이터가 아닌 LeafData의 참조값만 가지도록 하여 <strong>메모리 사용량을 최소화</strong>하고 데이터 재사용성을 극대화</li>
-                                        <li>맵 데이터(ScriptableObject)에 나뭇잎 생성 여부, 종류, 색상, 밀도 등을 파라미터화하여 기획자가 맵 속성만으로 환경 연출을 제어할 수 있도록 구조화</li>
+                                        <li>ScriptableObject에 높이/지름/색상/밀도 등 파라미터화하여 나무 종류에 따라 기획자가 번들로 제어할 수 있도록 구조화</li>
+                                        <li>각 나무 객체는 데이터가 아닌 LeafData의 참조 값만 가지도록 하여 메모리 사용량을 최소화하고 데이터 재사용성을 극대화</li>
                                     </ul>
                                 </div>
 
@@ -294,43 +376,81 @@
                             </div>
 
                             <div id="proj-c-tab-anim" class="dd-tab-pane">
-                                <h3 class="deep-dive-title">캐릭터 애니메이션 프레임워크</h3>
-                                <h4>핵심 구현 기술</h4>
+                                <h3 class="deep-dive-title">캐릭터 애니메이션 설계</h3>
+                                
+                                <div class="indented-media">
+                                    <img src="images/Animator1.png" alt="Animator 구조" class="clickable-image">
+                                    <p class="ref-note">* Sub-State Machine과 Override Controller를 활용한 모듈식 구조 설계 예시</p>
+                                </div>
+
+                                <h4>개발 목표</h4>
                                 <div class="dd-content">
-                                    <div class="indented-media"><img src="images/Animator1.png" alt="Animator 구조" class="clickable-image"></div>
-                                    <ul>
-                                        <li><strong>Blend Tree:</strong> Walk/Run 상태를 통합하여 속도 변화에 따른 자연스러운 모션 보간 구현.</li>
-                                        <li><strong>Sub-State Machine:</strong> 비무장/무장/탈것 등 상태를 모듈화하여 관리 효율성 증대.</li>
-                                        <li><strong>Override Controller:</strong> 직업별 고유 모션만 교체하는 방식으로 재사용성 극대화.</li>
+                                    <p style="margin-bottom: -15px;">•  3개의 클래스/직업군(50+)을 아우르는 애니메이션 로직 구축</p>
+                                    <p style="margin-bottom: -15px;">•  각 변화 시작 모션을 가운데 BlendTree에 몰아넣음으로써 Transition 복잡도 감소 및 유지보수성 증가</p>
+                                    <p style="margin-bottom: -15px;">•  기존 문자열 기반 호출 구조 유지하며 확장성 확보</p>
+                                </div>
+
+                                <h4>개발 기간</h4>
+                                <div class="dd-content">
+                                    <p>26.01.05 ~ 26.01.09 (5일)</p>
+                                </div>
+
+                                <h4>개발 사항</h4>
+                                <div class="dd-content">
+                                    <p style="margin-bottom: 5px;"><strong>① 상태에 따른 기존 애니메이션 호출 구조 유지</strong></p>
+                                    <ul style="margin-top: 0; margin-bottom: 15px;">
+                                        <li>상태 이름으로 호출하는 구조 유지</li>
+                                    </ul>
+
+                                    <p style="margin-bottom: 5px;"><strong>② 단일 레이어의 복잡도 증가 (Spaghetti State)</strong></p>
+                                    <ul style="margin-top: 0; margin-bottom: 15px;">
+                                        <li>Base Layer 안에 15개 이상의 상태가 혼재되어, Transition 연결 시 N:N의 복잡한 스파게티 구조</li>
+                                    </ul>
+
+                                    <p style="margin-bottom: 5px;"><strong>③ 방대한 직업군</strong></p>
+                                    <ul style="margin-top: 0; margin-bottom: 15px;">
+                                        <li>3개 클래스(남/녀), 50여 개의 직업, 무기 4종 등 수백 가지 조합을 지원해야 하므로, 개별 FSM 제작 불가능 (Logic 재사용 필수)</li>
+                                        <li>모든 직업이 동일한 상태 구조를 가지도록 표준화 필요</li>
+                                    </ul>
+                                </div>
+
+                                <h4>구현 내용</h4>
+                                <div class="dd-content">
+                                    <p style="margin-bottom: 5px;"><strong>① 계층적 상태 호출</strong></p>
+                                    <ul style="margin-top: 0; margin-bottom: 15px;">
+                                        <li>기존에는 단순히 "MOVE" 호출했다면, 개선 후에는 현재 상태(비무장/무장/탑승 비무장/ 탑승 무장)를 조합하여 SubStateMachine.State (예: SM_무장.MOVE) 형태로 호출되도록 래핑 함수 구현</li>
+                                        <li>기존 코드의 수정 없이, 내부 로직만으로 정밀한 상태 제어 가능</li>
+                                    </ul>
+
+                                    <p style="margin-bottom: 5px;"><strong>② Sub-State Machine 모듈화</strong></p>
+                                    <ul style="margin-top: 0; margin-bottom: 15px;">
+                                        <li><strong>상태 그룹화:</strong> 비무장, 무장, 탑승 비무장, 탑승 무장 등 행동 양식에 따라 상태를 Sub-State Machine으로 그룹화</li>
+                                        <li>상위 레이어에서는 그룹 간의 진입만 관리하므로 Transition 복잡도 감소</li>
+                                    </ul>
+
+                                    <p style="margin-bottom: 5px;"><strong>③ Animator Override Controller</strong></p>
+                                    <ul style="margin-top: 0; margin-bottom: 15px;">
+                                        <li>직업별로 Animation Clip만 교체하는 Override Controller 방식 적용</li>
+                                    </ul>
+
+                                    <p style="margin-bottom: 5px;"><strong>④ Blend Tree</strong></p>
+                                    <ul style="margin-top: 0; margin-bottom: 15px;">
+                                        <li>MoveSpeed 파라미터를 기준으로 Walk ↔ Run 모션과 속도를 선형 보간하여, 상태 전환 없이 자연스러운 가감속 표현.</li>
+                                    </ul>
+                                </div>
+
+                                <h4>어려웠던 점</h4>
+                                <div class="dd-content">
+                                    <p style="margin-bottom: 5px;"><strong>이슈: Default State의 무한 재진입 현상</strong></p>
+                                    <ul style="margin-top: 0; margin-bottom: 15px;">
+                                        <li><strong>문제 상황 :</strong> 중분류 파라미터 값을 통해 Sub-State Machine에 진입한 상태에서 애니메이션 변경 함수 호출 시 Default State의 애니메이션이 재생</li>
+                                    </ul>
+                                    <ul style="margin-top: 0; margin-bottom: 15px;">
+                                        <li><strong>로직 개선 :</strong> Sub-StateMachine의 name을 포함하여 호출하도록 래핑 함수를 추가하여 제어</li>
                                     </ul>
                                 </div>
                             </div>
 
-                            <div id="proj-c-tab-pipeline" class="dd-tab-pane">
-                                <h3 class="deep-dive-title">맵 변환 파이프라인 (DirectX to Unity)</h3>
-                                <h4>개발 목표</h4>
-                                <div class="dd-content">
-                                    <ul>
-                                        <li>20년 전 DirectX 기반으로 제작된 PC 원작의 맵 데이터를 유니티 엔진으로 이식.</li>
-                                        <li>방대한 맵 데이터를 수작업으로 재배치하는 비효율 제거.</li>
-                                    </ul>
-                                </div>
-                                <h4>구현 내용</h4>
-                                <div class="dd-content">
-                                    <ul>
-                                        <li><strong>자동 변환 툴 개발:</strong> 원작의 바이너리 맵 파일을 파싱하여 Unity Scene에 자동으로 오브젝트를 배치하는 에디터 툴 개발.</li>
-                                        <li><strong>리소스 매핑:</strong> 기존 리소스 ID와 유니티 프리팹 간의 매핑 테이블 구축.</li>
-                                    </ul>
-                                </div>
-                                <h4>성과</h4>
-                                <div class="dd-content">
-                                    <table class="perf-table">
-                                        <tr><th>구분</th><th>수작업 배치</th><th>자동 변환 툴</th><th>성과</th></tr>
-                                        <tr><td>작업 소요 시간</td><td>맵당 수일 소요</td><td>맵당 수분 내 완료</td><td class="text-success">공수 90% 이상 절감</td></tr>
-                                        <tr><td>정확도</td><td>휴먼 에러 발생 가능</td><td>좌표/회전값 100% 일치</td><td class="text-success">데이터 무결성 확보</td></tr>
-                                    </table>
-                                </div>
-                            </div>
                             <button onclick="toggleDetails('proj-c-deep-dive', 'btn-proj-c-top')" class="btn-toggle-bottom">▲ 상세 기술 및 성과 접기</button>
                         </div>
                     </div>
@@ -386,15 +506,32 @@
                                     <p>③ 번들 다운로드 받고 캐싱 후 타 번들이 .spriteAtlas를 찾지 못하도록 <strong>bundle.Unload(false)</strong>를 호출합니다.</p>
                                 </div>
 
-                                <h4>결과</h4>
+<h4>결과</h4>
                                 <div class="dd-content">
-                                    <p>총 메모리 사용량 68.4MB → 11.9MB 로 최적화 (<strong>약 56.5MB 절감</strong>)</p>
-                                    <div><strong>LateBinding 이전</strong> <span class="parenthesis-note">(IconAtlas * 24ea / BgAtlas * 8ea / SpriteAtlas * 6ea)</span>
-                                    <img src="images/SpriteAtlas_LateBinding_결과1.png" alt="LateBinding 결과" class="clickable-image">
-                                    - UICon.asset 하나만 사용했음에도 Texture2D 메모리가 <strong>68MB</strong> 증가했으며, 이는 기존에 로드된 Atlas들이 중복 적재되었음을 의미합니다.</div>
-                                    <br>
-                                    <strong>LateBinding 이후</strong><span class="parenthesis-note">(IconAtlas * 8ea / BgAtlas * 4ea / SpriteAtlas * 3ea)</span>
-                                    <img src="images/SpriteAtlas_LateBinding_결과2.png" alt="LateBinding 결과" class="clickable-image">
+                                    <p style="margin-bottom: 20px;">총 메모리 사용량 68.4MB → 11.9MB 로 최적화 (<span style="color:#e74c3c; font-weight:bold;">약 56.5MB 절감</span>)</p>
+                                    
+                                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: start;">
+                                        
+                                        <div>
+                                            <div style="margin-bottom: 8px; min-height: 40px;">
+                                                <strong>LateBinding 이전</strong>
+                                                <div class="parenthesis-note" style="line-height: 1.2;">(IconAtlas * 24ea / BgAtlas * 8ea / SpriteAtlas * 6ea)</div>
+                                            </div>
+                                            <img src="images/SpriteAtlas_LateBinding_결과1.png" alt="LateBinding 결과 전" class="clickable-image" style="width: 100%; border: 1px solid #eee;">
+                                            <p style="font-size: 0.9em; color: #666; margin-top: 8px; line-height: 1.4;">
+                                                - UICon.asset 하나만 사용했음에도 Texture2D 메모리가 <strong>68MB</strong> 증가 (중복 적재 발생)
+                                            </p>
+                                        </div>
+
+                                        <div>
+                                            <div style="margin-bottom: 8px; min-height: 40px;">
+                                                <strong>LateBinding 이후</strong>
+                                                <div class="parenthesis-note" style="line-height: 1.2;">(IconAtlas * 8ea / BgAtlas * 4ea / SpriteAtlas * 3ea)</div>
+                                            </div>
+                                            <img src="images/SpriteAtlas_LateBinding_결과2.png" alt="LateBinding 결과 후" class="clickable-image" style="width: 100%; border: 1px solid #eee;">
+                                        </div>
+
+                                    </div>
                                 </div>
 
                                 <h4>사용 기술</h4>
@@ -407,18 +544,18 @@
                                 <h3 class="deep-dive-title">SharedMap SpriteAtlas</h3>
                                 <h4>문제점</h4>
                                 <div class="dd-content">
-                                    <img src="images/SharedMap_SpriteAtlas_문제점.png" alt="SharedMap SpriteAtlas 문제점" class="clickable-image">
+                                    <!-- <img src="images/SharedMap_SpriteAtlas_문제점.png" alt="SharedMap SpriteAtlas 문제점" class="clickable-image" style="width: 60%; display: block;"> -->
                                     <ul><li>각 맵마다 별도 Sprite 폴더 및 SpriteAtlas를 사용하고 있음에도, 실제 게임 실행 시 다른 맵의 SpriteAtlas가 참조되어 <strong>불필요한 중복 로딩</strong>이 발생했습니다.</li><li>맵 제작 시 여러 맵에서 사용되는 하나의 맵 프리팹 사용으로 인한 <strong>SpriteAtlas 중복 적재</strong>를 확인했습니다.</li></ul>
                                 </div>
                                 <h4>개선 내용</h4>
                                 <div class="dd-content">
+                                    <!-- <img src="images/SharedMap_SpriteAtlas_개선_내용.png" alt="SharedMap SpriteAtlas 개선 내용" class="clickable-image" style="width: 60%; display: block;"> -->
                                     <p><strong>중복 방지 툴</strong>을 실행하여 공용으로 사용하는 Sprite들을 모아 <strong>SharedMap_SpriteAtlas.spriteatals</strong>를 제작하고, 각 맵 Prefab의 참조를 수정했습니다.</p>
-                                    <img src="images/SharedMap_SpriteAtlas_개선_내용.png" alt="SharedMap SpriteAtlas 개선 내용" class="clickable-image">
                                 </div>
                                 <h4>결과</h4>
                                 <div class="dd-content">
                                     <p>Texture 메모리 사용량 <strong>25.2MB → 14.4MB</strong> (약 10.8MB 감소)</p><img src="images/SharedMap_SpriteAtlas_결과1.png" alt="SharedMap SpriteAtlas 결과1" class="clickable-image">
-                                    <p>전체 메모리 사용량 <strong>1.39GB → 1.31GB</strong> (약 88MB 절감)</p><img src="images/SharedMap_SpriteAtlas_결과2.png" alt="SharedMap SpriteAtlas 결과2" class="clickable-image">
+                                    <p>전체 메모리 사용량 <strong>1.39GB → 1.31GB</strong> (약 88MB 절감)</p><img src="images/SharedMap_SpriteAtlas_결과2.png" alt="SharedMap SpriteAtlas 결과2" class="clickable-image" style="width: 80%; display: block;">
                                 </div>
                                 <h4>사용 기술</h4>
                                 <div class="dd-content">
@@ -431,7 +568,7 @@
                                 <h4>문제점</h4>
                                 <div class="dd-content">
                                     <p>맵 이동 시 이전 맵의 Resource들이 해제되지 않고 누적되어 <strong>최대 208MB까지 중복 적재</strong>되는 현상이 발생했습니다.</p>
-                                    <img src="images/Tilemap_Property_중복_적재_제거_문제.png" alt="Tilemap Property 문제" class="clickable-image">
+                                    <img src="images/Tilemap_Property_중복_적재_제거_문제.png" alt="Tilemap Property 문제" class="clickable-image" style="width: 40%; display: block;">
                                 </div>
                                 <h4>개선 내용</h4>
                                 <div class="dd-content">
@@ -518,8 +655,8 @@
                                 <div class="dd-content">
                                     <ul>
                                         <li>Firebase SDK 최신 버전 사용 (.tgz 방식)</li>
-                                        <li>AOS: AndroidManifest에 FCM 관련 권한 및 서비스 등록</li>
-                                        <li>IOS: APNs 인증 키 연동 및 Xcode 프로젝트 설정, 백그라운드/종료 상태 수신 처리 구현</li>
+                                        <li>AOS : AndroidManifest에 FCM 관련 권한 및 서비스 등록</li>
+                                        <li>IOS : APNs 인증 키 연동 및 Xcode 프로젝트 설정, 백그라운드/종료 상태 수신 처리 구현</li>
                                     </ul>
                                 </div>
                                 <h4>주요 문제 해결</h4>
@@ -561,21 +698,21 @@
                                 <h4>개발 목표</h4>
                                 <div class="dd-content">
                                     <ul>
-                                        <li>Unity Editor 내에서 빌드 관련 <strong>주요 설정(버전, 서버 타입 등)을 간편하게 관리</strong>하고 적용하는 프로세스 자동화.</li>
+                                        <li>Unity Editor 내에서 빌드 관련 <strong>주요 설정(버전, 서버 타입 등)을 간편하게 관리</strong>하고 적용하는 프로세스 자동화</li>
                                         <li>수동 설정으로 인한 <strong>휴먼 에러를 줄이고 빌드 준비 시간을 단축</strong>.</li>
-                                        <li>SVN 리비전 자동 조회 등 <strong>빌드 정보의 정확성 확보</strong>.</li>
+                                        <li>SVN 리비전 자동 조회 등 <strong>빌드 정보의 정확성 확보</strong></li>
                                     </ul>
                                 </div>
                                 <h4>주요 기능 (BuildProcessEditorWindow.cs)</h4>
                                 <div class="dd-content">
-                                    <ul>
-                                        <li><strong>(선행 작업) SVN 업데이트 자동화</strong>: 별도의 .bat 스크립트 실행으로 빌드 전 TortoiseSVN을 통해 프로젝트 폴더 일괄 업데이트. </li>
-                                        <li><strong>빌드 정보 관리</strong>: 서버 IP (라이브/QA), 번들 다운로드 방식, 시즌/클라이언트/스토어 버전 입력 및 관리.</li>
-                                        <li><strong>SVN 리비전 자동 조회</strong>: `svn.exe info` 명령어를 외부 프로세스로 실행하여 `Assets/Scripts` 폴더의 'Last Changed Rev'를 자동으로 가져와 빌드 버전에 반영.</li>
-                                        <li><strong>다음 빌드 설정 자동 계산</strong>: '다음 빌드 데이터 불러오기' 버튼으로 현재 설정 기준 다음 스토어 버전(+1, 옵션) 및 최신 SVN 리비전을 미리 계산하여 표시.</li>
-                                        <li><strong>설정 일괄 적용</strong>: 에디터 창의 설정을 타겟 오브젝트(`SceneProcess`) 및 `PlayerSettings` (Android `bundleVersionCode`, `bundleVersion`, iOS `buildNumber`)에 한 번에 적용.</li>
-                                        <li><strong>빌드 전 정리</strong>: `SpriteAtlas` 및 `StreamingAssets` 폴더 내용을 버튼 클릭으로 자동 삭제하여 깨끗한 빌드 환경 준비.</li>
-                                        <li><strong>보안 설정</strong>: Android Keystore 및 Keyalias 비밀번호 설정 기능 제공.</li>
+                                    <ul style="margin-top: 0; margin-bottom: 15px;">
+                                        <li><strong>SVN 업데이트 자동화:</strong> .bat 파일 연동을 통해 빌드 전 TortoiseSVN 프로젝트 업데이트 수행.</li>
+                                        <li><strong>빌드 옵션 관리:</strong> 서버 환경(Live/QA), 번들 로드 방식, 앱/리소스 버전을 통합 관리.</li>
+                                        <li><strong>리비전 동기화:</strong> svn info 명령어로 리비전을 조회하여 빌드 넘버에 자동 반영.</li>
+                                        <li><strong>버전 자동 계산:</strong> 현재 설정 기반으로 다음 스토어 버전(+1) 및 최신 리비전 프리뷰 제공.</li>
+                                        <li><strong>설정 일괄 적용:</strong> PlayerSettings(Android/iOS 버전 코드) 및 인게임 관리 객체에 설정 즉시 반영.</li>
+                                        <li><strong>에셋 정리:</strong> 빌드 전 SpriteAtlas 및 StreamingAssets 폴더 초기화(삭제) 기능.</li>
+                                        <li><strong>키스토어 설정:</strong> Android Keystore 비밀번호 입력 및 관리 편의성 제공.</li>
                                     </ul>
                                 </div>
                                 <h4>자동화 프로세스 ("자동 빌드 세팅" 버튼)</h4>
@@ -583,7 +720,6 @@
                                     <ul>
                                         <img src="images/빌드 에디터 툴.png" alt="빌드 에디터 툴" class="clickable-image"> <p class="ref-note">*유니티 에디터 빌드 툴</p>
                                         <li><strong>원클릭 실행</strong>: 버튼 클릭 한 번으로 [다음 빌드 설정 계산 → 설정값 적용(SceneProcess, PlayerSettings) → 씬 저장 → 에셋 폴더 정리 → 비밀번호 설정]까지 빌드 전 필요한 모든 준비 단계를 순차적으로 자동 실행.</li>
-                                        <li><strong>진행 상황 표시</strong>: `EditorUtility.DisplayProgressBar`를 사용하여 각 단계별 진행 상황을 사용자에게 시각적으로 안내.</li>
                                     </ul>
                                 </div>
                                 <h4>기대 효과</h4>
@@ -680,60 +816,68 @@
                             </div>
 
                             <div id="metin-tab-contents" class="dd-tab-pane">
-                                <h3 class="deep-dive-title">코스튬</h3>
-                                <h4>개발 목표</h4>
-                                <div class="dd-content">
-                                    <ul>
-                                        <li>캐릭터 외형 커스터마이징 기능 제공.</li>
-                                        <li>추가적인 BM을 통해 공성 및 PVP 활성화를 목표로 능력치 및 스킬 제공.</li>
-                                    </ul>
-                                </div>
-                                <h4>주요 기능</h4>
-                                <div class="dd-content">
-                                    <ul>
-                                        <li>캐릭터 외형 변경.</li>
-                                        <li>부가 능력치 부여.</li>
-                                        <li>패시브 스킬 제공.</li>
-                                    </ul>
-                                </div>
-                                <h4>구현 내용</h4>
-                                <div class="dd-content">
-                                    <div><strong>메인 메뉴 - 코스튬 버튼</strong></div>
-                                    <div class="indented-media"><img src="images/Contents/Costume/코스튬1.png" alt="코스튬 1" class="clickable-image"></div>
-                                    <br>
-                                    <div><strong>코스튬 UI - 장착 및 외형적용</strong></div>
-                                    <div class="indented-media"><img src="images/Contents/Costume/코스튬2.png" alt="코스튬 2" class="clickable-image"></div>
-                                    <p class="ref-note2">*캐릭터에 실시간으로 외형이 적용됩니다.</p>
-                                    <div class="indented-media"><img src="images/Contents/Costume/코스튬3.png" alt="코스튬 3" class="clickable-image"></div>
-                                    <p class="ref-note2">*코스튬 부위별 장착/해제 기능</p>
-                                    <div class="indented-media"><img src="images/Contents/Costume/코스튬4.png" alt="코스튬 4" class="clickable-image"></div>
-                                    <div class="indented-media"><img src="images/Contents/Costume/코스튬5.png" alt="코스튬 5" class="clickable-image"></div>
-                                    <p class="ref-note2">*산타 코스튬으로 전부 외형 적용됐을 때</p>
-                                    <br>
-
-                                    <div><strong>코스튬 UI - 강화</strong></div>
-                                    <div class="indented-media"><video controls muted loop playsinline autoplay>
+                                <h3 class="deep-dive-title">코스튬 시스템 (외형)</h3>
+                                
+                                <div class="indented-media">
+                                    <video controls muted loop playsinline autoplay style="width: 100%; border-radius: 8px;">
                                         <source src="video/코스튬7.mp4" type="video/mp4">
                                         영상을 지원하지 않는 브라우저입니다.
-                                    </video> </div>
-                                    <div class="indented-media"><img src="images/Contents/Costume/코스튬6.png" alt="코스튬 6" class="clickable-image"></div>
-                                    <div class="indented-media"><img src="images/Contents/Costume/코스튬9.png" alt="코스튬 9" class="clickable-image"></div>
-                                    <p class="ref-note2">*강화를 완료했을 때</p>
-                                    <p class="ref-note2">** 인벤토리 - 코스튬 : 금색으로 빛남</p>
-                                    <p class="ref-note2">** 코스튬 정보 - 이미지 뒤에 이펙트 추가</p>
-                                    <p class="ref-note2">** 현재 아인 능력치 - 아인 부여로 인해 얻은 추가 능력치</p>
-                                    <br>
-                                    <div><strong>코스튬 UI - 수집</strong></div>
-                                    <div class="indented-media"><img src="images/Contents/Costume/코스튬10.png" alt="코스튬 10" class="clickable-image"></div>
-                                    <div class="indented-media"><img src="images/Contents/Costume/코스튬11.png" alt="코스튬 11" class="clickable-image"></div>
-                                    <p class="ref-note2">*아인 100을 달성한 코스튬 수집 이미지</p>
-                                    <div class="indented-media"><img src="images/Contents/Costume/코스튬12.png" alt="코스튬 12" class="clickable-image"></div>
-                                    <div class="indented-media"><img src="images/Contents/Costume/코스튬13.png" alt="코스튬 13" class="clickable-image"></div>
-                                    <p class="ref-note2">*아인 100을 달성한 코스튬 외형 적용 이미지</p>
-                                    <div class="indented-media"><img src="images/Contents/Costume/코스튬14.png" alt="코스튬 14" class="clickable-image"></div>
-                                    <p class="ref-note2">*코스튬으로 얻은 추가 효과</p>
-                                    <div class="indented-media"><img src="images/Contents/Costume/코스튬15.png" alt="코스튬 15" class="clickable-image"></div>
-                                    <p class="ref-note2">*코스튬으로 얻은 스킬</p>
+                                    </video>
+                                    <p class="ref-note">* 실시간 외형 변경 및 스탯/스킬 부여가 가능한 코스튬 시스템</p>
+                                </div>
+
+                                <h4>개발 목표</h4>
+                                <div class="dd-content">
+                                    <p style="margin-bottom: -15px;">•  캐릭터의 개성을 표현할 수 있는 부위별 외형 커스터마이징 제공</p>
+                                    <p style="margin-bottom: -15px;">•  추가 BM 확보 및 공성/PVP 활성화를 위한 추가 능력치(스탯/스킬) 시스템 구축</p>
+                                </div>
+
+                                <!-- <h4>개발 사항</h4>
+                                <div class="dd-content">
+                                    <p style="margin-bottom: 5px;"><strong>① 장비/변신 시스템과의 우선순위 충돌</strong></p>
+                                    <ul style="margin-top: 0; margin-bottom: 15px;">
+                                        <li>기존 장비와 변신 시스템 위에 코스튬이 덧입혀져야 하므로, 외형 적용의 우선순위 관리가 필요함. (변신 > 코스튬 > 장비 순)</li>
+                                        <li>강화 시 스텟 및 스킬 표기</li>
+                                    </ul>
+
+                                    <p style="margin-bottom: 5px;"><strong>② 강화(아인)에 따른 동적 연출 및 데이터 관리</strong></p>
+                                    <ul style="margin-top: 0; margin-bottom: 15px;">
+                                        <li>단순 장착뿐만 아니라 강화(아인 부여) 단계에 따라 UI 이펙트, 추가 능력치, 전용 스킬이 실시간으로 활성화되어야 함</li>
+                                    </ul>
+                                </div> -->
+
+                                <h4>주요 기능</h4>
+                                <div class="dd-content">
+                                <p style="margin-bottom: 5px;"><strong>① 외형 관리자</strong></p>
+                                    <ul style="list-style: none;">
+                                        <div class="indented-media" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 5px;">
+                                            <img src="images/Contents/Costume/코스튬4.png" alt="코스튬 4" class="clickable-image" style="width: 100%;">
+                                            <img src="images/Contents/Costume/코스튬5.png" alt="코스튬 5" class="clickable-image" style="width: 100%;">
+                                        </div>
+                                        <p class="ref-note2" style="margin-top: 0; margin-bottom: 15px;">*산타 코스튬으로 전부 외형 적용됐을 때</p>
+                                    </ul>
+                                    <ul style="margin-top: 0; margin-bottom: 15px;">
+                                        <li><strong>렌더링 우선순위:</strong> 변신 여부를 우선 체크 후, 코스튬 데이터 존재 시 장비 메쉬를 덮어쓰거나 비활성화 처리 (변신 > 코스튬 > 장비 순)</li>
+                                    </ul>
+
+                                    <p style="margin-bottom: 5px;"><strong>② UI 시스템</strong></p>
+                                    <ul style="list-style: none;">
+                                        <div class="indented-media" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 5px;">
+                                            <img src="images/Contents/Costume/코스튬9.png" alt="코스튬 9" class="clickable-image" style="width: 100%;">
+                                            <img src="images/Contents/Costume/코스튬6.png" alt="코스튬 6" class="clickable-image" style="width: 100%;">
+                                        </div>
+                                        <p class="ref-note2" style="margin-top: 0; margin-bottom: 15px;">*산타 코스튬으로 전부 외형 적용됐을 때</p>
+                                    </ul>
+                                    <ul style="margin-top: 0; margin-bottom: 15px;">
+                                        <li><strong>인벤토리 시스템</strong> : 등급에 따른 정렬 및 이펙트, 탭, 팝업, 수집/강화 바로가기</li>
+                                        <li><strong>수집 시스템</strong> : 등급에 따른 정렬 및 수집 달성에 따른 머터리얼 변경</li>
+                                    </ul>
+
+                                    <p style="margin-bottom: 5px;"><strong>③ 강화(아인) 시스템</strong></p>
+                                    <ul style="margin-top: 0; margin-bottom: 15px;">
+                                        <li><strong>스탯 동기화 : </strong> 강화 단계별 스탯 테이블 조회 및 성공 시 서버 통신을 통해 능력치 즉시 갱신</li>
+                                        <li><strong>시각적 피드백 : </strong> MAX 레벨(100) 달성 시 인벤토리 슬롯에 전용 이펙트(Gold Material) 적용</li>
+                                    </ul>
                                 </div>
 
                                 <hr class="deep-dive-divider">
@@ -741,33 +885,33 @@
                                 <h3 class="deep-dive-title">칭호</h3>
                                 <h4>개발 목표</h4>
                                 <div class="dd-content">
-                                    <ul>
-                                        <li>캐릭터 성장 보조 및 업적 달성 시스템 구현.</li>
-                                    </ul>
+                                    <p style="margin-bottom: -15px;">•  플레이어의 성취감 고취 및 자기표현(과시) 수단 제공</p>
+                                    <p style="margin-bottom: -15px;">•  다양한 게임 내 활동(PVP, 사냥, 수집)에 대한 보상 체계 구축</p>
                                 </div>
                                 <h4>주요 기능</h4>
                                 <div class="dd-content">
                                     <ul>
-                                        <li>업적 달성 보상.</li>
-                                        <li>부가 능력치 부여.</li>
-                                        <li>다양한 목표 달성을 통해 자신을 소개할 수 있는 칭호 획득 및 노출.</li>
-                                        <li>여러 종류(기한/조건/달성)의 칭호로 유저간 경쟁심 증가.</li>
+                                        <li>업적 달성 보상</li>
+                                        <li>부가 능력치 부여</li>
+                                        <li>다양한 목표 달성을 통해 자신을 소개할 수 있는 칭호 획득 및 노출</li>
+                                        <li>여러 종류(기한/조건/달성)의 칭호로 유저간 경쟁심 증가</li>
                                     </ul>
                                 </div>
                                 <h4>구현 내용</h4>
                                 <div class="dd-content">
-                                    <div><strong>메인 메뉴 - 칭호 버튼</strong></div>
-                                    <div class="indented-media"><img src="images/Contents/TitleOf/칭호1.png" alt="칭호 1" class="clickable-image"></div>
-                                    <br>
                                     <div><strong></strong>칭호 UI - 장착</div>
-                                    <div class="indented-media"><img src="images/Contents/TitleOf/칭호2.png" alt="칭호 2" class="clickable-image"></div>
-                                    <div class="indented-media"><img src="images/Contents/TitleOf/칭호3.png" alt="칭호 3" class="clickable-image"></div>
-                                    <p class="ref-note2">*캐릭터 상단에 실시간으로 칭호가 적용됩니다.</p>
-                                    <div class="indented-media"><img src="images/Contents/TitleOf/칭호4.png" alt="칭호 4" class="clickable-image"></div>
-                                    <div class="indented-media"><img src="images/Contents/TitleOf/칭호5.png" alt="칭호 3" class="clickable-image"></div>
-                                    <p class="ref-note2">*적용 중인 칭호 효과 UI.</p>
+                                    <div class="indented-media">
+                                    <div class="indented-media" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 5px;">
+                                        <img src="images/Contents/TitleOf/칭호2.png" alt="칭호 장착" class="clickable-image" style="width: 100%;">
+                                        <img src="images/Contents/TitleOf/칭호3.png" alt="칭호 적용" class="clickable-image" style="width: 100%;">
+                                        <p class="ref-note2">*캐릭터 상단에 실시간으로 칭호가 적용됩니다.</p>
+                                    </div>
+                                    <div class="indented-media" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 5px;">
+                                        <img src="images/Contents/TitleOf/칭호4.png" alt="칭호4" class="clickable-image" style="width: 100%;">
+                                        <img src="images/Contents/TitleOf/칭호5.png" alt="칭호5" class="clickable-image" style="width: 100%;">
+                                        <p class="ref-note2">*적용 중인 칭호 효과 UI.</p>
+                                    </div>
                                     <br>
-                                    <div class="indented-media"><img src="images/Contents/TitleOf/칭호5.png" alt="칭호 3" class="clickable-image"></div>
                                 </div>
 
                                 <hr class="deep-dive-divider">
