@@ -289,17 +289,16 @@
                                 <div class="dd-content">
                                     <p style="margin-bottom: -15px;"><strong>① Vertex Shader 애니메이션</strong></p>
                                     <ul style="list-style: none;">
-                                    <div class="indented-media">
-                                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; align-items: center;">
-                                            <img src="images/butterfly_mat.png" alt="나비 shader math" class="clickable-image" style="width: 100%; height: auto;" onerror="this.style.display='none'">
-                                            <p class="ref-note"><br><br><br><br><br><br><br><br>* Flap Speed : 날개짓 속도<br>* Wing Intensity : 날개 강도</p>
-                                            <img src="images/sinx2.gif" alt="sin 그래프" class="clickable-image" style="width: 100%; height: auto;" onerror="this.style.display='none'">
+                                        <div class="indented-media">
+                                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; align-items: center;">
+                                                <img src="images/나비Mat조절.gif" alt="나비 shader math" class="clickable-image" style="width: 100%; height: auto;" onerror="this.style.display='none'">
+                                                <p class="ref-note"><br><br><br><br><br><br><br><br>* Flap Speed : 날개짓 속도<br>* Wing Intensity : 날개 강도</p>
+                                                <img src="images/sinx2.gif" alt="sin 그래프" class="clickable-image" style="width: 100%; height: auto;" onerror="this.style.display='none'">
+                                            </div>
                                         </div>
-                                    </div>
                                     </ul>
                                     <ul>
                                         <li>sin 파동 함수를 응용하여 시간에 따라 Plane Mesh의 정점을 중심점으로부터 멀어질수록 더 강하게 이동시켜 날개짓 구현 (CPU 연산 0)</li>
-                                        <li>ParticleSystem.Noise를 통해 나비의 불규칙하고 가벼운 이동 구현</li>
                                     </ul>
                                     <p style="margin-bottom: -15px;"><strong>② 플레이어 중심의 연출</strong></p>
                                     <ul>
@@ -309,6 +308,19 @@
                                     <p style="margin-bottom: -15px;"><strong>③ 데이터 기반 환경 제어</strong></p>
                                     <ul>
                                         <li>맵 데이터(ScriptableObject)에 생성 여부, 종류, 최대 개수 등 파라미터화하여 기획자가 번들로 환경 제어할 수 있도록 구조화</li>
+                                    </ul>
+                                    <p style="margin-bottom: -15px;"><strong>④ 나비 움직임 연출</strong></p>
+                                    <ul style="list-style: none;">
+                                        <div class="indented-media">
+                                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; align-items: center;">
+                                                <img src="images/불규칙나비.png" alt="불규칙나비" class="clickable-image" style="width: 100%; height: auto;" onerror="this.style.display='none'">
+                                                <img src="images/Radius Thickness0.png" alt="Radius Thickness0" class="clickable-image" style="width: 100%; height: auto;" onerror="this.style.display='none'">
+                                            </div>
+                                        </div>
+                                    </ul>
+                                    <ul>
+                                        <li>ParticleSystem.Noise를 통해 나비의 불규칙하고 가벼운 이동 구현</li>
+                                        <li>ParticleSystem.Radius Thickness를 0으로 설정함으로 원 중심으로 Emit되도록 설정</li>
                                     </ul>
                                 </div>
 
