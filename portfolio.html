@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale:1.0">
-    <title>임종훈의 포트폴리오 - 포트폴리오</title> <link rel="stylesheet" href="css/style.css">
+    <title>임종훈의 포트폴리오 - 포트폴리오</title> 
+    <link rel="stylesheet" href="css/style.css">
     <style>
         /* --- 포트폴리오 페이지 전용 스타일 --- */
 
@@ -215,10 +216,280 @@
         }
         .external-link-btn:hover {
             background-color : var(--card-bg-color, #f9f9f9);
-            border-color : #999;
+            border-color : #f9f9f9;
             color : #222;
         }
 
+        /* --- Deep Dive (토글 및 탭) 스타일 --- */
+        .deep-dive-wrapper {
+            margin-top: 10px;
+            grid-column: 1 / -1; /* 그리드의 전체 너비를 차지하도록 설정 */
+        }
+
+/* [수정] 토글 버튼 스타일: 가운데 정렬, 테두리 제거 */
+        .toggle-trigger-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center; /* space-between -> center로 변경 (가운데 정렬) */
+            width: 100%;
+            padding: 15px 20px;
+            background-color: #ffffff;
+            border: none; /* 테두리 제거 */
+            border-radius: 8px;
+            color: #333;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: center; /* 텍스트 가운데 정렬 */
+        }
+
+        .toggle-trigger-btn:hover {
+            background-color: #f0f0f0;
+            /* 테두리 색상 변경 코드 삭제됨 */
+        }
+
+        /* [추가] 하단 접기 버튼 스타일 */
+        .btn-toggle-bottom {
+            width: 100%;
+            padding: 15px;
+            margin-top: 20px;
+            background: transparent;
+            border: none; /* 테두리 제거 */
+            cursor: pointer;
+            font-weight: 700;
+            color: #555;
+            text-align: center; /* 가운데 정렬 */
+            font-size: 0.95rem;
+            border-radius: 8px;
+            transition: background 0.2s;
+        }
+        .btn-toggle-bottom:hover {
+            background-color: #f0f0f0;
+            color: #222;
+        }
+
+        .toggle-trigger-btn .arrow {
+            font-size: 0.8rem;
+            transition: transform 0.3s ease;
+        }
+
+        .toggle-trigger-btn.active .arrow {
+            transform: rotate(180deg);
+        }
+
+        /* 숨겨진 콘텐츠 영역 */
+        .deep-dive-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            background-color: #fff;
+            border-radius: 0 0 8px 8px;
+            border: 1px solid #ddd;
+            border-top: none;
+            opacity: 0; /* 부드러운 등장을 위해 추가 */
+        }
+
+        .deep-dive-content.open {
+            opacity: 1;
+            padding: 20px; /* 열렸을 때 패딩 적용 */
+        }
+
+        /* 내부 탭 네비게이션 */
+        .dd-nav {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+            overflow-x: auto; /* 모바일 대응 */
+        }
+
+        .dd-tab-btn {
+            background: none;
+            border: none;
+            padding: 8px 16px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #777;
+            cursor: pointer;
+            border-radius: 20px;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .dd-tab-btn:hover {
+            background-color: #f0f0f0;
+            color: #333;
+        }
+
+        .dd-tab-btn.active {
+            background-color: #222;
+            color: #fff;
+        }
+
+        /* 탭 내용 패널 */
+        .dd-tab-pane {
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .dd-tab-pane.active {
+            display: block;
+        }
+
+        /* Deep Dive 내부 타이틀 및 본문 스타일 */
+        .deep-dive-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #222;
+            border-left: 4px solid #222;
+            padding-left: 12px;
+        }
+
+        .deep-dive-divider {
+            border: 0;
+            border-top: 1px dashed #ddd;
+            margin: 30px 0;
+        }
+
+        /* 미디어 (이미지/영상) 스타일 */
+        .indented-media {
+            margin: 15px 0 25px 0;
+            /* background: #fafafa;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #eee; */
+        }
+
+        .indented-media img, .indented-media video {
+            width: 100%;
+            height: auto;
+            border-radius: 4px;
+            display: block;
+        }
+
+        .clickable-image {
+            cursor: zoom-in; /* 클릭 가능 암시 */
+            transition: transform 0.2s;
+        }
+        .clickable-image:hover {
+            transform: scale(1.01);
+        }
+
+        /* 설명 텍스트 */
+        .ref-note {
+            font-size: 0.85rem;
+            color: #666;
+            margin-top: 8px;
+            text-align: center;
+        }
+        .ref-note2 {
+            font-size: 0.85rem;
+            color: #666;
+            margin-top: 5px;
+            margin-bottom: 15px;
+        }
+
+        .dd-content {
+            border-left: 3px solid #e0e0e0; /* 여기가 회색 바입니다 */
+            padding-left: 18px;             /* 바와 텍스트 사이 간격 */
+            margin-left: 2px;               /* 헤더와 시작 라인 정렬 미세 조정 */
+            margin-bottom: 30px;            /* 다음 챕터와의 간격 */
+        }
+
+        .dd-content p {
+            margin-bottom: 8px;
+            color: #555;
+        }
+
+        .dd-content ul {
+            padding-left: 20px;
+            margin-bottom: 10px;
+        }
+        .dd-content li {
+            margin-bottom: 6px;
+        }
+
+        /* 성능 비교 테이블 */
+        .perf-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            font-size: 0.9rem;
+        }
+        .perf-table th, .perf-table td {
+            border: 1px solid #ddd;
+            padding: 8px 12px;
+            text-align: center;
+        }
+        .perf-table th {
+            background-color: #f1f1f1;
+            font-weight: 600;
+        }
+        .text-success {
+            color: #27ae60;
+            font-weight: bold;
+        }
+
+        /* 코드 블럭 스타일 */
+        .code-wrapper {
+            margin-top: 15px;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid #ddd;
+            }
+
+        /* HTML 기본 접기/펼치기 태그 스타일 커스텀 */
+        details.code-details summary {
+            background-color: #f1f1f1;
+            padding: 10px 15px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: #555;
+            list-style: none; /* 기본 삼각형 제거 */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background 0.2s;
+            }
+
+        details.code-details summary:hover {
+            background-color: #e8e8e8;
+            color: #333;
+            }
+
+        /* 접기 아이콘 커스텀 */
+        details.code-details summary::after {
+            content: '+'; 
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+        details.code-details[open] summary::after {
+            content: '-';
+            }
+
+        /* 실제 코드가 들어가는 영역 (다크 테마) */
+        .code-block {
+            background-color: #282c34; /* VS Code 느낌 배경 */
+            color: #abb2bf;
+            padding: 20px;
+            margin: 0;
+            overflow-x: auto; /* 가로 스크롤 허용 */
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 0.85rem;
+            line-height: 1.5;
+            white-space: pre; /* 띄어쓰기/줄바꿈 유지 */
+            }
+
+        /* 구문 강조 (간이) - 필요시 span으로 색상 적용 가능 */
+        .code-keyword { color: #c678dd; } /* 보라색 (public, void 등) */
+        .code-type { color: #e5c07b; }    /* 노란색 (int, class 등) */
+        .code-method { color: #61afef; }  /* 파란색 (함수명) */
+        .code-string { color: #98c379; }  /* 초록색 (문자열) */
+        .code-comment { color: #7f848e; font-style: italic; } /* 회색 (주석) */
     </style>
 </head>
 <body class="sub-page">
@@ -242,47 +513,690 @@
             <section id="portfolio-list">
                 
                 <div class="project-entry reverse-mobile">
-                    
                     <div class="project-details-column">
                         <h3>뚱땅주술사</h3>
                         <p class="project-date">2025. 01. ~ Ing.</p>
-                        
+
                         <h4>개발 도구</h4>
-                        <p>C# / Unity / Backend Server / CSV / GitHub</p>
-                        
+                        <p>C# / Unity / Backend Server / GitHub</p>
+
                         <h4>기술 상세</h4>
                         <ul class="tech-list">
-                            <li><strong>Addressable</strong> : 주소 참조 방식을 도입하여 에셋 중복 참조 문제 해결 및 Content Catalog를 통해 리소스의 변경 사항과 버전을 자동으로 추적/갱신 </li>
-                            <li><strong>PAD</strong> : Addressables의 빌드 시스템을 Play Asset Delivery와 연동, 별도 CDN없이 스토어 인프라를 통해 에셋 다운로드 및 로드 구현</li>
-                            <li><strong>Backend Server</strong> : 뒤끝(Backend) 서버와 DB를 활용하여 로그인, 유저 데이터 저장, 재화 동기화 등 비동기 기반의 게임 백엔드 구현</li>
-                            <li><strong>SDK</strong> : 인증(FB_Auth), 푸시(FB_Messaging), 광고(Admob)</li>
-                            <li><strong>프레임워크</strong> : 게임의 핵심 기능을 담당하는 10여종의 매니저 클래스 설계 및 전략 패턴을 적용하여 확장 가능한 스킬 구조 설계 </li>
+                            <li><strong>모듈화 스킬 시스템</strong> : 전략 패턴, 옵저버 패턴 등을 활용한 확장 가능한 아키텍처 설계</li>
+                            <li><strong>Addressable & PAD</strong> : 에셋 중복 참조 해결 및 스토어 인프라를 통한 리소스 로드 최적화</li>
+                            <li><strong>Backend Server</strong> : 뒤끝(Backend) DB를 활용한 비동기 데이터 동기화 및 로그인 구현</li>
                         </ul>
-                        
-                        <!-- <div class="project-external-links">
-                            <a href="https://drive.google.com/file/d/1yxp9Wy-wAgl5hdsb8tsuzYvCNQwVTmZD/view?usp=sharing" class="external-link-btn" target="_blank" rel="noopener noreferrer">
-                                포트폴리오 (Google Drive)
-                            </a>
-                            <a href="https://1drv.ms/b/c/ff9f96ef6fb758b8/ES0DFAnVb65NkeuWncX5rgEBAJ8vvQ4xacU8gDOdAkr3Zg" class="external-link-btn" target="_blank" rel="noopener noreferrer">
-                                포트폴리오 (OneDrive)
-                            </a>
-                        </div> -->
                     </div>
                     
                     <div class="project-media-column">
                         <img src="images/Portfolio/ddjcs.png" alt="뚱땅주술사">
-
-                        <!-- <div class="video-embed-container">
-                            <iframe 
-                                src="https://www.youtube.com/embed/7e_WOL5PCRE" 
-                                title="YouTube video player" 
-                                frameborder="0" 
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                                allowfullscreen>
-                            </iframe>    
-                        </div> -->
                     </div>
+                    
+                    <div class="deep-dive-wrapper">
+                        <button class="toggle-trigger-btn" onclick="toggleDetails(this)">
+                            <span>▼ 상세 보기</span>
+                        </button>
+                    
+                        <div class="deep-dive-content">
+                            <div class="dd-nav">
+                                <button class="dd-tab-btn active" onclick="switchTab(event, 'tab-module')">모듈화 스킬 시스템</button>
+                                <!-- <button class="dd-tab-btn" onclick="switchTab(event, 'tab-opt')">Addressable & 최적화</button>
+                                <button class="dd-tab-btn" onclick="switchTab(event, 'tab-backend')">Backend Server</button> -->
+                            </div>
+                        
+                            <div id="tab-opt" class="dd-tab-pane">
+                                <h3 class="deep-dive-title">SpriteAtlas 최적화 (Late Binding)</h3>
+                                <div class="dd-content">
+                                    <p>메모리 사용량 68.4MB → 11.9MB (<span class="text-success">약 82% 절감</span>)</p>
+                                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px;">
+                                        <div>
+                                            <strong>Before</strong>
+                                            <img src="images/SpriteAtlas_LateBinding_결과1.png" style="width:100%; border:1px solid #eee;" onerror="this.style.display='none'">
+                                        </div>
+                                        <div>
+                                            <strong>After</strong>
+                                            <img src="images/SpriteAtlas_LateBinding_결과2.png" style="width:100%; border:1px solid #eee;" onerror="this.style.display='none'">
+                                        </div>
+                                    </div>
+                                </div>
 
+                                <hr class="deep-dive-divider">
+
+                                <h3 class="deep-dive-title">나비 (Vertex Shader & Instancing)</h3>
+                                <div class="indented-media">
+                                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; align-items: center;">
+                                        <img src="Images/butterfly_mat.png" alt="나비 shader math" class="clickable-image" style="width: 100%;" onerror="this.style.display='none'">
+                                        <img src="Images/sinx2.gif" alt="sin 그래프" class="clickable-image" style="width: 100%;" onerror="this.style.display='none'">
+                                    </div>
+                                    <p class="ref-note">* 거리 비례 가중치를 적용한 Vertex Shader 수식 시각화</p>
+                                </div>
+                                <div class="dd-content">
+                                    <p><strong>해결 전략:</strong> <code>y = sin(|x| + t) * |x|</code> 수식을 응용하여 CPU 연산 없이 유기적인 펄럭임 구현 및 GPU Instancing으로 Draw Call 최소화.</p>
+                                </div>
+                            
+                                <hr class="deep-dive-divider">
+                            
+                                <h3 class="deep-dive-title">나뭇잎 (Centralized Control)</h3>
+                                <div class="dd-content">
+                                    <p><strong>해결 전략:</strong> 단 하나의 Particle System으로 중앙 제어, <code>Physics.OverlapSphere</code>로 주변 나무만 탐색하여 수동 방출(Emit).</p>
+                                    <table class="perf-table">
+                                        <tr><th>항목</th><th>개별 부착</th><th>중앙 제어</th><th>개선 효과</th></tr>
+                                        <tr><td>Draw Calls</td><td>100회</td><td><strong>1회</strong></td><td class="text-success">99% 감소</td></tr>
+                                    </table>
+                                </div>
+
+                                <hr class="deep-dive-divider">
+
+                                <h3 class="deep-dive-title">빌드 자동화 툴 (Editor Window)</h3>
+                                <div class="dd-content">
+                                    <ul>
+                                        <li><strong>SVN 연동:</strong> 빌드 전 리비전 업데이트 및 버전 넘버링 자동화.</li>
+                                        <li><strong>휴먼 에러 방지:</strong> 서버 환경(Live/QA), 키스토어 설정 프리셋 관리.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        
+                            <div id="tab-backend" class="dd-tab-pane">
+                                <h3 class="deep-dive-title">코스튬 시스템</h3>
+                                <div class="indented-media">
+                                    <video controls muted loop playsinline autoplay style="width: 100%; border-radius: 6px;">
+                                        <source src="video/코스튬7.mp4" type="video/mp4">
+                                    </video>
+                                </div>
+                                <div class="dd-content">
+                                    <p><strong>강화 시스템 (Enhancement):</strong> 서버와 데이터 동기화 로직을 구축하여, 강화 성공 시 능력치 갱신 및 MAX 레벨 달성 시 전용 이펙트(Gold Material) 자동 적용.</p>
+                                </div>
+                            
+                                <hr class="deep-dive-divider">
+                            
+                                <h3 class="deep-dive-title">칭호 시스템</h3>
+                                <div class="indented-media" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                                    <img src="images/Contents/TitleOf/칭호2.png" alt="칭호 장착" style="width:100%;" onerror="this.style.display='none'">
+                                    <img src="images/Contents/TitleOf/칭호3.png" alt="칭호 적용" style="width:100%;" onerror="this.style.display='none'">
+                                </div>
+                                <div class="dd-content">
+                                    <p><strong>데이터 동기화:</strong> 몬스터 처치, 레벨업 등 이벤트 발생 시 옵저버 패턴으로 조건을 체크하고 DB 비동기 업데이트 구현.</p>
+                                </div>
+                            </div>
+                        
+
+
+                            
+
+
+
+                            <div id="tab-module" class="dd-tab-pane active">
+                                <h3 class="deep-dive-title">모듈화 스킬 시스템</h3>
+                                <h4>개발 목표</h4>
+                                <div class="dd-content">
+                                    <p>• 스킬 구현 시 중복되는 능력의 공유 방법 필요</p>
+                                    <p>• 데이터(csv)로 다수의 스킬 제작</p>
+                                </div>
+
+                                <h4>개발 사항</h4>
+                                <div class="dd-content">
+                                    <p><strong>① 전략 패턴 도입</strong></p>
+                                    <ul>
+                                        <li>투사체의 동작을 <strong>이동(Movement)</strong>과 <strong>특성(Trait)</strong> 인터페이스로 분리하여 캡슐화</li>
+                                        <li>"유도", "스턴", "폭발" 등 공통 기능을 중복 구현 없이 재사용 가능하도록 구조화</li>
+                                    </ul>
+
+                                    <p><strong>② 데이터 바인딩</strong></p>
+                                    <ul>
+                                        <li><strong>SkillInfo.csv</strong>의 컬럼 값을 읽어 팩토리 클래스가 런타임에 로직을 조립</li>
+                                        <li>SO 조합으로 프로그래머 개입 없이 기획자가 수백 가지의 파생 스킬 생성 가능</li>
+                                    </ul>
+                                </div>
+
+                                <h4>해결 방법</h4>
+                                <div class="dd-content">
+                                    <p><strong>① 전략 패턴 도입</strong></p>
+                                    <div class="indented-media" style="display: grid; grid-template-columns: 0.5fr 1.5fr; gap: 15px; align-items: start;">
+                                    <div>
+                                        <img src="images/Portfolio/Project_dd/SkillArchitecture.png" alt="스킬 로직 클래스 구조" class="clickable-image" style="width: 100%; border: 1px solid #ddd;">
+                                        <p class="ref-note" style="margin-top:5px;">* 전략 패턴으로 분리된 로직 구조</p>
+                                    </div>
+                                    <div>
+                                        <img src="images/Portfolio/Project_dd/CBulletFactory.png" alt="스킬 팩토리 클래스" class="clickable-image" style="width: 100%; border: 1px solid #ddd;">
+                                        <p class="ref-note" style="margin-top:5px;">* <strong>CBulletFactroy</strong>에서 불렛 생성 시 <strong>전략 패턴 로직 대입</strong></p>
+                                    </div>
+                                </div>
+
+                                <div class="dd-content">
+                                    <ul>
+                                        <li>투사체의 동작을 <strong>이동(Movement)</strong>과 <strong>특성(Trait)</strong> 인터페이스로 분리하여 캡슐화</li>
+                                        <li>"유도", "스턴", "폭발" 등 공통 기능을 중복 구현 없이 재사용 가능하도록 구조화</li>
+                                    </ul>
+
+
+<div class="code-wrapper">
+                                        <details class="code-details" ontoggle="updateHeight(this)">
+                                            <summary>이동 로직(Movement) 전체 소스코드 보기 (C#)</summary>
+                                            
+                                            <p style="margin: 15px 0 5px 0; color: #333; font-weight: bold;">1. 이동 로직의 기본 설계 (Base Class)</p>
+                                            <p style="margin-bottom: 10px; font-size: 0.9rem; color: #666;">모든 투사체 이동 로직이 상속받는 추상 클래스입니다. 초기화(Initialize)와 매 프레임 갱신(ProcessMove)을 정의합니다.</p>
+<pre class="code-block"><code><span class="code-keyword">public abstract class</span> <span class="code-type">CBulletLogic_Movement</span> : <span class="code-type">ScriptableObject</span>
+{
+    <span class="code-keyword">protected</span> <span class="code-type">CBullet</span>      m_cBullet;
+    <span class="code-keyword">protected</span> <span class="code-type">Rigidbody2D</span> m_rd;
+    <span class="code-keyword">protected</span> <span class="code-type">CBulletDesc</span> m_cBulletDesc;
+
+
+    <span class="code-comment">// CBullet 이동로직 초기화</span>
+    <span class="code-comment">// CBullet.Init에서 호출</span>
+    <span class="code-keyword">public virtual bool</span> <span class="code-method">Initialize</span>(<span class="code-type">CBullet</span> cBullet)
+    {
+        m_cBullet = cBullet;
+        <span class="code-keyword">if</span> (m_cBullet == <span class="code-keyword">null</span>)
+        {
+            m_rd = m_cBullet.Rigidbody;
+            m_cBulletDesc = m_cBullet.m_cBulletDesc;
+        }
+        <span class="code-keyword">else</span>
+        {
+            <span class="code-type">Debug</span>.<span class="code-method">LogError</span>(<span class="code-string">$"</span>{cBullet.name}<span class="code-string"> is null."</span>);
+            <span class="code-keyword">return false</span>;
+        }
+        <span class="code-keyword">return true</span>;
+    }
+
+    <span class="code-comment">CBullet 이동로직</span>
+    <span class="code-comment">CBullet.FixedUpdate에서 호출</span>
+    <span class="code-keyword">public virtual bool</span> <span class="code-method">ProcessMove</span>()
+    {
+        <span class="code-keyword">if</span> (m_rd == <span class="code-keyword">null</span> || m_cBulletDesc == <span class="code-keyword">null</span>)
+            <span class="code-keyword">return false</span>;
+
+        <span class="code-keyword">return true</span>;
+    }
+}</code></pre>
+
+                                            <p style="margin: 25px 0 5px 0; color: #333; font-weight: bold;">2. 일반 이동 (Normal)</p>
+                                            <p style="margin-bottom: 10px; font-size: 0.9rem; color: #666;">가장 기초적인 직선 이동 로직입니다. 설정된 방향(vDir)으로 속도를 적용합니다.</p>
+<pre class="code-block"><code>[<span class="code-type">CreateAssetMenu</span>(menuName = <span class="code-string">"BulletLogic/Movement/Normal"</span>)]
+<span class="code-keyword">public class</span> <span class="code-type">CBulletLogic_Movement_Normal</span> : <span class="code-type">CBulletLogic_Movement</span>
+{
+    <span class="code-keyword">public override bool</span> <span class="code-method">ProcessMove</span>()
+    {
+        <span class="code-keyword">if</span> (<span class="code-keyword">base</span>.<span class="code-method">ProcessMove</span>() == <span class="code-keyword">false</span>)
+            <span class="code-keyword">return false</span>;
+
+        <span class="code-comment">// 방사형으로 발사</span>
+        m_rd.velocity = m_cBulletDesc.vDir * m_cBulletDesc.fSpeed_Move;
+
+        <span class="code-keyword">return true</span>;
+    }
+}</code></pre>
+
+                                            <p style="margin: 25px 0 5px 0; color: #333; font-weight: bold;">3. 부메랑 이동 (Boomerang)</p>
+                                            <p style="margin-bottom: 10px; font-size: 0.9rem; color: #666;">상태 머신(FSM)을 활용하여 [출발 -> 체류 -> 복귀]의 3단계 동작을 구현했습니다.</p>
+<pre class="code-block"><code>[<span class="code-type">CreateAssetMenu</span>(menuName = <span class="code-string">"BulletLogic/Movement/Boomerang"</span>)]
+<span class="code-keyword">public class</span> <span class="code-type">CBulletLogic_Movement_Boomerang</span> : <span class="code-type">CBulletLogic_Movement</span>
+{
+    <span class="code-keyword">public</span>  <span class="code-keyword">float</span>       m_fBoomerangTime_Out = <span class="code-type">0.5f</span>;
+    <span class="code-keyword">public</span>  <span class="code-keyword">float</span>       m_fBoomerangTime_Stay = <span class="code-type">0.75f</span>;
+
+    <span class="code-keyword">private</span> <span class="code-type">Transform</span>   m_trPlayer;
+    <span class="code-keyword">private</span> <span class="code-keyword">float</span>       m_fTimer = <span class="code-type">0f</span>;
+    <span class="code-keyword">private</span> <span class="code-keyword">byte</span>        m_byBoomerangState = <span class="code-type">0</span>; <span class="code-comment">// 0:출발, 1:체류, 2:복귀</span>
+
+    <span class="code-keyword">public override bool</span> <span class="code-method">Initialize</span>(<span class="code-type">CBullet</span> cBullet)
+    {
+        <span class="code-keyword">if</span> (<span class="code-keyword">base</span>.<span class="code-method">Initialize</span>(cBullet) == <span class="code-keyword">false</span>) <span class="code-keyword">return false</span>;
+        m_byBoomerangState = <span class="code-type">0</span>;
+        <span class="code-keyword">return true</span>;
+    }
+
+    <span class="code-keyword">public override bool</span> <span class="code-method">ProcessMove</span>()
+    {
+        <span class="code-keyword">if</span> (<span class="code-keyword">base</span>.<span class="code-method">ProcessMove</span>() == <span class="code-keyword">false</span>) <span class="code-keyword">return false</span>;
+
+        m_cBullet.transform.<span class="code-method">Rotate</span>(<span class="code-type">Vector3</span>.forward * -<span class="code-type">150</span> * <span class="code-type">Time</span>.deltaTime);
+
+        <span class="code-keyword">switch</span> (m_byBoomerangState)
+        {
+            <span class="code-keyword">case</span> <span class="code-type">0</span>: <span class="code-method">Update_Out</span>();    <span class="code-keyword">break</span>;
+            <span class="code-keyword">case</span> <span class="code-type">1</span>: <span class="code-method">Update_Stay</span>();   <span class="code-keyword">break</span>;
+            <span class="code-keyword">case</span> <span class="code-type">2</span>: <span class="code-method">Update_Return</span>(); <span class="code-keyword">break</span>;
+        }
+        <span class="code-keyword">return true</span>;
+    }
+
+    <span class="code-keyword">private void</span> <span class="code-method">Update_Out</span>()
+    {
+        m_cBullet.Rigidbody.velocity = m_cBullet.m_cBulletDesc.vDir * m_cBullet.m_cBulletDesc.fSpeed_Move;
+        m_fTimer += <span class="code-type">Time</span>.deltaTime;
+        <span class="code-keyword">if</span> (m_fTimer >= m_fBoomerangTime_Out)
+        {
+            m_byBoomerangState = <span class="code-type">1</span>;
+            m_fTimer = <span class="code-type">0f</span>;
+            m_cBullet.Rigidbody.velocity = <span class="code-type">Vector2</span>.zero;
+        }
+    }
+
+    <span class="code-keyword">private void</span> <span class="code-method">Update_Stay</span>()
+    {
+        m_fTimer += <span class="code-type">Time</span>.deltaTime;
+        <span class="code-keyword">if</span> (m_fTimer >= m_fBoomerangTime_Stay)
+        {
+            m_byBoomerangState = <span class="code-type">2</span>;
+            m_fTimer = <span class="code-type">0f</span>;
+        }
+    }
+
+    <span class="code-keyword">private void</span> <span class="code-method">Update_Return</span>()
+    {
+        <span class="code-keyword">if</span> (m_trPlayer == <span class="code-keyword">null</span>) m_trPlayer = <span class="code-type">CGameManager</span>.instance.PLAYER.transform;
+
+        <span class="code-type">Vector2</span> vDir = (<span class="code-type">Vector2</span>)m_trPlayer.position - m_cBullet.Rigidbody.position;
+        m_cBullet.Rigidbody.velocity = vDir.normalized * m_cBullet.m_cBulletDesc.fSpeed_Move;
+
+        <span class="code-keyword">if</span> (vDir.magnitude <= <span class="code-type">0.1f</span>) m_cBullet.<span class="code-method">Hide</span>();
+    }
+}</code></pre>
+
+                                            <p style="margin: 25px 0 5px 0; color: #333; font-weight: bold;">4. 원형 패턴 (CirclePattern)</p>
+                                            <p style="margin-bottom: 10px; font-size: 0.9rem; color: #666;">플레이어 주변을 공전하는 투사체입니다. 삼각함수를 이용해 각도를 좌표로 변환합니다.</p>
+<pre class="code-block"><code>[<span class="code-type">CreateAssetMenu</span>(menuName = <span class="code-string">"BulletLogic/Movement/CirclePattern"</span>)]
+<span class="code-keyword">public class</span> <span class="code-type">CBulletLogic_Movement_CirclePattern</span> : <span class="code-type">CBulletLogic_Movement</span>
+{
+    <span class="code-keyword">private float</span> m_fRadius = <span class="code-type">2.0f</span>;
+    <span class="code-keyword">private float</span> m_fRotateSpeed = <span class="code-type">150f</span>;
+
+    <span class="code-keyword">public override bool</span> <span class="code-method">ProcessMove</span>()
+    {
+        <span class="code-keyword">if</span> (<span class="code-keyword">base</span>.<span class="code-method">ProcessMove</span>() == <span class="code-keyword">false</span>) <span class="code-keyword">return false</span>;
+
+        <span class="code-keyword">float</span> fAngleStep = <span class="code-type">360f</span> / m_cBulletDesc.byTotalCount;
+        <span class="code-keyword">float</span> fCurrentAngle = (m_fRotateSpeed * <span class="code-type">Time</span>.time) + (fAngleStep * m_cBulletDesc.byBulletIndex);
+
+        <span class="code-comment">// 극좌표계를 직교좌표계로 변환 (r*cos, r*sin)</span>
+        <span class="code-keyword">float</span> fRadius = fCurrentAngle * <span class="code-type">Mathf</span>.Deg2Rad;
+        <span class="code-type">Vector3</span> offset = <span class="code-keyword">new</span> <span class="code-type">Vector3</span>(<span class="code-type">Mathf</span>.<span class="code-method">Cos</span>(fRadius), <span class="code-type">Mathf</span>.<span class="code-method">Sin</span>(fRadius), <span class="code-type">0</span>) * m_fRadius;
+
+        m_rd.<span class="code-method">MovePosition</span>(<span class="code-type">CGameManager</span>.instance.PLAYER.transform.position + offset);
+        <span class="code-keyword">return true</span>;
+    }
+}</code></pre>
+
+                                            <p style="margin: 25px 0 5px 0; color: #333; font-weight: bold;">5. 나선형 이동 (Spiral)</p>
+                                            <p style="margin-bottom: 10px; font-size: 0.9rem; color: #666;">시간이 지날수록 반지름이 커지는 나선 궤도를 그립니다.</p>
+<pre class="code-block"><code>[<span class="code-type">CreateAssetMenu</span>(menuName = <span class="code-string">"BulletLogic/Movement/Spiral"</span>)]
+<span class="code-keyword">public class</span> <span class="code-type">CBulletLogic_Movement_Spiral</span> : <span class="code-type">CBulletLogic_Movement</span>
+{
+    <span class="code-keyword">public float</span> fRotateSpeed = <span class="code-type">2f</span>;
+    <span class="code-keyword">public float</span> fExpandSpeed = <span class="code-type">2f</span>;
+
+    <span class="code-keyword">public override bool</span> <span class="code-method">ProcessMove</span>()
+    {
+        <span class="code-keyword">if</span> (<span class="code-keyword">base</span>.<span class="code-method">ProcessMove</span>() == <span class="code-keyword">false</span>) <span class="code-keyword">return false</span>;
+
+        <span class="code-keyword">float</span> fTimer = <span class="code-type">5f</span> - m_cBullet.fLIFETIME;
+        <span class="code-keyword">float</span> fAngle = fRotateSpeed * fTimer;
+        <span class="code-keyword">float</span> fRadius = fExpandSpeed * fTimer;
+
+        <span class="code-keyword">float</span> x = <span class="code-type">Mathf</span>.<span class="code-method">Cos</span>(fAngle) * fRadius;
+        <span class="code-keyword">float</span> y = <span class="code-type">Mathf</span>.<span class="code-method">Sin</span>(fAngle) * fRadius;
+
+        m_rd.velocity = <span class="code-type">Vector2</span>.zero;
+        m_rd.<span class="code-method">MovePosition</span>(m_cBulletDesc.vPos + <span class="code-keyword">new</span> <span class="code-type">Vector2</span>(x, y));
+
+        <span class="code-keyword">return true</span>;
+    }
+}</code></pre>
+
+                                            <p style="margin: 25px 0 5px 0; color: #333; font-weight: bold;">6. 플레이어 동기화 (SyncPlayer)</p>
+                                            <p style="margin-bottom: 10px; font-size: 0.9rem; color: #666;">플레이어의 위치와 완벽하게 일치하여 이동합니다 (오라형 스킬 등).</p>
+<pre class="code-block"><code>[<span class="code-type">CreateAssetMenu</span>(menuName = <span class="code-string">"BulletLogic/Movement/SyncPlayer"</span>)]
+<span class="code-keyword">public class</span> <span class="code-type">CBulletLogic_Movement_SyncPlayer</span> : <span class="code-type">CBulletLogic_Movement</span>
+{
+    <span class="code-keyword">public override bool</span> <span class="code-method">ProcessMove</span>()
+    {
+        <span class="code-keyword">if</span> (<span class="code-keyword">base</span>.<span class="code-method">ProcessMove</span>() == <span class="code-keyword">false</span>) <span class="code-keyword">return false</span>;
+
+        m_cBullet.transform.position = <span class="code-type">CGameManager</span>.instance.PLAYER.transform.position;
+        <span class="code-keyword">return true</span>;
+    }
+}</code></pre>
+
+                                            <p style="margin: 25px 0 5px 0; color: #333; font-weight: bold;">7. 유도탄 (Trace)</p>
+                                            <p style="margin-bottom: 10px; font-size: 0.9rem; color: #666;">타겟 방향으로 계속해서 속도를 갱신하여 추적합니다.</p>
+<pre class="code-block"><code>[<span class="code-type">CreateAssetMenu</span>(menuName = <span class="code-string">"BulletLogic/Movement/Trace"</span>)]
+<span class="code-keyword">public class</span> <span class="code-type">CBulletLogic_Movement_Trace</span> : <span class="code-type">CBulletLogic_Movement</span>
+{
+    <span class="code-keyword">public override bool</span> <span class="code-method">ProcessMove</span>()
+    {
+        <span class="code-keyword">if</span> (<span class="code-keyword">base</span>.<span class="code-method">ProcessMove</span>() == <span class="code-keyword">false</span>) <span class="code-keyword">return false</span>;
+
+        m_rd.velocity = m_cBulletDesc.vDir * m_cBulletDesc.fSpeed_Move;
+        <span class="code-keyword">return true</span>;
+    }
+}</code></pre>
+                                        </details>
+                                    </div>
+
+
+
+
+
+
+
+
+
+
+
+                                    <div class="code-wrapper">
+                                        <details class="code-details" ontoggle="updateHeight(this)">
+                                            <summary>특성 로직(Trait) 전체 소스코드 보기 (C#)</summary>
+                                            
+                                            <p style="margin: 15px 0 5px 0; color: #333; font-weight: bold;">1. 특성 로직의 기본 설계 (Base Class)</p>
+                                            <p style="margin-bottom: 10px; font-size: 0.9rem; color: #666;">충돌 이벤트(Enter, Stay, Exit)와 매 프레임(Tick) 실행될 로직을 정의합니다.</p>
+<pre class="code-block"><code><span class="code-keyword">public abstract class</span> <span class="code-type">CBulletLogic_Trait</span> : <span class="code-type">ScriptableObject</span>
+{
+    <span class="code-keyword">protected</span> <span class="code-type">CBullet</span>     m_cBullet;
+    <span class="code-keyword">protected</span> <span class="code-type">CBulletDesc</span> m_cBulletDesc;
+
+    <span class="code-keyword">public virtual bool</span> <span class="code-method">Initialize</span>(<span class="code-type">CBullet</span> cBullet)
+    {
+        m_cBullet = cBullet;
+        <span class="code-keyword">if</span> (m_cBullet == <span class="code-keyword">null</span>)
+        {
+            <span class="code-type">Debug</span>.<span class="code-method">LogError</span>(<span class="code-string">$"</span>{cBullet.name}<span class="code-string"> is null."</span>);
+            <span class="code-keyword">return false</span>;
+        }
+        m_cBulletDesc = m_cBullet.m_cBulletDesc;
+        <span class="code-keyword">return true</span>;
+    }
+
+    <span class="code-keyword">public virtual bool</span> <span class="code-method">Tick</span>() { <span class="code-keyword">return true</span>; }
+    <span class="code-keyword">public virtual bool</span> <span class="code-method">CollisionEnter</span>(<span class="code-type">CActor</span> cTargetActor, <span class="code-keyword">int</span> iColliderTagHash) { <span class="code-keyword">return true</span>; }
+    <span class="code-keyword">public virtual bool</span> <span class="code-method">CollisionStay</span>(<span class="code-type">CActor</span> cTargetActor, <span class="code-keyword">int</span> iColliderTagHash) { <span class="code-keyword">return true</span>; }
+    <span class="code-keyword">public virtual bool</span> <span class="code-method">CollisionExit</span>(<span class="code-type">CActor</span> cTargetActor, <span class="code-keyword">int</span> iColliderTagHash) { <span class="code-keyword">return true</span>; }
+}</code></pre>
+
+                                            <p style="margin: 25px 0 5px 0; color: #333; font-weight: bold;">2. 스턴 부여 (EnterStun)</p>
+                                            <p style="margin-bottom: 10px; font-size: 0.9rem; color: #666;">충돌 시 데미지를 주고, 적을 일정 시간 동안 스턴 상태(FSM)로 만듭니다.</p>
+<pre class="code-block"><code>[<span class="code-type">CreateAssetMenu</span>(menuName = <span class="code-string">"BulletLogic/Trait/EnterStun"</span>)]
+<span class="code-keyword">public class</span> <span class="code-type">CBulletLogic_Trait_EnterStun</span> : <span class="code-type">CBulletLogic_Trait</span>
+{
+    <span class="code-keyword">public override bool</span> <span class="code-method">CollisionEnter</span>(<span class="code-type">CActor</span> cTargetActor, <span class="code-keyword">int</span> iColliderTagHash)
+    {
+        <span class="code-keyword">if</span> (<span class="code-keyword">base</span>.<span class="code-method">CollisionEnter</span>(cTargetActor, iColliderTagHash) == <span class="code-keyword">false</span>) <span class="code-keyword">return false</span>;
+
+        <span class="code-comment">// 데미지 처리 및 DPS 기록</span>
+        (<span class="code-type">cTargetActor</span> <span class="code-keyword">as</span> <span class="code-type">CMonster</span>).<span class="code-method">Damage</span>(m_cBulletDesc.fPower);
+        <span class="code-type">CGameManager</span>.EVENT_MANAGER.<span class="code-method">BroadCast_Param</span>(<span class="code-type">EventType</span>.ET_MONSTERDAMAGE, (m_cBulletDesc.iID, m_cBulletDesc.fPower));
+        
+        <span class="code-comment">// 스턴 적용</span>
+        <span class="code-type">CCoroutine_Excution</span>.instance.<span class="code-method">RunCoroutine</span>(<span class="code-method">IEStun</span>(cTargetActor));
+
+        <span class="code-keyword">return true</span>;
+    }
+
+    <span class="code-keyword">private</span> <span class="code-type">IEnumerator</span> <span class="code-method">IEStun</span>(<span class="code-type">CActor</span> cTargetActor)
+    {
+        <span class="code-type">CMonster</span> cMonster = cTargetActor <span class="code-keyword">as</span> <span class="code-type">CMonster</span>;
+        cMonster.<span class="code-method">Change_State</span>(<span class="code-type">FSM</span>.STUN);
+        <span class="code-keyword">yield return</span> <span class="code-type">YieldCache</span>.<span class="code-method">WaitForSeconds</span>(<span class="code-type">1f</span>);
+        cMonster.<span class="code-method">Change_State</span>(<span class="code-type">FSM</span>.MOVE);
+    }
+}</code></pre>
+
+                                            <p style="margin: 25px 0 5px 0; color: #333; font-weight: bold;">3. 인력&척력 (Gravity)</p>
+                                            <p style="margin-bottom: 10px; font-size: 0.9rem; color: #666;">범위 내(CollisionStay)에 있는 적을 투사체 쪽으로 끌어당기거나 밀어냅니다.<br>SO내에서 bool을 통해 인력과 척력으로 조작 가능</p>
+<pre class="code-block"><code>[<span class="code-type">CreateAssetMenu</span>(menuName = <span class="code-string">"BulletLogic/Trait/Gravity"</span>)]
+<span class="code-keyword">public class</span> <span class="code-type">CBulletLogic_Trait_Gravity</span> : <span class="code-type">CBulletLogic_Trait</span>
+{
+    <span class="code-keyword">public bool</span>  m_bDirection; <span class="code-comment">// true: 밀어냄, false: 당김</span>
+    <span class="code-keyword">public float</span> m_fPower = <span class="code-type">3f</span>;
+
+    <span class="code-keyword">public override bool</span> <span class="code-method">CollisionStay</span>(<span class="code-type">CActor</span> cTargetActor, <span class="code-keyword">int</span> iColliderTagHash)
+    {
+        <span class="code-keyword">if</span> (<span class="code-keyword">base</span>.<span class="code-method">CollisionStay</span>(cTargetActor, iColliderTagHash) == <span class="code-keyword">false</span>) <span class="code-keyword">return false</span>;
+
+        <span class="code-comment">// 지속 데미지 적용</span>
+        <span class="code-keyword">float</span> fDmg = m_cBulletDesc.fPower * <span class="code-type">Time</span>.deltaTime;
+        (<span class="code-type">cTargetActor</span> <span class="code-keyword">as</span> <span class="code-type">CMonster</span>).<span class="code-method">Damage</span>(fDmg);
+        <span class="code-type">CGameManager</span>.EVENT_MANAGER.<span class="code-method">BroadCast_Param</span>(<span class="code-type">EventType</span>.ET_MONSTERDAMAGE, (m_cBulletDesc.iID, fDmg));
+
+        <span class="code-comment">// 중력 효과 적용</span>
+        <span class="code-type">Vector3</span> vDirection = m_cBullet.transform.position - cTargetActor.transform.position;
+        cTargetActor.transform.position += (vDirection.normalized * <span class="code-type">Time</span>.deltaTime * m_fPower * (m_bDirection ? <span class="code-type">1</span> : <span class="code-type">-1</span>));
+
+        <span class="code-keyword">return true</span>;
+    }
+}</code></pre>
+
+                                            <p style="margin: 25px 0 5px 0; color: #333; font-weight: bold;">4. 히트 스탑 (HitStop)</p>
+                                            <p style="margin-bottom: 10px; font-size: 0.9rem; color: #666;">타격감을 극대화하기 위해 충돌 순간 투사체를 잠시 멈추고 몬스터를 흔듭니다.</p>
+<pre class="code-block"><code>[<span class="code-type">CreateAssetMenu</span>(menuName = <span class="code-string">"BulletLogic/Trait/HitStop"</span>)]
+<span class="code-keyword">public class</span> <span class="code-type">CBulletLogic_Trait_HitStop</span> : <span class="code-type">CBulletLogic_Trait</span>
+{
+    <span class="code-keyword">public override bool</span> <span class="code-method">CollisionEnter</span>(<span class="code-type">CActor</span> cTargetActor, <span class="code-keyword">int</span> iColliderTagHash)
+    {
+        <span class="code-keyword">if</span> (<span class="code-keyword">base</span>.<span class="code-method">CollisionEnter</span>(cTargetActor, iColliderTagHash) == <span class="code-keyword">false</span>) <span class="code-keyword">return false</span>;
+
+        (<span class="code-type">cTargetActor</span> <span class="code-keyword">as</span> <span class="code-type">CMonster</span>).<span class="code-method">Damage</span>(m_cBulletDesc.fPower);
+        <span class="code-type">CGameManager</span>.EVENT_MANAGER.<span class="code-method">BroadCast_Param</span>(<span class="code-type">EventType</span>.ET_MONSTERDAMAGE, (m_cBulletDesc.iID, m_cBulletDesc.fPower));
+
+        <span class="code-type">CCoroutine_Excution</span>.instance.<span class="code-method">RunCoroutine</span>(<span class="code-method">IEHitStop</span>(cTargetActor));
+        <span class="code-keyword">return true</span>;
+    }
+
+    <span class="code-keyword">private</span> <span class="code-type">IEnumerator</span> <span class="code-method">IEHitStop</span>(<span class="code-type">CActor</span> cTargetActor)
+    {
+        <span class="code-type">CMonster</span> cMonster = cTargetActor <span class="code-keyword">as</span> <span class="code-type">CMonster</span>;
+        cMonster.<span class="code-method">Shake</span>(<span class="code-type">0.1f</span>, <span class="code-type">0.1f</span>); <span class="code-comment">// 몬스터 흔들림 효과</span>
+
+        <span class="code-keyword">float</span> fOriginSpeed = m_cBulletDesc.fSpeed_Move;
+        <span class="code-keyword">if</span> (fOriginSpeed <= <span class="code-type">0.01f</span>) <span class="code-keyword">yield break</span>;
+
+        <span class="code-comment">// 투사체 정지 후 재개</span>
+        m_cBulletDesc.fSpeed_Move = <span class="code-type">0f</span>;
+        <span class="code-keyword">yield return</span> <span class="code-type">YieldCache</span>.<span class="code-method">WaitForSeconds</span>(<span class="code-type">0.1f</span>);
+        m_cBulletDesc.fSpeed_Move = fOriginSpeed;
+    }
+}</code></pre>
+
+                                            <p style="margin: 25px 0 5px 0; color: #333; font-weight: bold;">5. 넉백 (KnockBack)</p>
+                                            <p style="margin-bottom: 10px; font-size: 0.9rem; color: #666;">투사체의 진행 방향으로 적을 밀어냅니다.</p>
+<pre class="code-block"><code>[<span class="code-type">CreateAssetMenu</span>(menuName = <span class="code-string">"BulletLogic/Trait/KnockBack"</span>)]
+<span class="code-keyword">public class</span> <span class="code-type">CBulletLogic_Trait_KnockBack</span> : <span class="code-type">CBulletLogic_Trait</span>
+{
+    <span class="code-keyword">public bool</span>  m_bDirection;
+    <span class="code-keyword">public float</span> m_fKnockbackPower = <span class="code-type">50f</span>;
+
+    <span class="code-keyword">public override bool</span> <span class="code-method">CollisionEnter</span>(<span class="code-type">CActor</span> cTargetActor, <span class="code-keyword">int</span> iColliderTagHash)
+    {
+        <span class="code-keyword">if</span> (<span class="code-keyword">base</span>.<span class="code-method">CollisionEnter</span>(cTargetActor, iColliderTagHash) == <span class="code-keyword">false</span>) <span class="code-keyword">return false</span>;
+
+        (<span class="code-type">cTargetActor</span> <span class="code-keyword">as</span> <span class="code-type">CMonster</span>).<span class="code-method">Damage</span>(m_cBulletDesc.fPower);
+        <span class="code-type">CGameManager</span>.EVENT_MANAGER.<span class="code-method">BroadCast_Param</span>(<span class="code-type">EventType</span>.ET_MONSTERDAMAGE, (m_cBulletDesc.iID, m_cBulletDesc.fPower));
+
+        <span class="code-comment">// 넉백 적용</span>
+        <span class="code-type">Vector2</span> vKnockbackDir = m_cBulletDesc.vDir.normalized * (m_bDirection ? <span class="code-type">1</span> : <span class="code-type">-1</span>);
+        (<span class="code-type">cTargetActor</span> <span class="code-keyword">as</span> <span class="code-type">CMonster</span>).<span class="code-method">Knockback</span>(vKnockbackDir, m_fKnockbackPower);
+
+        <span class="code-keyword">return true</span>;
+    }
+}</code></pre>
+
+                                            <p style="margin: 25px 0 5px 0; color: #333; font-weight: bold;">6. 무작위 특성 부여 (RandomTrait)</p>
+                                            <p style="margin-bottom: 10px; font-size: 0.9rem; color: #666;">여러 특성 중 하나를 랜덤하게 선택하여 적용합니다 (전략 패턴의 중첩 활용).</p>
+<pre class="code-block"><code>[<span class="code-type">CreateAssetMenu</span>(menuName = <span class="code-string">"BulletLogic/Trait/RandomBullet"</span>)]
+<span class="code-keyword">public class</span> <span class="code-type">CBulletLogic_Trait_RandomTrait</span> : <span class="code-type">CBulletLogic_Trait</span>
+{
+    <span class="code-keyword">public override bool</span> <span class="code-method">Initialize</span>(<span class="code-type">CBullet</span> cBullet)
+    {
+        <span class="code-keyword">if</span> (<span class="code-keyword">base</span>.<span class="code-method">Initialize</span>(cBullet) == <span class="code-keyword">false</span>) <span class="code-keyword">return false</span>;
+
+        <span class="code-comment">// 보유한 특성 리스트 중 하나를 랜덤 선택</span>
+        <span class="code-type">List</span>&lt;<span class="code-type">CBulletLogic_Trait</span>&gt; lstTraitLogic = m_cBulletDesc.lstTraitLogics;
+        <span class="code-type">System</span>.<span class="code-type">Random</span> random = <span class="code-keyword">new</span> <span class="code-type">System</span>.<span class="code-type">Random</span>();
+        <span class="code-keyword">int</span> iIndex = random.<span class="code-method">Next</span>(<span class="code-type">1</span>, lstTraitLogic.Count);
+
+        <span class="code-type">CBulletLogic_Trait</span> cTrait = lstTraitLogic[iIndex];
+        lstTraitLogic.<span class="code-method">Clear</span>();
+        lstTraitLogic.<span class="code-method">Add</span>(cTrait);
+
+        <span class="code-keyword">return true</span>;
+    }
+}</code></pre>
+
+                                            <p style="margin: 25px 0 5px 0; color: #333; font-weight: bold;">7. 벽 튕기기 (Rebound)</p>
+                                            <p style="margin-bottom: 10px; font-size: 0.9rem; color: #666;">화면 경계에 닿으면 입사각/반사각을 계산하여 방향을 전환합니다.</p>
+<pre class="code-block"><code>[<span class="code-type">CreateAssetMenu</span>(menuName = <span class="code-string">"BulletLogic/Trait/Rebound"</span>)]
+<span class="code-keyword">public class</span> <span class="code-type">CBulletLogic_Trait_Rebound</span> : <span class="code-type">CBulletLogic_Trait</span>
+{
+    <span class="code-keyword">private</span> <span class="code-type">Rigidbody2D</span> m_rd;
+
+    <span class="code-keyword">public override bool</span> <span class="code-method">Initialize</span>(<span class="code-type">CBullet</span> cBullet)
+    {
+        <span class="code-keyword">if</span> (<span class="code-keyword">base</span>.<span class="code-method">Initialize</span>(cBullet)) <span class="code-keyword">return false</span>;
+        m_rd = m_cBullet.Rigidbody;
+        <span class="code-keyword">return true</span>;
+    }
+
+    <span class="code-keyword">public override bool</span> <span class="code-method">Tick</span>()
+    {
+        <span class="code-comment">// 매 프레임 화면 경계 충돌 체크</span>
+        <span class="code-method">Redirect</span>();
+        <span class="code-keyword">return true</span>;
+    }
+
+    <span class="code-keyword">private void</span> <span class="code-method">Redirect</span>()
+    {
+        <span class="code-type">Vector2</span> vCollision_Normal = <span class="code-method">Get_CollisionNormal</span>();
+        <span class="code-keyword">if</span> (vCollision_Normal == <span class="code-type">Vector2</span>.zero) <span class="code-keyword">return</span>;
+
+        <span class="code-comment">// 반사각 계산 (Vector2.Reflect) 및 속도 재설정</span>
+        m_cBulletDesc.vDir = <span class="code-type">Vector2</span>.<span class="code-method">Reflect</span>(m_cBulletDesc.vDir, vCollision_Normal);
+        m_rd.velocity = m_cBulletDesc.vDir * m_cBulletDesc.fSpeed_Move;
+        
+        <span class="code-comment">// 내구도 감소</span>
+        <span class="code-keyword">if</span> (--m_cBulletDesc.fHP <= <span class="code-type">0</span>) m_cBullet.<span class="code-method">Hide</span>();
+    }
+
+    <span class="code-keyword">private</span> <span class="code-type">Vector2</span> <span class="code-method">Get_CollisionNormal</span>()
+    {
+        <span class="code-comment">// 화면 경계(ScreenBoundary)를 기준으로 법선 벡터 반환</span>
+        <span class="code-type">Vector4</span> vBound = <span class="code-type">CGameManager</span>.instance.PLAYER.SCREENBOUNDERY_WORLDPOSITION;
+        <span class="code-type">Vector3</span> vPos = m_cBullet.transform.position;
+
+        <span class="code-keyword">if</span> (vPos.x <= vBound.x) <span class="code-keyword">return new</span> <span class="code-type">Vector2</span>(<span class="code-type">-1</span>, <span class="code-type">0</span>); <span class="code-comment">// 좌</span>
+        <span class="code-keyword">if</span> (vPos.y <= vBound.y) <span class="code-keyword">return new</span> <span class="code-type">Vector2</span>(<span class="code-type">0</span>, <span class="code-type">-1</span>); <span class="code-comment">// 하</span>
+        <span class="code-keyword">if</span> (vPos.x >= vBound.z) <span class="code-keyword">return new</span> <span class="code-type">Vector2</span>(<span class="code-type">1</span>, <span class="code-type">0</span>);  <span class="code-comment">// 우</span>
+        <span class="code-keyword">if</span> (vPos.y >= vBound.w) <span class="code-keyword">return new</span> <span class="code-type">Vector2</span>(<span class="code-type">0</span>, <span class="code-type">1</span>);  <span class="code-comment">// 상</span>
+
+        <span class="code-keyword">return</span> <span class="code-type">Vector2</span>.zero;
+    }
+}</code></pre>
+
+                                            <p style="margin: 25px 0 5px 0; color: #333; font-weight: bold;">8. 크기 변화 (ScaleOverTime)</p>
+                                            <p style="margin-bottom: 10px; font-size: 0.9rem; color: #666;">시간 경과에 따라 투사체의 크기를 부드럽게(Lerp) 변화시킵니다.</p>
+<pre class="code-block"><code>[<span class="code-type">CreateAssetMenu</span>(menuName = <span class="code-string">"BulletLogic/Trait/ScaleOverTime"</span>)]
+<span class="code-keyword">public class</span> <span class="code-type">CBulletLogic_Trait_ScaleOverTime</span> : <span class="code-type">CBulletLogic_Trait</span>
+{
+    <span class="code-keyword">public float</span> m_fTargetScale = <span class="code-type">5f</span>;
+    <span class="code-keyword">public float</span> m_fLerpTime = <span class="code-type">5f</span>;
+
+    <span class="code-keyword">public override bool</span> <span class="code-method">Tick</span>()
+    {
+        <span class="code-keyword">if</span> (<span class="code-keyword">base</span>.<span class="code-method">Tick</span>() == <span class="code-keyword">false</span>) <span class="code-keyword">return false</span>;
+
+        <span class="code-comment">// 현재 수명 비율에 맞춰 Scale 보간 (Lerp)</span>
+        <span class="code-keyword">float</span> fRatio = <span class="code-type">Mathf</span>.<span class="code-method">Clamp01</span>((<span class="code-type">5</span> - m_cBullet.fLIFETIME) / m_fLerpTime);
+        <span class="code-type">Vector3</span> vStartScale = <span class="code-keyword">new</span> <span class="code-type">Vector3</span>(<span class="code-type">0.1f</span>, <span class="code-type">0.1f</span>, <span class="code-type">0.1f</span>) * m_cBulletDesc.vScale;
+        <span class="code-type">Vector3</span> vTargetScale = vStartScale * m_fTargetScale;
+
+        m_cBullet.transform.localScale = <span class="code-type">Vector3</span>.<span class="code-method">Lerp</span>(vStartScale, vTargetScale, fRatio);
+        <span class="code-keyword">return true</span>;
+    }
+}</code></pre>
+
+                                            <p style="margin: 25px 0 5px 0; color: #333; font-weight: bold;">9. 영역 속박 (StayStun)</p>
+                                            <p style="margin-bottom: 10px; font-size: 0.9rem; color: #666;">범위 안에 들어온 적을 속박(Stun)하고, 범위를 벗어나면(Exit) 해제합니다.</p>
+<pre class="code-block"><code>[<span class="code-type">CreateAssetMenu</span>(menuName = <span class="code-string">"BulletLogic/Trait/StayStun"</span>)]
+<span class="code-keyword">public class</span> <span class="code-type">CBulletLogic_Trait_StayStun</span> : <span class="code-type">CBulletLogic_Trait</span>
+{
+    <span class="code-keyword">public override bool</span> <span class="code-method">CollisionEnter</span>(<span class="code-type">CActor</span> cTargetActor, <span class="code-keyword">int</span> iColliderTagHash)
+    {
+        <span class="code-keyword">if</span> (<span class="code-keyword">base</span>.<span class="code-method">CollisionEnter</span>(cTargetActor, iColliderTagHash) == <span class="code-keyword">false</span>) <span class="code-keyword">return false</span>;
+
+        <span class="code-comment">// 속박 상태 적용</span>
+        (<span class="code-type">cTargetActor</span> <span class="code-keyword">as</span> <span class="code-type">CMonster</span>).<span class="code-method">Change_State</span>(<span class="code-type">FSM</span>.STUN);
+        <span class="code-keyword">return true</span>;
+    }
+
+    <span class="code-keyword">public override bool</span> <span class="code-method">CollisionExit</span>(<span class="code-type">CActor</span> cTargetActor, <span class="code-keyword">int</span> iColliderTagHash)
+    {
+        <span class="code-keyword">if</span> (<span class="code-keyword">base</span>.<span class="code-method">CollisionEnter</span>(cTargetActor, iColliderTagHash) == <span class="code-keyword">false</span>) <span class="code-keyword">return false</span>;
+
+        <span class="code-comment">// 속박 해제</span>
+        (<span class="code-type">cTargetActor</span> <span class="code-keyword">as</span> <span class="code-type">CMonster</span>).<span class="code-method">Change_State</span>(<span class="code-type">FSM</span>.MOVE);
+        <span class="code-keyword">return true</span>;
+    }
+}</code></pre>
+
+                                            <p style="margin: 25px 0 5px 0; color: #333; font-weight: bold;">10. 시각 효과 (WhiteOut)</p>
+                                            <p style="margin-bottom: 10px; font-size: 0.9rem; color: #666;">충돌 시 몬스터가 하얗게 빛나는 피드백을 줍니다.</p>
+<pre class="code-block"><code>[<span class="code-type">CreateAssetMenu</span>(menuName = <span class="code-string">"BulletLogic/Trait/WhiteOut"</span>)]
+<span class="code-keyword">public class</span> <span class="code-type">CBulletLogic_Trait_WhiteOut</span> : <span class="code-type">CBulletLogic_Trait</span>
+{
+    <span class="code-keyword">public override bool</span> <span class="code-method">CollisionEnter</span>(<span class="code-type">CActor</span> cTargetActor, <span class="code-keyword">int</span> iColliderTagHash)
+    {
+        <span class="code-keyword">if</span> (<span class="code-keyword">base</span>.<span class="code-method">CollisionEnter</span>(cTargetActor, iColliderTagHash) == <span class="code-keyword">false</span>) <span class="code-keyword">return false</span>;
+
+        <span class="code-comment">// 하얗게 빛나기 켜기</span>
+        (<span class="code-type">cTargetActor</span> <span class="code-keyword">as</span> <span class="code-type">CMonster</span>).<span class="code-method">WhiteOut</span>(<span class="code-keyword">true</span>);
+        <span class="code-keyword">return true</span>;
+    }
+
+    <span class="code-keyword">public override bool</span> <span class="code-method">CollisionExit</span>(<span class="code-type">CActor</span> cTargetActor, <span class="code-keyword">int</span> iColliderTagHash)
+    {
+        <span class="code-keyword">if</span> (<span class="code-keyword">base</span>.<span class="code-method">CollisionEnter</span>(cTargetActor, iColliderTagHash) == <span class="code-keyword">false</span>) <span class="code-keyword">return false</span>;
+
+        <span class="code-comment">// 끄기</span>
+        (<span class="code-type">cTargetActor</span> <span class="code-keyword">as</span> <span class="code-type">CMonster</span>).<span class="code-method">WhiteOut</span>(<span class="code-keyword">false</span>);
+        <span class="code-keyword">return true</span>;
+    }
+}</code></pre>
+                                        </details>
+                                    </div>
+
+
+
+
+
+
+
+
+
+
+
+                                    
+
+                                </div>
+
+                                    <p><strong>② 데이터 바인딩</strong></p>
+                                    <ul>
+                                        <li><strong>SkillInfo.csv</strong>의 컬럼 값을 읽어 팩토리 클래스가 런타임에 로직을 조립</li>
+                                        <li>프로그래머 개입 없이 기획자가 수백 가지의 파생 스킬 생성 가능</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            
+
+
+
+
+
+                        
+                            <button onclick="closeDetails(this)" class="btn-toggle-bottom">
+                                ▲ 상세 접기
+                            </button>
+                        </div> 
+                    </div>
                 </div>
 
                 <hr class="project-divider">
@@ -476,7 +1390,81 @@
     </div>
 
     <footer>
-        <p>&copy; 2025 임종훈. All rights reserved.</p> </footer>
+        <p>&copy; 2025 임종훈. All rights reserved.</p> 
+    </footer>
 
+    <script>
+        // 토글 열기/닫기 함수 (HTML onclick="toggleDetails(this)" 와 호환되도록 수정)
+        function toggleDetails(btn) {
+            // 버튼 바로 다음에 있는 .deep-dive-content를 찾음
+            const content = btn.nextElementSibling;
+            
+            // 토글 대상이 없으면 종료
+            if (!content) return;
+
+            // CSS class 'open'을 토글하여 애니메이션 처리
+            // (CSS에 .deep-dive-content.open { opacity: 1; padding: 20px; } 및 max-height 트랜지션이 있어야 함)
+            if (content.classList.contains('open')) {
+                // 닫기
+                content.classList.remove('open');
+                content.style.maxHeight = null;
+                
+                // 버튼 텍스트 변경
+                const span = btn.querySelector('span');
+                if (span) span.innerText = "▼ 상세 기술 및 성과 보기";
+                btn.style.backgroundColor = "#f8f9fa";
+            } else {
+                // 열기
+                content.classList.add('open');
+                // 내부 콘텐츠 높이만큼 max-height 설정 (CSS transition 작동)
+                content.style.maxHeight = content.scrollHeight + "px";
+                
+                // 버튼 텍스트 변경
+                const span = btn.querySelector('span');
+                if (span) span.innerText = "▲ 상세 기술 및 성과 접기";
+                btn.style.backgroundColor = "#f0f0f0";
+            }
+        }
+
+        // Deep Dive 내부 탭 전환 함수 (HTML 클래스명에 맞춰 수정)
+        function switchTab(event, tabContentId) {
+            // 클릭된 버튼이 속한 네비게이션 컨테이너
+            const nav = event.currentTarget.parentElement;
+            // 탭 내용들이 들어있는 부모 컨테이너 (.deep-dive-content)
+            const container = nav.parentElement;
+
+            // 1. 모든 탭 버튼 비활성화 (CSS 클래스 .dd-tab-btn 사용)
+            nav.querySelectorAll('.dd-tab-btn').forEach(btn => btn.classList.remove('active'));
+            // 클릭된 버튼 활성화
+            event.currentTarget.classList.add('active');
+
+            // 2. 모든 탭 내용 숨기기 (CSS 클래스 .dd-tab-pane 사용)
+            container.querySelectorAll('.dd-tab-pane').forEach(pane => pane.classList.remove('active'));
+            
+            // 3. 선택된 탭 내용 보이기
+            const targetPane = document.getElementById(tabContentId);
+            if(targetPane) {
+                targetPane.classList.add('active');
+            }
+
+            // 4. 탭 전환 시 내용 높이가 달라지므로 부모 컨테이너(토글 영역) 높이 재계산
+            // (열려있는 상태라면 max-height를 갱신해줘야 함)
+            if (container.classList.contains('open')) {
+                container.style.maxHeight = container.scrollHeight + "px";
+            }
+        }
+
+        // [추가] 내부의 details(코드 보기)가 열리거나 닫힐 때 높이 재계산
+        function updateHeight(element) {
+            // 현재 클릭한 요소의 가장 가까운 부모 컨텐츠 영역(.deep-dive-content)을 찾음
+            const content = element.closest('.deep-dive-content');
+            
+            // 만약 부모 영역이 열려있는 상태라면
+            if (content && content.classList.contains('open')) {
+                // 늘어난(또는 줄어든) 내부 높이만큼 max-height를 새로 고침
+                content.style.maxHeight = content.scrollHeight + "px";
+            }
+        }
+    </script>
 </body>
 </html>
